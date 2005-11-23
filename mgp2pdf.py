@@ -30,6 +30,22 @@ def parse_color(color):
     return HexColor(color)
 
 
+def textWrapPositions(s):
+    """Find all break points in text, starting from the rightmost.
+
+        >>> textWrapPositions('well hello world')
+        [16, 10, 4]
+        >>> textWrapPositions('a  good  day')
+        [12, 7, 1]
+
+    """
+    poses = [len(s)]
+    for idx in range(len(s) - 1, 0, -1):
+        if s[idx-1].isalnum() and not s[idx].isalnum():
+            poses.append(idx)
+    return poses
+
+
 class Slide(object):
     """Description of a slide."""
 
@@ -89,17 +105,33 @@ class Slide(object):
         line = self.currentOrNewLine()
         line.add(Image(filename, zoom))
 
+    def addMark(self):
+        line = self.currentOrNewLine()
+        mark = Mark()
+        line.add(mark)
+        return mark
+
+    def addAgain(self, mark):
+        line = self.currentOrNewLine()
+        line.add(Again(mark))
+
     def __str__(self):
         return '\n'.join(map(str, self.lines))
+
+    def wordWrap(self, canvas, w, h):
+        new_lines = []
+        for line in self.lines:
+            new_lines += line.split(canvas, w, h)
+        self.lines = new_lines
 
     def drawOn(self, canvas, pageSize):
         # canvas.bookmarkPage(title)
         # canvas.addOutlineEntry(title, title, outlineLevel)
-
         w = pageSize[0] * self.area[0] / 100
         h = pageSize[1] * self.area[1] / 100
         x = (pageSize[0] - w) / 2
         y = (pageSize[1] + h) / 2
+        self.wordWrap(canvas, w, h)
         for p in self.lines:
             x, y = p.drawOn(canvas, x, y, w, h)
 
@@ -127,6 +159,11 @@ class Line(object):
         self.chunks = []
         self.alignment = alignment
 
+    def cloneStyle(self, newchunks):
+        clone = Line(self.alignment)
+        clone.chunks = newchunks
+        return clone
+
     def add(self, chunk):
         self.chunks.append(chunk)
 
@@ -149,6 +186,29 @@ class Line(object):
         myh += 1 # Another MagicPoint oddity
         return myw, myh
 
+    def split(self, canvas, w, h):
+        chunks_that_fit = []
+        remaining_chunks = list(self.chunks)
+        remaining_space = w
+        while remaining_chunks:
+            chunk = remaining_chunks.pop(0)
+            cw, ch = chunk.size(canvas, w, h)
+            if cw <= remaining_space:
+                chunks_that_fit.append(chunk)
+                remaining_space -= cw
+            else:
+                bits = chunk.split(canvas, w, h, remaining_space)
+                remaining_chunks = bits + remaining_chunks
+                if len(bits) == 1 or remaining_space <= 0: # was unsplittable
+                    break
+        if not chunks_that_fit and remaining_chunks:
+            chunks_that_fit.append(remaining_chunks.pop(0))
+        if remaining_chunks:
+            return [self.cloneStyle(chunks_that_fit),
+                    self.cloneStyle(remaining_chunks)]
+        else:
+            return [self]
+
     def drawOn(self, canvas, x, y, w, h):
         x0, y0 = x, y
         myw, myh = self.size(canvas, w, h)
@@ -161,7 +221,49 @@ class Line(object):
         return ''.join(map(str, self.chunks))
 
 
-class Image(object):
+class SimpleChunk(object):
+    """A simple chunk that takes no space, is invisible, and unsplittable."""
+
+    def size(self, canvas, w, h):
+        return 0, 0
+
+    def drawOn(self, canvas, x, y, w, h):
+        return x, y
+
+    def split(self, canvas, w, h, maxw):
+        return [self]
+
+
+class Mark(SimpleChunk):
+    """A position marker."""
+
+    def __init__(self):
+        self.pos = None
+
+    def drawOn(self, canvas, x, y, w, h):
+        self.pos = x, y
+        return x, y
+
+    def __str__(self):
+        return '<mark>'
+
+
+class Again(SimpleChunk):
+    """Move to a position marker."""
+
+    def __init__(self, mark):
+        self.mark = mark
+
+    def drawOn(self, canvas, x, y, w, h):
+        assert self.mark.pos is not None, "Mark not initialized yet!"
+        mx, my = self.mark.pos
+        return x, my
+
+    def __str__(self):
+        return '<again>'
+
+
+class Image(SimpleChunk):
     """An image."""
 
     def __init__(self, filename, zoom=100):
@@ -194,6 +296,10 @@ class TextChunk(object):
         self.vgap = vgap
         self.color = color
 
+    def cloneStyle(self, newtext):
+        return TextChunk(newtext, self.font, self.fontSize, self.vgap,
+                         self.color)
+
     def size(self, canvas, w, h):
         fontSize = h * self.fontSize / 100
         leading = fontSize * (100 + self.vgap) / 100
@@ -209,6 +315,19 @@ class TextChunk(object):
         txt.textOut(self.text)
         canvas.drawText(txt)
         return txt.getX(), y
+
+    def split(self, canvas, w, h, maxw):
+        fontSize = h * self.fontSize / 100
+        for pos in textWrapPositions(self.text):
+            myw = canvas.stringWidth(self.text[:pos], self.font, fontSize)
+            if myw <= maxw:
+                return [self.cloneStyle(self.text[:pos]),
+                        self.cloneStyle(self.text[pos:].lstrip())]
+        if pos < len(self.text):
+            # well, it still sticks out, but a bit less
+            return [self.cloneStyle(self.text[:pos]),
+                    self.cloneStyle(self.text[pos:].lstrip())]
+        return [self]
 
     def __str__(self):
         return self.text
@@ -244,6 +363,7 @@ class Presentation(object):
         self._use_defaults = True
         self._continuing = False
         self._directives_used_in_this_line = set()
+        self.mark = None
 
     def _handleDirectives(self, line):
         line = line[1:].strip()
@@ -318,6 +438,14 @@ class Presentation(object):
             else:
                 raise MgpSyntaxError("newimage %s not handled yet" % k)
         self.slides[-1].addImage(args[-1], zoom)
+
+    def _handleDirective_mark(self, parts):
+        self.mark = self.slides[-1].addMark()
+
+    def _handleDirective_again(self, parts):
+        if not self.mark:
+            raise MgpSyntaxError("%again without %mark")
+        self.slides[-1].addAgain(self.mark)
 
     def _handleUnknownDirective(self, parts):
         pass
