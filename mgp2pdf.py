@@ -73,8 +73,11 @@ class Slide(object):
         self._cur_line = None
 
     def reopenCurrentLine(self):
-        if self.lines:
+        if self.lines and self._cur_line is None:
             self._cur_line = self.lines[-1]
+            return True
+        else:
+            return False
 
     def addText(self, text):
         line = self.currentOrNewLine()
@@ -143,6 +146,7 @@ class Line(object):
                     ch -= h * chunk.fontSize / 100
             myw += cw
             myh = max(myh, ch)
+        myh += 1 # Another MagicPoint oddity
         return myw, myh
 
     def drawOn(self, canvas, x, y, w, h):
@@ -219,6 +223,7 @@ class Presentation(object):
         self.defaultDirectives = {}
         self.fonts = Fonts()
         self.slides = []
+        self._directives_used_in_this_line = set()
         if file:
             self.load(file)
 
@@ -237,6 +242,8 @@ class Presentation(object):
         self.slides.append(Slide())
         self._lastlineno = 0
         self._use_defaults = True
+        self._continuing = False
+        self._directives_used_in_this_line = set()
 
     def _handleDirectives(self, line):
         line = line[1:].strip()
@@ -252,6 +259,7 @@ class Presentation(object):
     def _handleDirective(self, directive):
         parts = directive.split()
         word = parts[0]
+        self._directives_used_in_this_line.add(word)
         handler = getattr(self, '_handleDirective_%s' % word,
                           self._handleUnknownDirective)
         handler(parts)
@@ -298,6 +306,7 @@ class Presentation(object):
 
     def _handleDirective_cont(self, parts):
         self.slides[-1].reopenCurrentLine()
+        self._continuing = True
 
     def _handleDirective_newimage(self, parts):
         n = (len(parts) - 1) / 2
@@ -333,11 +342,16 @@ class Presentation(object):
         return tuple(results)
 
     def _handleText(self, line):
-        self._lastlineno += 1
-        if self._use_defaults:
-            for part in self.defaultDirectives.get(self._lastlineno, []):
-                self._handleDirective(part)
+        if not self._continuing:
+            self._lastlineno += 1
+            if self._use_defaults:
+                for part in self.defaultDirectives.get(self._lastlineno, []):
+                    word = part.split()[0]
+                    if word not in self._directives_used_in_this_line:
+                        self._handleDirective(part)
         self.slides[-1].addText(line)
+        self._continuing = False
+        self._directives_used_in_this_line = set()
 
     def __str__(self):
         res = []
