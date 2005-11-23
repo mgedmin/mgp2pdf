@@ -4,11 +4,13 @@ A quick-and-dirty MagicPoint to PDF converter.
 """
 
 import os
+import sys
 
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.units import inch
 from reportlab.lib.fonts import addMapping
 from reportlab.lib.colors import HexColor, black
+from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
@@ -32,7 +34,8 @@ class Slide(object):
     """Description of a slide."""
 
     def __init__(self):
-        self.text = []
+        self.lines = []
+        self._cur_line = None
         self.font = 'Helvetica'
         self.size = 5
         self.vgap = 0
@@ -57,16 +60,34 @@ class Slide(object):
 
     def setAlignment(self, alignment):
         self.alignment = alignment
+        if self._cur_line is not None:
+            self._cur_line.alignment = alignment
+
+    def currentOrNewLine(self):
+        if self._cur_line is None:
+            self._cur_line = Line(self.alignment)
+            self.lines.append(self._cur_line)
+        return self._cur_line
+
+    def closeCurrentLine(self):
+        self._cur_line = None
+
+    def reopenCurrentLine(self):
+        if self.lines:
+            self._cur_line = self.lines[-1]
 
     def addText(self, text):
-        self.text.append(TextChunk(text, self.font, self.size, self.vgap,
-                                   self.color, self.alignment))
+        line = self.currentOrNewLine()
+        text = text.rstrip('\n')
+        line.add(TextChunk(text, self.font, self.size, self.vgap, self.color))
+        self.closeCurrentLine()
 
     def addImage(self, filename, zoom):
-        self.text.append(Image(filename, zoom, self.alignment))
+        line = self.currentOrNewLine()
+        line.add(Image(filename, zoom))
 
     def __str__(self):
-        return ''.join(map(str, self.text))
+        return '\n'.join(map(str, self.lines))
 
     def drawOn(self, canvas, pageSize):
         # canvas.bookmarkPage(title)
@@ -76,7 +97,7 @@ class Slide(object):
         h = pageSize[1] * self.area[1] / 100
         x = (pageSize[0] - w) / 2
         y = (pageSize[1] + h) / 2
-        for p in self.text:
+        for p in self.lines:
             x, y = p.drawOn(canvas, x, y, w, h)
 
 
@@ -96,52 +117,94 @@ class Center(object):
         return (boxwidth - textwidth) / 2
 
 
+class Line(object):
+    """A line of text (and images)."""
+
+    def __init__(self, alignment=Left):
+        self.chunks = []
+        self.alignment = alignment
+
+    def add(self, chunk):
+        self.chunks.append(chunk)
+
+    def size(self, canvas, w, h):
+        myw = myh = 0
+        seen_text = False
+        for chunk in self.chunks:
+            cw, ch = chunk.size(canvas, w, h)
+            if isinstance(chunk, TextChunk):
+                if chunk is not self.chunks[-1]:
+                    seen_text = True
+                elif not seen_text and not chunk.text and len(self.chunks) > 1:
+                    # MagicPoint weirdness: if a line only has images and no
+                    # text, and nothing more, then the text size is not
+                    # considered when calculating line height, but the vgap is
+                    # computed in the usual fashion.
+                    ch -= h * chunk.fontSize / 100
+            myw += cw
+            myh = max(myh, ch)
+        return myw, myh
+
+    def drawOn(self, canvas, x, y, w, h):
+        x0, y0 = x, y
+        myw, myh = self.size(canvas, w, h)
+        x += self.alignment.align(myw, w)
+        for chunk in self.chunks:
+            x, y = chunk.drawOn(canvas, x, y, w, h)
+        return x0, y0 - myh
+
+    def __str__(self):
+        return ''.join(map(str, self.chunks))
+
+
 class Image(object):
     """An image."""
 
-    def __init__(self, filename, zoom=100, alignment=Left):
+    def __init__(self, filename, zoom=100):
         self.filename = filename
         self.zoom = zoom
-        self.alignment = alignment
+        self.image = ImageReader(filename)
+
+    def size(self, canvas, w, h):
+        myw, myh = self.image.getSize()
+        myw = myw * self.zoom / 100
+        myh = myh * self.zoom / 100
+        return myw, myh
 
     def drawOn(self, canvas, x, y, w, h):
-        return x, y
+        myw, myh = self.size(canvas, w, h)
+        canvas.drawImage(self.filename, x, y - myh, myw, myh, mask='auto')
+        return x + myw, y
+
+    def __str__(self):
+        return '[%s]' % self.filename
 
 
 class TextChunk(object):
     """A chunk of text."""
 
-    def __init__(self, text, font, size, vgap, color, alignment):
+    def __init__(self, text, font, fontSize, vgap, color):
         self.text = text
         self.font = font
-        self.size = size
+        self.fontSize = fontSize
         self.vgap = vgap
         self.color = color
-        self.alignment = alignment
+
+    def size(self, canvas, w, h):
+        fontSize = h * self.fontSize / 100
+        leading = fontSize * (100 + self.vgap) / 100
+        textwidth = canvas.stringWidth(self.text, self.font, fontSize)
+        return textwidth, leading
 
     def drawOn(self, canvas, x, y, w, h):
-        fontSize = h * self.size / 100
+        fontSize = h * self.fontSize / 100
         leading = fontSize * (100 + self.vgap) / 100
         txt = canvas.beginText(x, y - fontSize)
         txt.setFont(self.font, fontSize, leading)
         txt.setFillColor(self.color)
-        for line in self.text.splitlines(True):
-            if line.endswith('\n'):
-                fn, arg = txt.textLine, line.rstrip()
-            else:
-                fn, arg = txt.textOut, line
-            textwidth = canvas.stringWidth(arg, self.font, fontSize)
-            xpos = self.alignment.align(textwidth, w)
-            txt.setXPos(xpos)
-            fn(arg)
-            txt.setXPos(-xpos)
+        txt.textOut(self.text)
         canvas.drawText(txt)
-        return txt.getX(), txt.getY() + fontSize
-
-    def toParagraph(self):
-        style = getParagraphStyles()['BodyText']
-        return Paragraph('<font name="%s">%s</font>' % (self.font, self.text),
-                         style)
+        return txt.getX(), y
 
     def __str__(self):
         return self.text
@@ -233,6 +296,9 @@ class Presentation(object):
     def _handleDirective_center(self, parts):
         self.slides[-1].setAlignment(Center)
 
+    def _handleDirective_cont(self, parts):
+        self.slides[-1].reopenCurrentLine()
+
     def _handleDirective_newimage(self, parts):
         n = (len(parts) - 1) / 2
         args = self._parseArgs(parts, "wn" * n + "s")
@@ -243,7 +309,6 @@ class Presentation(object):
             else:
                 raise MgpSyntaxError("newimage %s not handled yet" % k)
         self.slides[-1].addImage(args[-1], zoom)
-
 
     def _handleUnknownDirective(self, parts):
         pass
@@ -309,6 +374,8 @@ class Fonts(object):
 
 def main():
     p = Presentation('intro.mgp')
+    if '-v' in sys.argv:
+        print p
     p.makePDF('intro.pdf')
 
 
