@@ -420,12 +420,18 @@ class Presentation(object):
 
     def _handleDirective_left(self, parts):
         self.slides[-1].setAlignment(Left)
+        self._directives_used_in_this_line.add('right')
+        self._directives_used_in_this_line.add('center')
 
     def _handleDirective_right(self, parts):
         self.slides[-1].setAlignment(Right)
+        self._directives_used_in_this_line.add('left')
+        self._directives_used_in_this_line.add('center')
 
     def _handleDirective_center(self, parts):
         self.slides[-1].setAlignment(Center)
+        self._directives_used_in_this_line.add('left')
+        self._directives_used_in_this_line.add('right')
 
     def _handleDirective_cont(self, parts):
         self.slides[-1].reopenCurrentLine()
