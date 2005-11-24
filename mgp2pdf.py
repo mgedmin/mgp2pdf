@@ -545,7 +545,7 @@ class Presentation(object):
                     word = self._splitArgs(part)[0]
                     if word not in self._directives_used_in_this_line:
                         self._handleDirective(part)
-        line = line.rstrip().replace(r'\#', '#').replace(r'\\', '\\')
+        line = line.rstrip('\n').replace(r'\#', '#').replace(r'\\', '\\')
         self.slides[-1].addText(line)
         self._continuing = False
         self._directives_used_in_this_line = set()
