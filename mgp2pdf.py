@@ -98,7 +98,6 @@ class Slide(object):
 
     def addText(self, text):
         line = self.currentOrNewLine()
-        text = text.rstrip('\n')
         line.add(TextChunk(text, self.font, self.size, self.vgap, self.color))
         self.closeCurrentLine()
 
@@ -478,6 +477,7 @@ class Presentation(object):
                     word = part.split()[0]
                     if word not in self._directives_used_in_this_line:
                         self._handleDirective(part)
+        line = line.rstrip().replace(r'\#', '#').replace(r'\\', '\\')
         self.slides[-1].addText(line)
         self._continuing = False
         self._directives_used_in_this_line = set()
