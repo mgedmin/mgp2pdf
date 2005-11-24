@@ -28,6 +28,9 @@ class MgpSyntaxError(Exception):
 
 def parse_color(color):
     color = {'black': '#000000'}.get(color, color)
+    if len(color) == 4 and color.startswith('#'):
+        r, g, b = color[1:]
+        color = '#' + r + r + g + g + b + b
     return HexColor(color)
 
 
