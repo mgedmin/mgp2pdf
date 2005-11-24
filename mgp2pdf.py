@@ -345,11 +345,12 @@ class Presentation(object):
 
     pageSize = landscape(Screen_1024x768_at_72_dpi)
 
-    def __init__(self, file=None):
+    def __init__(self, file=None, title=None):
         self.defaultDirectives = {}
         self.fonts = Fonts()
         self.slides = []
         self._directives_used_in_this_line = set()
+        self.title = title
         if file:
             self.load(file)
 
@@ -504,7 +505,8 @@ class Presentation(object):
 
     def makePDF(self, outfile):
         canvas = Canvas(outfile, self.pageSize)
-        # canvas.setTitle(...)
+        if self.title:
+            canvas.setTitle(self.title)
         # canvas.setAuthor(...)
         # canvas.setSubject(...)
         for n, s in enumerate(self.slides):
@@ -546,7 +548,8 @@ def main():
         print >> sys.stderr, "nothing to do (try mgp2pdf -h for help)"
         sys.exit(1)
     for fn in args:
-        p = Presentation(fn)
+        title = os.path.splitext(os.path.basename(fn))[0]
+        p = Presentation(fn, title)
         if opts.outfile:
             outfile = opts.outfile
         else:
