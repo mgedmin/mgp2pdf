@@ -5,7 +5,6 @@ mgp2pdf TODO
 - Handle tabs in the middle of a line (see lecture8.mgp)
 - Cmdline option to enable unsafe directives (%filter)
 - Trap MgpSyntaxErrors, print filename and line number
-- Fix %again when several lines follow it (see lecture6.mgp)
 
 Maybe
 -----

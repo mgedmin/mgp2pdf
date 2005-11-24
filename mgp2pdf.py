@@ -224,6 +224,8 @@ class Line(object):
         x += self.alignment.align(myw, w)
         for chunk in self.chunks:
             x, y = chunk.drawOn(canvas, x, y, w, h)
+            if isinstance(chunk, Again): # XXX breaks OOP and is fugly hack
+                y0 = y
         return x0, y0 - myh
 
     def __str__(self):
