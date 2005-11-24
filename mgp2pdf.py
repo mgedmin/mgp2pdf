@@ -513,6 +513,7 @@ class Presentation(object):
     def _handleDirective_again(self, parts):
         if not self.mark:
             raise MgpSyntaxError("%again without %mark")
+        self._handleText('')
         self.slides[-1].addAgain(self.mark)
 
     def _handleUnknownDirective(self, parts):
