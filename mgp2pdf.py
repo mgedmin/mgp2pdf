@@ -5,6 +5,7 @@ A quick-and-dirty MagicPoint to PDF converter.
 
 import os
 import sys
+import optparse
 
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.units import inch
@@ -515,10 +516,31 @@ class Fonts(object):
 
 
 def main():
-    p = Presentation('intro.mgp')
-    if '-v' in sys.argv:
-        print p
-    p.makePDF('intro.pdf')
+    parser = optparse.OptionParser()
+    parser.add_option('-v', action='store_true', dest='verbose', default=False,
+                      help="print the presentation as text (debug)")
+    parser.add_option('-o', action='store', dest='outfile',
+                      help="override output file name")
+    try:
+        opts, args = parser.parse_args(sys.argv[1:])
+    except optparse.OptParseError, e:
+        print >> sys.stderr, e
+        sys.exit(1)
+    if opts.outfile and len(args) > 1:
+        print >> sys.stderr, "-o not allowed when there is more than one file"
+        sys.exit(1)
+    if not args:
+        print >> sys.stderr, "nothing to do (try mgp2pdf -h for help)"
+        sys.exit(1)
+    for fn in args:
+        p = Presentation(fn)
+        if opts.verbose:
+            print p
+        if opts.outfile:
+            outfile = opts.outfile
+        else:
+            outfile = os.path.splitext(fn)[0] + '.pdf'
+        p.makePDF(outfile)
 
 
 if __name__ == '__main__':
