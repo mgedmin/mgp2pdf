@@ -4,6 +4,7 @@ A quick-and-dirty MagicPoint to PDF converter.
 """
 
 import os
+import re
 import sys
 import optparse
 import subprocess
@@ -402,19 +403,38 @@ class Presentation(object):
         self._directives_used_in_this_line = set()
         self.mark = None
 
+    @staticmethod
+    def _splitDirectives(line):
+        """
+            >>> Presentation._splitDirectives('foo, bar 42, baz "q, q", wumba')
+            ['foo', 'bar 42', 'baz "q, q"', 'wumba']
+
+        """
+        return [s.strip() for s in re.findall('(?:[^,"]|"[^"]*")+', line)]
+
+    @staticmethod
+    def _splitArgs(line):
+        """
+            >>> Presentation._splitArgs('baz 42 "q w" e -foo 11')
+            ['baz', '42', '"q w"', 'e', '-foo', '11']
+
+        """
+        return [s.strip() for s in re.findall('(?:[^ "]|"[^"]*")+', line)]
+
     def _handleDirectives(self, line):
         line = line[1:].strip()
-        parts = line.split(",")
+        parts = self._splitDirectives(line)
         if parts[0].startswith('default'):
-            n = int(parts[0].split()[1])
-            parts[0] = ' '.join(parts[0].split()[2:])
+            args = self._splitArgs(parts[0])
+            n = int(args[1])
+            parts[0] = ' '.join(args[2:])
             self.defaultDirectives[n] = parts
         else:
             for part in parts:
                 self._handleDirective(part.strip())
 
     def _handleDirective(self, directive):
-        parts = directive.split()
+        parts = self._splitArgs(directive)
         if not parts:
             return # warn maybe
         word = parts[0]
@@ -522,7 +542,7 @@ class Presentation(object):
             self._lastlineno += 1
             if self._use_defaults:
                 for part in self.defaultDirectives.get(self._lastlineno, []):
-                    word = part.split()[0]
+                    word = self._splitArgs(part)[0]
                     if word not in self._directives_used_in_this_line:
                         self._handleDirective(part)
         line = line.rstrip().replace(r'\#', '#').replace(r'\\', '\\')
@@ -559,6 +579,7 @@ class Fonts(object):
             raise NotImplementedError("unsupported font engine %s" % engine)
         enginefontname = enginefontname.replace('-bold', 'b')
         enginefontname = enginefontname.replace('-medium-i', 'i')
+        enginefontname = enginefontname.replace('andale mono', 'andalemo')
         filename = os.path.join(self.fontpath, enginefontname + '.ttf')
         pdfmetrics.registerFont(TTFont(name, filename))
         font = pdfmetrics.getFont(name)

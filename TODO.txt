@@ -7,7 +7,6 @@ mgp2pdf TODO
 - Trap MgpSyntaxErrors, print filename and line number
 - Fix %again when several lines follow it (see lecture6.mgp)
 - Fix %again immediatelly following %newimage (see lecture6.mgp)
-- Fix argument splitting with spaces inside ("foo bar"; see lecture9.mgp)
 
 Maybe
 -----
