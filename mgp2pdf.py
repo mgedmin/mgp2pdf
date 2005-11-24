@@ -211,8 +211,8 @@ class Line(object):
         if not chunks_that_fit and remaining_chunks:
             chunks_that_fit.append(remaining_chunks.pop(0))
         if remaining_chunks:
-            return [self.cloneStyle(chunks_that_fit),
-                    self.cloneStyle(remaining_chunks)]
+            return ([self.cloneStyle(chunks_that_fit)] +
+                    self.cloneStyle(remaining_chunks).split(canvas, w, h))
         else:
             return [self]
 
