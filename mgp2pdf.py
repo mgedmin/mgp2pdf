@@ -107,9 +107,9 @@ class Slide(object):
         line.add(TextChunk(text, self.font, self.size, self.vgap, self.color))
         self.closeCurrentLine()
 
-    def addImage(self, filename, zoom):
+    def addImage(self, filename, zoom=100, raised_by=0):
         line = self.currentOrNewLine()
-        line.add(Image(filename, zoom))
+        line.add(Image(filename, zoom, raised_by))
 
     def addMark(self):
         line = self.currentOrNewLine()
@@ -274,9 +274,10 @@ class Again(SimpleChunk):
 class Image(SimpleChunk):
     """An image."""
 
-    def __init__(self, filename, zoom=100):
+    def __init__(self, filename, zoom=100, raised_by = 0):
         self.filename = filename
         self.zoom = zoom
+        self.raised_by = 0
         self.image = ImageReader(filename)
 
     def size(self, canvas, w, h):
@@ -287,7 +288,8 @@ class Image(SimpleChunk):
 
     def drawOn(self, canvas, x, y, w, h):
         myw, myh = self.size(canvas, w, h)
-        canvas.drawImage(self.filename, x, y - myh, myw, myh, mask='auto')
+        canvas.drawImage(self.filename, x, y - myh + self.raised_by, myw, myh,
+                         mask='auto')
         return x + myw, y
 
     def __str__(self):
@@ -475,12 +477,15 @@ class Presentation(object):
         n = (len(parts) - 1) / 2
         args = self._parseArgs(parts, "wn" * n + "s")
         zoom = 100
+        raised_by = 0
         for k, v in zip(args[:-1:2], args[1:-1:2]):
             if k == '-zoom':
                 zoom = v
+            elif k == '-raise':
+                raised_by = v
             else:
                 raise MgpSyntaxError("newimage %s not handled yet" % k)
-        self.slides[-1].addImage(args[-1], zoom)
+        self.slides[-1].addImage(args[-1], zoom, raised_by)
 
     def _handleDirective_mark(self, parts):
         self.mark = self.slides[-1].addMark()
