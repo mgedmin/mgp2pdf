@@ -6,6 +6,7 @@ A quick-and-dirty MagicPoint to PDF converter.
 import os
 import sys
 import optparse
+import subprocess
 
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.units import inch
@@ -357,13 +358,39 @@ class Presentation(object):
     def load(self, file):
         if not hasattr(file, 'read'):
             file = open(file)
-        for line in file:
+        for line in self.preprocess(file):
             if line.startswith('%'):
                 self._handleDirectives(line)
             elif line.startswith('#'):
                 pass
             else:
                 self._handleText(line)
+
+    def preprocess(self, file):
+        filter_cmd = None
+        data_to_filter = []
+        for line in file:
+            if line.startswith('%filter'):
+                filter_cmd = line[len('%filter'):].strip()
+                if not filter_cmd.startswith('"') or not filter_cmd.startswith('"'):
+                    raise MgpSyntaxError("%filter directive expects a quoted string")
+                filter_cmd = filter_cmd[1:-1]
+                data_to_filter = []
+            elif line.startswith('%endfilter'):
+                if not filter_cmd:
+                    raise MgpSyntaxError('%endfilter without matching %filter')
+                # UNSAFE -- should have a cmdline option to turn this on
+                child = subprocess.Popen(filter_cmd, shell=True,
+                                         stdin=subprocess.PIPE,
+                                         stdout=subprocess.PIPE)
+                output = child.communicate(''.join(data_to_filter))[0]
+                for line in output.splitlines(True):
+                    yield line
+                filter_cmd = None
+            elif filter_cmd:
+                data_to_filter.append(line)
+            else:
+                yield line
 
     def _newPage(self):
         self.slides.append(Slide())
@@ -386,6 +413,8 @@ class Presentation(object):
 
     def _handleDirective(self, directive):
         parts = directive.split()
+        if not parts:
+            return # warn maybe
         word = parts[0]
         self._directives_used_in_this_line.add(word)
         handler = getattr(self, '_handleDirective_%s' % word,
