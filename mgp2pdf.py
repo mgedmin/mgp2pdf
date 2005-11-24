@@ -41,11 +41,13 @@ def textWrapPositions(s):
         [16, 10, 4]
         >>> textWrapPositions('a  good  day')
         [12, 7, 1]
+        >>> textWrapPositions(u'neangli\u0161kas tekstas'.encode('UTF-8'))
+        [20, 12]
 
     """
     poses = [len(s)]
     for idx in range(len(s) - 1, 0, -1):
-        if s[idx-1].isalnum() and not s[idx].isalnum():
+        if not s[idx-1].isspace() and s[idx].isspace():
             poses.append(idx)
     return poses
 
