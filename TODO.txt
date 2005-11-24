@@ -1,0 +1,18 @@
+mgp2pdf TODO
+------------
+
+- Handle tabs at the beginning of line (i.e. bullet points; see lecture5.mgp)
+- Handle tabs in the middle of a line (see lecture8.mgp)
+- Cmdline option to enable unsafe directives (%filter)
+- Trap MgpSyntaxErrors, print filename and line number
+- Fix %again when several lines follow it (see lecture6.mgp)
+- Fix %again immediatelly following %newimage (see lecture6.mgp)
+- Fix argument splitting with spaces inside ("foo bar"; see lecture9.mgp)
+
+Maybe
+-----
+
+- Compare output with mgp's output semiautomatically (screenshot, diff pixmaps)
+- Config file for font mappings (xfont "andale mono" -> /path/to/file.ttf)
+- --title, --author, --subject cmdline options
+- PDF outlines
