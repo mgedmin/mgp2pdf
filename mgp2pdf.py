@@ -203,9 +203,11 @@ class Line(object):
                 remaining_space -= cw
             else:
                 bits = chunk.split(canvas, w, h, remaining_space)
+                cw, ch = bits[0].size(canvas, w, h)
+                if cw <= remaining_space:
+                    chunks_that_fit.append(bits.pop(0))
                 remaining_chunks = bits + remaining_chunks
-                if len(bits) == 1 or remaining_space <= 0: # was unsplittable
-                    break
+                break
         if not chunks_that_fit and remaining_chunks:
             chunks_that_fit.append(remaining_chunks.pop(0))
         if remaining_chunks:
@@ -545,13 +547,13 @@ def main():
         sys.exit(1)
     for fn in args:
         p = Presentation(fn)
-        if opts.verbose:
-            print p
         if opts.outfile:
             outfile = opts.outfile
         else:
             outfile = os.path.splitext(fn)[0] + '.pdf'
         p.makePDF(outfile)
+        if opts.verbose:
+            print p
 
 
 if __name__ == '__main__':
