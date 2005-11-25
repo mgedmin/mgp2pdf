@@ -313,26 +313,47 @@ class TextChunk(object):
         return TextChunk(newtext, self.font, self.fontSize, self.vgap,
                          self.color)
 
-    def size(self, canvas, w, h):
+    def _splitIntoRuns(self, text=None):
+        if text is None:
+            text = self.text
+        return map(None, re.split('(\t)', text))
+
+    def _calcSizes(self, w, h):
         fontSize = h * self.fontSize / 100
         leading = fontSize * (100 + self.vgap) / 100
-        textwidth = canvas.stringWidth(self.text, self.font, fontSize)
+        tabsize = fontSize * 2
+        return fontSize, leading, tabsize
+
+    def size(self, canvas, w, h, text=None):
+        fontSize, leading, tabsize = self._calcSizes(w, h)
+        textwidth = 0
+        for run in self._splitIntoRuns(text):
+            if run == '\t':
+                textwidth = textwidth + tabsize - textwidth % tabsize
+            else:
+                textwidth += canvas.stringWidth(run, self.font, fontSize)
         return textwidth, leading
 
     def drawOn(self, canvas, x, y, w, h):
-        fontSize = h * self.fontSize / 100
-        leading = fontSize * (100 + self.vgap) / 100
-        txt = canvas.beginText(x, y - fontSize)
-        txt.setFont(self.font, fontSize, leading)
-        txt.setFillColor(self.color)
-        txt.textOut(self.text)
-        canvas.drawText(txt)
-        return txt.getX(), y
+        fontSize, leading, tabsize = self._calcSizes(w, h)
+        x0 = x
+        for run in self._splitIntoRuns():
+            if run == '\t':
+                curpos = x - x0
+                newpos = curpos + tabsize - curpos % tabsize
+                x = x0 + newpos
+            else:
+                txt = canvas.beginText(x, y - fontSize)
+                txt.setFont(self.font, fontSize, leading)
+                txt.setFillColor(self.color)
+                txt.textOut(run)
+                canvas.drawText(txt)
+                x = txt.getX()
+        return x, y
 
     def split(self, canvas, w, h, maxw):
-        fontSize = h * self.fontSize / 100
         for pos in textWrapPositions(self.text):
-            myw = canvas.stringWidth(self.text[:pos], self.font, fontSize)
+            myw = self.size(canvas, w, h, self.text[:pos])[0]
             if myw <= maxw:
                 return [self.cloneStyle(self.text[:pos]),
                         self.cloneStyle(self.text[pos:].lstrip())]

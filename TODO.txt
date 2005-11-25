@@ -2,7 +2,6 @@ mgp2pdf TODO
 ------------
 
 - Handle tabs at the beginning of line (i.e. bullet points; see lecture5.mgp)
-- Handle tabs in the middle of a line (see lecture8.mgp)
 - Cmdline option to enable unsafe directives (%filter)
 - Trap MgpSyntaxErrors, print filename and line number
 
