@@ -2,7 +2,11 @@
 """
 Compare screenshots of MGP presentations with screenshots of PDF files.
 
-Use: compare.py file.pdf file.mgp
+Use: compare.py file.pdf file.mgp [outputdir]
+
+If outputdir is omitted, compare.py opens an interactive PyGame window.
+If outputdir is specified, compare.py puts merged slides into the given
+directory noninteractively.
 
 Keys:
     Left or PgUp    -- back one slide
@@ -15,7 +19,8 @@ Keys:
 
 Dependencies:
     python 2.4
-    pygame
+    pygame (only for interactive mode)
+    PIL (only for noninteractive mode)
     mgp
     pdftoppm (from xpdf)
     convert (from imagemagick)
@@ -109,6 +114,34 @@ def to_images(filename):
     if filename.endswith('.pdf'):
         return pdf_to_images(filename)
     raise Error("don't know what to do with %s")
+
+
+class ImageComparator:
+
+    canonical_size = (1024, 768)
+
+    def __init__(self, outputdir):
+        self.outputdir = outputdir
+
+    def load(self, filename):
+        import Image
+        img = Image.open(filename)
+        if img.mode != 'RGB':
+            img = img.convert('RGB')
+        if img.size != self.canonical_size:
+            img = img.resize(self.canonical_size, Image.BICUBIC)
+        return img
+
+    def compare(self, images):
+        import Image
+        try_mkdir(self.outputdir)
+        for idx, (img1, img2) in enumerate(images):
+            outfile = os.path.join(self.outputdir, 'slide%0d.png' % (idx+1))
+            inform("Creating %s" % outfile)
+            img1 = self.load(img1)
+            img2 = self.load(img2)
+            img = Image.blend(img1, img2, 0.5)
+            img.save(outfile)
 
 
 class PygameComparator:
@@ -219,7 +252,7 @@ def compare(file1, file2, comparator=None):
                                                           file2, len(images2))
     if not comparator:
         return
-    comparator(file1, file2).compare(zip(images1, images2))
+    comparator.compare(zip(images1, images2))
 
 
 def setup_extra_path(extrapath):
@@ -227,13 +260,17 @@ def setup_extra_path(extrapath):
 
 
 def main():
-    if len(sys.argv) != 3:
-        print >> sys.stderr, "Use: compare.py filename.pdf filename.mgp"
+    if len(sys.argv) not in (3, 4):
+        print >> sys.stderr, "Use: compare.py filename.pdf filename.mgp [outputdir]"
         sys.exit(1)
     setup_extra_path(EXTRAPATH)
-    comparator = PygameComparator
+    file1, file2 = sys.argv[1], sys.argv[2]
+    if len(sys.argv) == 4:
+        comparator = ImageComparator(sys.argv[3])
+    else:
+        comparator = PygameComparator(file1, file2)
     try:
-        compare(sys.argv[1], sys.argv[2], comparator)
+        compare(file1, file2, comparator)
     except Error, e:
         print >> sys.stderr, e
         sys.exit(1)
