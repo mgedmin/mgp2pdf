@@ -1,6 +1,23 @@
 #!/usr/bin/python
 """
 Compare screenshots of MGP presentations with screenshots of PDF files.
+
+Use: compare.py file.pdf file.mgp
+
+Keys:
+    Left or PgUp    -- back one slide
+    f               -- toggle fullscreen
+    q or Esc        -- quit
+    1               -- show only one of the images
+    2               -- show the other one of the images
+    3               -- show both images (alpha-blended)
+    any other key   -- advance to next slide
+
+Needs some external programs:
+    mgp
+    pdftoppm (from xpdf)
+    convert (from imagemagick)
+
 """
 
 import os
@@ -59,7 +76,7 @@ def mgp_to_images(filename):
         try_mkdir(tempdir)
         touch(timestampfile)
         inform("Converting %s to images" % filename)
-        system(MGP, '-E', 'png', '-D', tempdir, filename)
+        system(MGP, '-U', '-E', 'png', '-D', tempdir, filename)
     return sorted(glob.glob(os.path.join(tempdir, 'mgp?????.png')))
 
 
@@ -92,8 +109,10 @@ class PygameComparator:
 
     _shared_dict = dict(_did_init=False)
 
-    def __init__(self):
+    def __init__(self, filename1, filename2):
         self.__dict__ = self._shared_dict
+        self.filename1 = os.path.basename(filename1)
+        self.filename2 = os.path.basename(filename2)
 
     def init(self):
         if self._did_init:
@@ -102,7 +121,6 @@ class PygameComparator:
 
         import pygame, pygame.locals
         pygame.init()
-        pygame.display.set_caption('Comparing MGP and PDF')
         self._set_mode()
 
     def _set_mode(self, fullscreen=None):
@@ -124,6 +142,9 @@ class PygameComparator:
     def compare_image(self, img1, img2):
         self.init()
         import pygame, pygame.locals
+        pygame.display.set_caption('Comparing %s and %s: slide %s'
+                                   % (self.filename1, self.filename2,
+                                      self.idx+1))
         img1 = pygame.image.load(img1)
         self.img1 = pygame.transform.scale(img1, self.screen_size)
         img2 = pygame.image.load(img2)
@@ -152,6 +173,13 @@ class PygameComparator:
             if event.type == pygame.locals.QUIT:
                 return
             if event.type == pygame.locals.KEYDOWN:
+                if event.key in [pygame.locals.K_LALT,
+                                 pygame.locals.K_RALT,
+                                 pygame.locals.K_LCTRL,
+                                 pygame.locals.K_RCTRL,
+                                 pygame.locals.K_LSHIFT,
+                                 pygame.locals.K_RSHIFT]:
+                    pass
                 if event.key == pygame.locals.K_ESCAPE:
                     sys.exit(0)
                 elif event.key in (pygame.locals.K_PAGEUP,
@@ -182,7 +210,7 @@ def compare(file1, file2, comparator=None):
                                                           file2, len(images2))
     if not comparator:
         return
-    comparator().compare(zip(images1, images2))
+    comparator(file1, file2).compare(zip(images1, images2))
 
 
 def setup_extra_path(extrapath):
