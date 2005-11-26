@@ -136,7 +136,7 @@ class ImageComparator:
         import Image
         try_mkdir(self.outputdir)
         for idx, (img1, img2) in enumerate(images):
-            outfile = os.path.join(self.outputdir, 'slide%0d.png' % (idx+1))
+            outfile = os.path.join(self.outputdir, 'slide%05d.png' % (idx+1))
             inform("Creating %s" % outfile)
             img1 = self.load(img1)
             img2 = self.load(img2)
