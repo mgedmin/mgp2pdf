@@ -13,11 +13,20 @@ Keys:
     3               -- show both images (alpha-blended)
     any other key   -- advance to next slide
 
-Needs some external programs:
+Dependencies:
+    python 2.4
+    pygame
     mgp
     pdftoppm (from xpdf)
     convert (from imagemagick)
 
+Note: the conversion of mgp to bitmaps shows the presentation on the screen,
+but is not interactive.  When the conversion is done, only then you can
+interact with the pygame interface.
+
+Note: compare.py leaves around bitmaps rendered from the pdf/mgp files as
+caches, for faster future reconversion.  These caches may take up some amount
+of disk space.  You will find them in hidden directories named .convert-*.
 """
 
 import os
