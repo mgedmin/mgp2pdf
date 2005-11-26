@@ -114,6 +114,13 @@ class PygameComparator:
         mode = self.fullscreen and pygame.locals.FULLSCREEN or 0
         self.screen = pygame.display.set_mode(self.screen_size, mode)
 
+    def compare(self, images):
+        self.init()
+        self.idx = 0
+        while self.idx < len(images):
+            self.compare_image(*images[self.idx])
+            self.idx += 1
+
     def compare_image(self, img1, img2):
         self.init()
         import pygame, pygame.locals
@@ -132,6 +139,12 @@ class PygameComparator:
         self.screen.blit(self.img2, (0, 0))
         pygame.display.flip()
 
+    def _draw_one(self, img):
+        import pygame, pygame.locals
+        img.set_alpha(255)
+        self.screen.blit(img, (0, 0))
+        pygame.display.flip()
+
     def _wait_for_key(self):
         import pygame, pygame.locals
         while True:
@@ -141,17 +154,24 @@ class PygameComparator:
             if event.type == pygame.locals.KEYDOWN:
                 if event.key == pygame.locals.K_ESCAPE:
                     sys.exit(0)
+                elif event.key in (pygame.locals.K_PAGEUP,
+                                   pygame.locals.K_LEFT):
+                    if self.idx > 0:
+                        self.idx -= 2
+                        return
+                elif event.unicode == '1':
+                    self._draw_one(self.img1)
+                elif event.unicode == '2':
+                    self._draw_one(self.img2)
+                elif event.unicode == '3':
+                    self._draw()
                 elif event.unicode in ('f', 'F'):
                     self._set_mode(not self.fullscreen)
                     self._draw()
+                elif event.unicode in ('q', 'Q'):
+                    sys.exit(0)
                 else:
                     return
-
-
-def compare_image(img1, img2, comparator=None):
-    if comparator is not None:
-        inform("Comparing %s and %s" % (img1, img2))
-        comparator().compare_image(img1, img2)
 
 
 def compare(file1, file2, comparator=None):
@@ -160,8 +180,9 @@ def compare(file1, file2, comparator=None):
     if len(images1) != len(images2):
         print "%s has %d slides, but %s has %d slides" % (file1, len(images1),
                                                           file2, len(images2))
-    for image1, image2 in zip(images1, images2):
-        compare_image(image1, image2, comparator)
+    if not comparator:
+        return
+    comparator().compare(zip(images1, images2))
 
 
 def setup_extra_path(extrapath):
