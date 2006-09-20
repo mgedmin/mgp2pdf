@@ -66,6 +66,7 @@ class Slide(object):
         self.area = (100, 100)
         self.color = black
         self.alignment = Left
+        self.prefix = 0
 
     def setArea(self, w, h):
         self.area = (w, h)
@@ -87,9 +88,16 @@ class Slide(object):
         if self._cur_line is not None:
             self._cur_line.alignment = alignment
 
+    def setPrefix(self, prefix):
+        self.prefix = prefix
+        if self._cur_line is not None:
+            # XXX: not sure how mgp handles prefix changes in the middle of a
+            # line
+            self._cur_line.prefix = prefix
+
     def currentOrNewLine(self):
         if self._cur_line is None:
-            self._cur_line = Line(self.alignment)
+            self._cur_line = Line(self.alignment, self.prefix)
             self.lines.append(self._cur_line)
         return self._cur_line
 
@@ -162,12 +170,15 @@ class Center(object):
 class Line(object):
     """A line of text (and images)."""
 
-    def __init__(self, alignment=Left):
+    def __init__(self, alignment=Left, prefix=0):
         self.chunks = []
         self.alignment = alignment
+        self.prefix = 0
+        # XXX prefix can be a string (usually of whitespace), but that is not
+        # yet implemented in size(), split() nor drawOn().
 
     def cloneStyle(self, newchunks):
-        clone = Line(self.alignment)
+        clone = Line(self.alignment, self.prefix)
         clone.chunks = newchunks
         return clone
 
@@ -177,6 +188,9 @@ class Line(object):
     def size(self, canvas, w, h):
         myw = myh = 0
         seen_text = False
+        chunks = self.chunks
+        if isinstance(self.prefix, int):
+            w = w * (100 - self.prefix) / 100
         for chunk in self.chunks:
             cw, ch = chunk.size(canvas, w, h)
             if isinstance(chunk, TextChunk):
@@ -197,6 +211,8 @@ class Line(object):
         chunks_that_fit = []
         remaining_chunks = list(self.chunks)
         remaining_space = w
+        if isinstance(self.prefix, int):
+            w = w * (100 - self.prefix) / 100
         while remaining_chunks:
             chunk = remaining_chunks.pop(0)
             cw, ch = chunk.size(canvas, w, h)
@@ -221,6 +237,10 @@ class Line(object):
     def drawOn(self, canvas, x, y, w, h):
         x0, y0 = x, y
         myw, myh = self.size(canvas, w, h)
+        if isinstance(self.prefix, int):
+            x += w * self.prefix / 100
+            x0 += w * self.prefix / 100
+            w = w * (100 - self.prefix) / 100
         x += self.alignment.align(myw, w)
         for chunk in self.chunks:
             x, y = chunk.drawOn(canvas, x, y, w, h)
@@ -485,6 +505,10 @@ class Presentation(object):
         name, = self._parseArgs(parts, "s")
         self.slides[-1].setFont(name)
 
+    def _handleDirective_prefix(self, parts):
+        prefix, = self._parseArgs(parts, "S")
+        self.slides[-1].setPrefix(prefix)
+
     def _handleDirective_size(self, parts):
         size, = self._parseArgs(parts, "n")
         self.slides[-1].setSize(size)
@@ -548,6 +572,11 @@ class Presentation(object):
                                  % (parts[0], len(argspec), len(parts) - 1))
         results = []
         for n, (arg, part) in enumerate(zip(argspec, parts[1:])):
+            if arg == 'S': # either 'n' or 's'
+                if part.isdigit():
+                    arg = 'n'
+                else:
+                    arg = 's'
             if arg == 'w':
                 results.append(part)
             elif arg == 'n':
