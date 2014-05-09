@@ -1,8 +1,8 @@
 mgp2pdf TODO
 ------------
 
-- [ ] Package and upload to PyPI
-- [ ] Add a test suite and set up Travis & Jenkins
+- [x] Package and upload to PyPI
+- [x] Add a test suite and set up Travis & Jenkins
 - [ ] Set up test coverage measurement
 - [ ] Add some sensible integration tests
 - [ ] Python 3 support
