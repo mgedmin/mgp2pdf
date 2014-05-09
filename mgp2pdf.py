@@ -631,6 +631,16 @@ class Fonts(object):
     def define(self, name, engine, enginefontname):
         if engine != "xfont":
             raise NotImplementedError("unsupported font engine %s" % engine)
+        if '-' in enginefontname and ':' not in enginefontname:
+            if enginefontname.count('-') == 1:
+                # family-weight
+                family, weight = enginefontname.split('-')
+                enginefontname = '%s:weight=%s' % (family, weight)
+            elif enginefontname.count('-') == 2:
+                # family-weight-slant
+                family, weight, slant = enginefontname.split('-')
+                slant = {'i': 'italic', 'm': 'roman'}[slant]
+                enginefontname = '%s:weight=%s:slant=%s' % (family, weight, slant)
         filename = subprocess.Popen(
             ['fc-match', enginefontname, '-f', '%{file}'],
             stdout=subprocess.PIPE).communicate()[0].strip()
