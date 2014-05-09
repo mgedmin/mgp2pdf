@@ -625,6 +625,7 @@ class Presentation(object):
 class Fonts(object):
     """Manages the fonts used in the presentation."""
 
+    # XXX: this is not very portable
     fontpath = '/usr/share/fonts/truetype/msttcorefonts/'
 
     def define(self, name, engine, enginefontname):

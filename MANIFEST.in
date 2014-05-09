@@ -1,0 +1,6 @@
+include *.md
+include *.py
+include *.rst
+include *.ini
+include *.yml
+include LICENCE
