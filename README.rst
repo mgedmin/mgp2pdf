@@ -14,10 +14,7 @@ Installation
 
 ::
 
-    pip install reportlab  # or sudo apt-get install python-reportlab
-
-
-You can't pip install mgp2pdf (yet).
+    pip install mgp2pdf
 
 
 Usage
@@ -25,7 +22,7 @@ Usage
 
 ::
 
-    python mgp2pdf slides.mgp [-o output.pdf]
+    mgp2pdf slides.mgp [-o output.pdf]
 
 
 Why another converter?
