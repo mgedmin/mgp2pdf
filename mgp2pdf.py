@@ -8,6 +8,7 @@ import re
 import sys
 import optparse
 import subprocess
+import logging
 
 from reportlab.lib.pagesizes import landscape
 from reportlab.lib.units import inch
@@ -16,6 +17,9 @@ from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
+
+
+log = logging.getLogger('mgp2pdf')
 
 
 Screen_1024x768_at_100_dpi = 1024 * inch / 100, 768 * inch / 100
@@ -632,8 +636,15 @@ class Fonts(object):
             stdout=subprocess.PIPE).communicate()[0].strip()
         if not filename:
             sys.exit('Could not find the font file for %s', enginefontname)
+        log.debug("Font %s: %s -> %s" % (name, enginefontname, filename))
         pdfmetrics.registerFont(TTFont(name, filename))
         pdfmetrics.getFont(name)  # just see if raises
+
+
+def setUpLogging(verbose=False):
+    root = logging.getLogger()
+    root.addHandler(logging.StreamHandler(sys.stdout))
+    root.setLevel(logging.DEBUG if verbose else logging.INFO)
 
 
 def main():
@@ -653,6 +664,7 @@ def main():
     if not args:
         print >> sys.stderr, "nothing to do (try mgp2pdf -h for help)"
         sys.exit(1)
+    setUpLogging(opts.verbose)
     for fn in args:
         title = os.path.splitext(os.path.basename(fn))[0]
         p = Presentation(fn, title)
