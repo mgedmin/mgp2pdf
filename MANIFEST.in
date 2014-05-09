@@ -4,3 +4,5 @@ include *.rst
 include *.ini
 include *.yml
 include LICENCE
+include Makefile
+include .gitignore
