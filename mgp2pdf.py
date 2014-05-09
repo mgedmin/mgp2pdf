@@ -9,9 +9,8 @@ import sys
 import optparse
 import subprocess
 
-from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib.pagesizes import landscape
 from reportlab.lib.units import inch
-from reportlab.lib.fonts import addMapping
 from reportlab.lib.colors import HexColor, black
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase import pdfmetrics
@@ -21,7 +20,6 @@ from reportlab.pdfgen.canvas import Canvas
 
 Screen_1024x768_at_100_dpi = 1024 * inch / 100, 768 * inch / 100
 Screen_1024x768_at_72_dpi = 1024 * inch / 72, 768 * inch / 72
-
 
 
 class MgpSyntaxError(Exception):
@@ -49,7 +47,7 @@ def textWrapPositions(s):
     """
     poses = [len(s)]
     for idx in range(len(s) - 1, 0, -1):
-        if not s[idx-1].isspace() and s[idx].isspace():
+        if not s[idx - 1].isspace() and s[idx].isspace():
             poses.append(idx)
     return poses
 
@@ -156,10 +154,12 @@ class Left(object):
     def align(textwidth, boxwidth):
         return 0
 
+
 class Right(object):
     @staticmethod
     def align(textwidth, boxwidth):
         return boxwidth - textwidth
+
 
 class Center(object):
     @staticmethod
@@ -188,7 +188,6 @@ class Line(object):
     def size(self, canvas, w, h):
         myw = myh = 0
         seen_text = False
-        chunks = self.chunks
         if isinstance(self.prefix, int):
             w = w * (100 - self.prefix) / 100
         for chunk in self.chunks:
@@ -297,7 +296,7 @@ class Again(SimpleChunk):
 class Image(SimpleChunk):
     """An image."""
 
-    def __init__(self, filename, zoom=100, raised_by = 0):
+    def __init__(self, filename, zoom=100, raised_by=0):
         self.filename = filename
         self.zoom = zoom
         self.raised_by = 0
@@ -584,7 +583,7 @@ class Presentation(object):
             elif arg == 's':
                 if not part.startswith('"') or not part.startswith('"'):
                     raise MgpSyntaxError("%s directive expects a quoted string as its %dth arg"
-                                         % (parts[0], n+1))
+                                         % (parts[0], n + 1))
                 results.append(part[1:-1])
             else:
                 assert False, 'unknown argspec %r' % arg
@@ -606,7 +605,7 @@ class Presentation(object):
     def __str__(self):
         res = []
         for n, s in enumerate(self.slides):
-            res.append('--- Slide %d ---\n' % (n+1))
+            res.append('--- Slide %d ---\n' % (n + 1))
             res.append(str(s) + '\n')
         return ''.join(res)
 
@@ -636,7 +635,7 @@ class Fonts(object):
         enginefontname = enginefontname.replace('andale mono', 'andalemo')
         filename = os.path.join(self.fontpath, enginefontname + '.ttf')
         pdfmetrics.registerFont(TTFont(name, filename))
-        font = pdfmetrics.getFont(name)
+        pdfmetrics.getFont(name)  # just see if raises
 
 
 def main():
