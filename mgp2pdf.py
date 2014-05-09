@@ -624,16 +624,14 @@ class Presentation(object):
 class Fonts(object):
     """Manages the fonts used in the presentation."""
 
-    # XXX: this is not very portable
-    fontpath = '/usr/share/fonts/truetype/msttcorefonts/'
-
     def define(self, name, engine, enginefontname):
         if engine != "xfont":
             raise NotImplementedError("unsupported font engine %s" % engine)
-        enginefontname = enginefontname.replace('-bold', 'b')
-        enginefontname = enginefontname.replace('-medium-i', 'i')
-        enginefontname = enginefontname.replace('andale mono', 'andalemo')
-        filename = os.path.join(self.fontpath, enginefontname + '.ttf')
+        filename = subprocess.Popen(
+            ['fc-match', enginefontname, '-f', '%{file}'],
+            stdout=subprocess.PIPE).communicate()[0].strip()
+        if not filename:
+            sys.exit('Could not find the font file for %s', enginefontname)
         pdfmetrics.registerFont(TTFont(name, filename))
         pdfmetrics.getFont(name)  # just see if raises
 
