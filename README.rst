@@ -61,3 +61,7 @@ If you want to leave a tip, see https://www.gittip.com/mgedmin/
 
 .. image:: https://travis-ci.org/mgedmin/mgp2pdf.svg?branch=master
     :target: https://travis-ci.org/mgedmin/mgp2pdf
+
+.. image:: https://coveralls.io/repos/mgedmin/mgp2pdf/badge.png
+  :target: https://coveralls.io/r/mgedmin/mgp2pdf
+
