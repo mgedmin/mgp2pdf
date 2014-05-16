@@ -17,6 +17,9 @@ all:
 test check:
 	detox
 
+.PHONY: coverage
+coverage:
+	tox -e coverage
 
 .PHONY: dist
 dist:
