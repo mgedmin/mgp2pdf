@@ -3,6 +3,7 @@ python:
     - 2.6
     - 2.7
 install:
+    - if [ $TRAVIS_PYTHON_VERSION = 2.6 ]; then pip install 'ReportLab<3.0'; fi
     - travis_retry pip install coverage coveralls -e .
 script:
     - coverage run --source=mgp2pdf.py tests.py
