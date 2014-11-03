@@ -14,7 +14,6 @@ setup(
     author='Marius Gedminas',
     author_email='marius@gedmin.as',
     url='https://github.com/mgedmin/mgp2pdf/',
-    bugtrack_url='https://github.com/mgedmin/mgp2pdf/issues',
     description='MagicPoint to PDF converter',
     long_description=long_description,
     classifiers=[
