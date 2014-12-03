@@ -1,0 +1,515 @@
+#!/usr/bin/env mgp
+# Note: tabs and trailing spaces are *important* in this file
+# - Preamble ----------------------------------------------------------------
+%deffont "standard" xfont "verdana"
+%deffont "thick" xfont "verdana-bold"
+%deffont "em" xfont "verdana-medium-i"
+%default 1 area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%default 2 center, size 5
+%default 3 size 7, vgap 80
+##%default 4 font "em", size 7, vgap 10
+##%default 5 font "standard", size 3
+# ---------------------------------------------------------------------------
+%page
+%pcache 1 1 0 1
+%ccolor "#134d73"
+%nodefault
+%size 7, font "standard", vgap 20, fore "black", back "white"
+
+
+
+%center, font "standard", size 7
+Programavimo kalba
+%center, font "thick", size 11
+Python
+%size 3
+
+antroji paskaita
+
+%size 5, font "standard", fore "#134d73"
+Marius Gedminas
+%size 4
+<mgedmin@b4net.lt>
+%size 2
+
+%size 5
+
+%size 4
+http://mg.b4net.lt/python/
+%size 2
+
+
+%mark
+
+
+%fore "black",size 2
+2006 ruduo
+%again
+%left,valign "top",newimage "logo.gif"
+# ---------------------------------------------------------------------------
+%page
+
+
+Sintaksė
+# ---------------------------------------------------------------------------
+%page
+
+
+Vienas sakinys vienoje eilutėje
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+x = 2
+y = 3
+z = x + y
+print x, "+", y, "=", z
+
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 8, vgap 50, fore "#000"
+\# Jei labai reikia --
+\# keli sakiniai vienoje eilutėje
+x = 2; y = 3
+import pdb; pdb.set_trace()
+
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 8, vgap 50, fore "#000"
+\# Jei netelpa -- galima perkelti
+my_magic_formula = (x + y +
+                                       z * w)
+from very.very.long.package.name \\
+    import something
+# ---------------------------------------------------------------------------
+%page
+
+
+Blokai skiriami postūmio gyliu
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+x = int(raw_input("Įveskite x: "))
+y = int(raw_input("Įveskite y: "))
+if x == y:
+    print "Koks sutapimas!"
+    print "x == y"
+    print "kas galėjo pagalvoti?"
+# ---------------------------------------------------------------------------
+%page
+
+
+Programuotojams tai atrodo keista
+%size 7
+pirmas 20 minučių
+# ---------------------------------------------------------------------------
+%page
+
+
+4 tarpai
+%size 7
+stipri tradicija
+# ---------------------------------------------------------------------------
+%page
+
+
+Priskyrimo sakinys
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+x = 42
+y = 'abc'
+z = str(x) + y
+
+i = j = k = 0
+foo, bar = bar, foo
+# ---------------------------------------------------------------------------
+%page
+
+
+Reiškiniai
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%center, size 7, vgap 50, fore "#000"
+-b + c * d
+(x ** 2 + y ** 2) ** 0.5
+'Mano' + '\\n' + "vardas"
+len('lia lia')
+'kva kva'.upper()
+# ---------------------------------------------------------------------------
+%page
+
+
+Reiškiniai
+%size 7
+sąrašai
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%center, size 7, vgap 50, fore "#000"
+[1, 2, 3, 4]
+[1, 2] + [3, 4]
+a_list[5]
+a_list[i:j]
+a_list[:3]
+a_list[-3:]
+# ---------------------------------------------------------------------------
+%page
+
+
+Reiškiniai
+%size 7
+žodynai
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%center, size 7, vgap 50, fore "#000"
+{'jonas': 2, 'petras': 3}
+balai['jonas']
+balai.get('petraitis', 0)
+'jonas' in balai
+'petras' not in balai
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%center, size 7, vgap 50, fore "#000"
+balai['jonas', 'matematika']
+balai['jonas', 'informatika']
+raktas == ('jonas', 'matematika')
+balai[raktas]
+# ---------------------------------------------------------------------------
+%page
+
+
+Sąrašai ir žodynai
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+balai = []
+balai.append(4)
+balai += [5, 6, 1, 2, 3]
+print max(balai)
+balai.sort()
+print ', '.join(balai[-3:])
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+balai = {}
+balai['jonas'] = 5
+balai['petras'] = 6
+print balai.keys()
+print balai.values()
+balai['aš'] = balai.get('aš', 0) + 1
+# ---------------------------------------------------------------------------
+%page
+
+
+Išvedimas į ekraną
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+print 'Labas!'
+print 'Mano', 'vardas'
+print 'x =', x
+print 'x =',
+print x
+# ---------------------------------------------------------------------------
+%page
+
+
+Skaitymas iš klaviatūros
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+x = raw_input("Įvesk ką nors: ")
+
+\# Nedarykite taip:
+y = input("Sugadink ką nors: ")
+# ---------------------------------------------------------------------------
+%page
+
+
+Darbas su failais
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+input = open('input.txt')
+output = open('output.txt', 'w')
+for line in input:
+    print >> output, line
+input.close()
+output.close()
+# ---------------------------------------------------------------------------
+%page
+
+
+Sąlyginis sakinys
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+if 1 <= x <= n:
+    print "valio"
+else:
+    print "ne valio"
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+cmd = raw_input("> ").strip()
+if cmd == 'shout':
+    print "Valio!!!!"
+elif cmd == 'wait':
+    time.sleep(1)
+else:
+    print "Huh?"
+# ---------------------------------------------------------------------------
+%page
+
+
+Ciklai
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+while True:
+    cmd = raw_input("> ").strip()
+    if cmd == 'quit':
+        break
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+for line in file('/etc/passwd'):
+    print line,
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+for i in range(0, 1000, 10):
+    print i,
+# ---------------------------------------------------------------------------
+%page
+
+
+Funkcijos
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+def print_password(username):
+    for line in file('/etc/passwd'):
+        fields = line.split(':')
+        if fields[0] == username:
+            print fields[1]
+# ---------------------------------------------------------------------------
+%page
+
+
+Moduliai
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+import sys
+print >> sys.stderr, "Klaida!"
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+\# mano_modulis.py
+import time
+
+def visatos_prasme():
+    time.sleep(236677140000000)
+    return 42
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+\# mano programa
+
+from mano_modulis import \\
+      visatos_prasme
+print visatos_prasme()
+# ---------------------------------------------------------------------------
+%page
+
+
+Kuo skirias modulis nuo programos?
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+\# mano_modulis.py
+import time
+%size 3
+
+%size 7
+def visatos_prasme():
+    time.sleep(236677140000000)
+    return 42
+%size 3
+
+%size 7
+if __name__ == '__main__':
+    print "Testuoju..."
+    assert visatos_prasme() == 42
+# ---------------------------------------------------------------------------
+%page
+
+
+Paketai
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+from zope.interface import Interface
+# ---------------------------------------------------------------------------
+%page
+
+
+Katalogas su __init__.py failu
+# ---------------------------------------------------------------------------
+%page
+
+
+Klasės
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 4
+
+%left, size 7, vgap 40, fore "#000"
+from math import hypot
+%size 2
+
+%size 7
+class Vector(object):
+%size 2
+
+%size 7
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+%size 2
+
+%size 7
+    def length(self):
+        return hypot(self.x, self.y)
+# ---------------------------------------------------------------------------
+%page
+
+
+Objektai
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+zero = Vector(0, 0)
+assert zero.length() == 0.0
+# ---------------------------------------------------------------------------
+%page
+
+
+Viskas yra objektai
+# ---------------------------------------------------------------------------
+%page
+%size 2
+
+%size 3
+
+Skaičiai
+Simbolių eilutės
+Įvairios kitos reikšmės
+Funkcijos
+Moduliai
+Klasės
+# ---------------------------------------------------------------------------
+%page
+
+
+Bet kokį objektą galima priskirti kintamajam
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#000"
+zero = Vector(0, 0)
+one = Vector(1, 0)
+fn1 = zero.length
+fn2 = one.length
+print fn1(), fn2()
+# ---------------------------------------------------------------------------
+%page
+
+
+uff...
+%size 4
+laikas pailsėti
+# ---------------------------------------------------------------------------

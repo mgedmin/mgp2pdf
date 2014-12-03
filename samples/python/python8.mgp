@@ -1,0 +1,626 @@
+#!/usr/bin/env mgp
+# Note: tabs and trailing spaces are *important* in this file
+# - Preamble ----------------------------------------------------------------
+%deffont "standard" xfont "verdana"
+%deffont "thick" xfont "verdana-bold"
+%deffont "em" xfont "verdana-medium-i"
+%deffont "mono" xfont "andale mono"
+%default 1 area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%default 2 center, size 5
+%default 3 size 7, vgap 80
+%tab 1 prefix "    "
+# ---------------------------------------------------------------------------
+%page
+%pcache 1 1 0 1
+%ccolor "#134d73"
+%nodefault
+%size 7, font "standard", vgap 20, fore "black", back "white"
+
+
+
+%center, font "standard", size 7
+Programavimo kalba
+%center, font "thick", size 11
+Python
+%size 3
+
+aštuntoji paskaita
+
+%size 5, font "standard", fore "#134d73"
+Marius Gedminas
+%size 4
+<mgedmin@b4net.lt>
+%size 2
+
+%size 5
+
+%size 4
+http://mg.b4net.lt/python/
+%size 2
+
+
+%mark
+
+
+%fore "black",size 2
+2006 ruduo
+%again
+%left,valign "top",newimage "logo.gif"
+# ---------------------------------------------------------------------------
+%page
+
+
+Dekoratoriai ir metaklasės
+# ---------------------------------------------------------------------------
+%page
+
+
+gili magija
+# ---------------------------------------------------------------------------
+%page
+
+
+Klasės ir metodai
+(pakartojimas)
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 6
+class ManoKlase(object):
+%size 5
+
+%size 6
+    def metodas(self, x):
+        print x
+%size 5
+
+%size 6
+    def statinism(x):
+        print x
+    statinism = staticmethod(statinism)
+%size 5
+
+%size 6
+    def klasesm(cls, x):
+        print x
+    klasesm = classmethod(klasesm)
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 5
+>>> obj = ManoKlase()
+>>> obj.metodas(42)
+42
+>>> ManoKlase.statinism(42)
+42
+>>> ManoKlase.klasesm(42)
+42
+# ---------------------------------------------------------------------------
+%page
+
+
+Kas per paukštis yra klasės metodai
+ir su kuo jie valgomi?
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 6
+class Figura(object):
+
+    def __init__(self, x, y): ...
+
+    def atsitiktine(cls):
+        return cls(random.gauss(0, 100),
+                       random.gauss(0, 100))
+    atsitiktine = classmethod(atsitiktine)
+
+class Varliukas(Figura): ...
+class Zuvyte(Figura): ...
+# ---------------------------------------------------------------------------
+%page
+
+
+Grįžtam prie sintaksės
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 6
+
+
+
+
+    def 
+%font "thick", cont
+atsitiktine
+%font "standard", cont
+ (cls):
+        return cls(random.gauss(0, 100),
+                       random.gauss(0, 100))
+    
+%font "thick", cont
+atsitiktine
+%font "standard", cont
+ = classmethod(
+%font "thick", cont
+atsitiktine
+%font "standard", cont
+)
+
+# ---------------------------------------------------------------------------
+%page
+
+
+Tris kartus kartoti tą patį vardą nepatogu
+# ---------------------------------------------------------------------------
+%page
+
+
+Python 2.4 įvedė naują sintakę -- dekoratorius
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 6
+    @classmethod
+    def 
+%font "thick", cont
+atsitiktine
+%font "standard", cont
+ (cls):
+        return cls(random.gauss(0, 100),
+                       random.gauss(0, 100))
+%center
+
+=
+
+%left
+    def 
+%font "thick", cont
+atsitiktine
+%font "standard", cont
+ (cls):
+        return cls(random.gauss(0, 100),
+                       random.gauss(0, 100))
+    
+%font "thick", cont
+atsitiktine
+%font "standard", cont
+ = classmethod(
+%font "thick", cont
+atsitiktine
+%font "standard", cont
+)
+# ---------------------------------------------------------------------------
+%page
+
+
+Nieko per daug stebuklingo
+# ---------------------------------------------------------------------------
+%page
+
+
+Bet galima daryti triukus
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 6
+class Rect(object):
+    ...
+    def _calc_width(self):
+        return self.x2 - self.x1
+    width = property(_calc_width)
+
+>>> r = Rect(10, 10, 630, 400)
+>>> r.width
+620
+>>> r.x2 = 400; r.width
+390
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 6
+class Rect(object):
+    ...
+    @property
+    def width(self):
+        return self.x2 - self.x1
+
+>>> r = Rect(10, 10, 630, 400)
+>>> r.width
+620
+>>> r.x2 = 400; r.width
+390
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 6
+class Rect(object):
+    ...
+    def _calc_width(self): ...
+    def _set_width(self, width):
+        self.x2 = self.x1 + width
+    width = property(_calc_width,
+                               _set_width)
+
+>>> r = Rect(10, 10, 630, 400)
+>>> r.width = 20; r.x2
+30
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 6
+class Rect(object):
+    ...
+    @apply
+    def width():
+        def get(self):
+            return self.x2 - self.x1
+        def set(self, width):
+            self.x2 = self.x1 + width
+        return property(get, set)
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+%left
+\# google for rwproperty.py
+%left, vgap 2, size 6
+class Rect(object):
+    ...
+    @rwproperty.getproperty
+    def width(self):
+        return self.x2 - self.x1
+    @rwproperty.setproperty
+    def width(self, new_value):
+        self.x2 = self.x1 + new_value
+
+>>> r = Rect(10, 10, 630, 400)
+>>> r.width
+620
+>>> r.x2 = 400; r.width
+390
+# ---------------------------------------------------------------------------
+%page
+
+
+Aukštasis pilotažas:
+rašome savo dekoratorių
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 6
+def debug(fn):
+    def wrapped_fn(*args, **kw):
+        print "Entering %s" % fn.__name__
+        return fn(*args, **kw)
+    wrapped_fn.__name__ = fn.__name__
+    return wrapped_fn
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 6
+@debug
+def compute(x, y):
+    return x + y
+
+>>> compute(2, 3)
+Entering compute
+5
+# ---------------------------------------------------------------------------
+%page
+%vgap 200
+
+
+Tikrame kode tokių triukų geriau nenaudoti
+Kodo įskaitomumas svarbiau!
+# ---------------------------------------------------------------------------
+%page
+%vgap 200
+
+
+Bet debuginant praverčia, nes
+pakanka pridėti vieną eilutę
+prieš bet kokią funkciją ar metodą
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 6
+def breakpoint(fn):
+    def wrapped_fn(*args, **kw):
+        import pdb; pdb.set_trace()
+        return fn(*args, **kw)
+    wrapped_fn.__name__ = fn.__name__
+    return wrapped_fn
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 6
+@breakpoint
+def compute(x, y):
+    return x + y
+
+>>> compute(2, 3)
+> <stdin>(4)wrapped_fn()
+(pdb)
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 6
+def timed(fn):
+    def wrapped_fn(*args, **kw):
+        start = time.time()
+        try:
+            return fn(*args, **kw)
+        finally:
+            print "%s took %.3f seconds" % (
+                      fn.__name__,
+                      time.time() - start)
+    wrapped_fn.__name__ = fn.__name__
+    return wrapped_fn
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 6
+@timed
+def compute(n):
+    for i in range(n):
+        time.sleep(0.2)
+
+>>> compute(10)
+compute took 1.999 seconds
+# ---------------------------------------------------------------------------
+%page
+%vgap 200
+
+
+Dekoratorius profiliavimui
+http://mg.pov.lt/blog/profiling.html
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 6
+from profilehooks import profile
+%size 3
+
+%size 6
+@profile
+def compute(n):
+    for i in range(n):
+        time.sleep(0.2)
+%size 3, vgap 0
+
+>>> compute(2, 3)
+>>> ^D
+*** PROFILER RESULTS ***
+compute (<stdin>:1)
+function called 1 times
+
+         1 function calls in 0.000 CPU seconds
+
+   Ordered by: internal time, call count
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.000    0.000 <stdin>:1(compute)
+        0    0.000             0.000          profile:0(profiler)
+
+# ---------------------------------------------------------------------------
+%page
+%vgap 200
+
+
+Dekoratorius padengimo analizei
+http://mg.pov.lt/blog/profiling.html
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 6
+from profilehooks import coverage
+
+@coverage
+def compute(n):
+    if n % 2 == 1:
+        print "a"
+    else:
+        print "b"
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 1, size 5, font "mono"
+$ python x.py
+b
+
+*** COVERAGE RESULTS ***
+compute (x.py:3)
+function called 1 times
+
+       @coverage
+       def compute(n):
+    1:     if n % 2 == 1:
+>>>>>>         print "a"
+           else:
+    1:         print "b"
+
+1 lines were not executed.
+
+# ---------------------------------------------------------------------------
+%page
+
+
+Dekoratoriai su parametrais
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 6
+def debug(prefix):
+    def decorator(fn):
+        def w_fn(*args, **kw):
+            print "%s %s" % (prefix,
+                                        fn.__name__)
+            return fn(*args, **kw)
+        w_fn.__name__ = fn.__name__
+        return w_fn
+    return decorator
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 2, size 6
+@debug('==>')
+def compute(x, y):
+    return x + y
+
+>>> compute(2, 3)
+==> compute
+7
+# ---------------------------------------------------------------------------
+%page
+
+
+(Pailsinkim smegenis)
+# ---------------------------------------------------------------------------
+%page
+
+
+Metaklasės
+# ---------------------------------------------------------------------------
+%page
+
+
+Kas yra objekto klasė?
+# ---------------------------------------------------------------------------
+%page
+
+
+%left, size 5, vgap 2
+>>> x = 5; x.__class__
+<type 'int'>
+>>> y = 'abc'; y.__class__
+<type 'str'>
+# ---------------------------------------------------------------------------
+%page
+
+
+Klasė taip pat yra objektas
+# ---------------------------------------------------------------------------
+%page
+
+
+Kas yra objekto klasė,
+kai pats objektas yra klasė?
+# ---------------------------------------------------------------------------
+%page
+
+
+%left, size 5, vgap 2
+>>> x = 5; x.__class__
+<type 'int'>
+>>> x.__class__.__class__
+<type 'type'>
+# ---------------------------------------------------------------------------
+%page
+
+
+Tai yra paprasta klasė.
+Bet kadangi ji yra klasės klasė,
+ji vadinama metaklase.
+# ---------------------------------------------------------------------------
+%page
+
+%vgap 10
+
+5 yra objektas
+(int klasės egzempliorius)
+int yra objektas
+(type klasės egzempliorius)
+type yra objektas
+(type klasės egzempliorius)
+# ---------------------------------------------------------------------------
+%page
+
+
+Mazgelis užrištas
+# ---------------------------------------------------------------------------
+%page
+
+
+Turėdami klasę galime kurti jos egzempliorių
+kviesdami klasę kaip funkciją
+# ---------------------------------------------------------------------------
+%page
+
+
+%left, size 5, vgap 2
+>>> int
+<type 'int'>
+>>> int(5)
+5
+# ---------------------------------------------------------------------------
+%page
+
+
+Metaklasė irgi klasė
+Jos egzemplioriai -- klasės
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, size 5, vgap 2
+class NaujaKlase(object):
+    a = 1
+
+    def b(self):
+        return 2 + self.a
+%center
+
+=
+
+%left
+def b(self):
+    return 2 + self.a
+NaujaKlase = type('NaujaKlase', (), {'a': 1, 'b': b})
+del b
+# ---------------------------------------------------------------------------
+%page
+
+
+Yra daugiau nei viena metaklasė
+bet dabar į tai nesigilinsime

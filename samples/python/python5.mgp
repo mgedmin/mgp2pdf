@@ -1,0 +1,668 @@
+#!/usr/bin/env mgp
+# Note: tabs and trailing spaces are *important* in this file
+# - Preamble ----------------------------------------------------------------
+%deffont "standard" xfont "verdana"
+%deffont "thick" xfont "verdana-bold"
+%deffont "em" xfont "verdana-medium-i"
+%default 1 area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%default 2 center, size 5
+%default 3 size 7, vgap 80
+##%default 4 font "em", size 7, vgap 10
+##%default 5 font "standard", size 3
+# ---------------------------------------------------------------------------
+%page
+%pcache 1 1 0 1
+%ccolor "#134d73"
+%nodefault
+%size 7, font "standard", vgap 20, fore "black", back "white"
+
+
+
+%center, font "standard", size 7
+Programavimo kalba
+%center, font "thick", size 11
+Python
+%size 3
+
+penktoji paskaita
+
+%size 5, font "standard", fore "#134d73"
+Marius Gedminas
+%size 4
+<mgedmin@b4net.lt>
+%size 2
+
+%size 5
+
+%size 4
+http://mg.b4net.lt/python/
+%size 2
+
+
+%mark
+
+
+%fore "black",size 2
+2006 ruduo
+%again
+%left,valign "top",newimage "logo.gif"
+# ---------------------------------------------------------------------------
+%page
+
+
+Programas reikia testuoti
+# ---------------------------------------------------------------------------
+%page
+
+
+Programą pakeitus reikia
+ją testuoti iš naujo
+# ---------------------------------------------------------------------------
+%page
+
+
+Rankomis kartoti tuos pačius testus
+sunku ir nuobodu
+# ---------------------------------------------------------------------------
+%page
+
+
+Automatizuotas testavimas
+# ---------------------------------------------------------------------------
+%page
+
+%left, size 7, vgap 40, fore "#000"
+$ python test.py
+Ran 120 tests in 3 seconds.
+
+OK
+# ---------------------------------------------------------------------------
+%page
+
+
+Kokie būna testai?
+# ---------------------------------------------------------------------------
+%page
+
+
+Modulių testai
+Sistemos testai
+# ---------------------------------------------------------------------------
+%page
+
+
+Modulių testai:
+kiekviena funkcija testuojama atskirai
+# ---------------------------------------------------------------------------
+%page
+
+
+Sistemos testai:
+testuojama visa programa
+# ---------------------------------------------------------------------------
+%page
+
+
+import unittest
+# ---------------------------------------------------------------------------
+%page
+
+
+Funkcija
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+\# fact.py
+
+def fact(n):
+    f = 1
+    for i in range(n):
+        f *= i
+    return f
+
+# ---------------------------------------------------------------------------
+%page
+
+
+Funkcijos testai
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 40, fore "#000"
+class TestFact(unittest.TestCase):
+%size 2
+
+%size 7
+    def test(self):
+        self.assertEquals(fact(0), 1)
+        self.assertEquals(fact(1), 1)
+        self.assertEquals(fact(2), 2)
+        self.assertEquals(fact(3), 6)
+        self.assertEquals(fact(4), 24)
+
+# ---------------------------------------------------------------------------
+%page
+
+
+Testų rinkinys
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 40, fore "#000"
+import unittest
+from fact import fact
+%size 2
+
+%size 7
+class TestFact(unittest.TestCase):
+%fore "#ccc"
+  ...
+%fore "#000"
+%size 2
+
+%size 7
+if __name__ == '__main__':
+    unittest.main()
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 4
+
+%left, size 4, vgap 40, fore "#000"
+$ python test.py
+F
+====================================
+FAIL: test (__main__.TestFact)
+------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test.py", line 8, in test
+    self.assertEquals(fact(1), 1)
+AssertionError: 0 != 1
+
+------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+\# fact.py
+
+def fact(n):
+    f = 1
+    for i in range(
+%cont, fore "#c21"
+1,
+%cont, fore "#000"
+  n):
+        f *= i
+    return f
+
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 4
+
+%left, size 4, vgap 40, fore "#000"
+$ python test.py
+F
+====================================
+FAIL: test (__main__.TestFact)
+------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test.py", line 9, in test
+    self.assertEquals(fact(2), 2)
+AssertionError: 1 != 2
+
+------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+\# fact.py
+
+def fact(n):
+    f = 1
+    for i in range(1, n
+%cont, fore "#c21"
+ + 1
+%cont, fore "#000"
+):
+        f *= i
+    return f
+
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 4
+
+%left, size 4, vgap 40, fore "#000"
+$ python test.py
+.
+------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+OK
+# ---------------------------------------------------------------------------
+%page
+
+
+Testai pirma
+(Test Driven Development)
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+
+%left, size 7, vgap 50, fore "#134d73"
+1. Rašai naują testą
+%pause, size 7, vgap 50, fore "#134d73"
+2. Leidi testų rinkini
+        (naujas testas nepraeina)
+%pause, size 7, vgap 50, fore "#134d73"
+3. Rašai kodą, kad testas veiktų
+%pause, size 7, vgap 50, fore "#134d73"
+4. Leidi testų rinkinį
+        (testas praeina)
+%pause, size 7, vgap 50, fore "#134d73"
+5. Kartoji
+# ---------------------------------------------------------------------------
+%page
+
+
+TDD nauda:
+testų rinkinys yra pilnas
+# ---------------------------------------------------------------------------
+%page
+
+
+TDD nauda:
+kodas bus toks, kokį lengva naudoti
+# ---------------------------------------------------------------------------
+%page
+
+
+Realesnis pavyzdys
+sprendžiam kvadratines lygtis
+# ---------------------------------------------------------------------------
+%page
+
+
+1. Įvedimas
+2. Sprendimas
+3. Išvedimas
+# ---------------------------------------------------------------------------
+%page
+
+
+
+2. Sprendimas
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+\# qeq.py
+
+def solve(a, b, c):
+    """Solve ax**2 + bx + c = 0.
+
+    Returns a list of solutions.
+    """
+    raise NotImplementedError
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+\# test.py
+
+class TestSolve(unittest.TestCase):
+
+    def test_no_solutions(self):
+        # x**2 + 4 = 0
+        self.assertEquals(
+              solve(1, 0, 4), [])
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 4
+
+%left, size 4, vgap 40, fore "#000"
+$ python test.py
+
+====================================
+ERROR: test_no_solutions (__main__.TestSolve)
+------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test.py", line 10, in test_no_solutions
+    self.assertEquals(
+  File "qeq.py", line 8, in solve
+    raise NotImplementedError
+NotImplementedError
+
+
+FAILED (errors=1)
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+\# qeq.py
+
+def solve(a, b, c):
+    """Solve ax**2 + bx + c = 0.
+
+    Returns a list of solutions.
+    """
+    return []
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 4
+
+%left, size 4, vgap 40, fore "#000"
+$ python test.py
+
+...
+
+Ran 1 test in 0.001s
+
+OK
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+\# test.py
+
+    def test_two_solutions(self):
+        # (x - 3)(x + 2) = 0
+        # x**2 - x - 6 = 0
+        self.assertEquals(
+              solve(1, -1, -6),
+              [-2, 3])
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 4
+
+%left, size 4, vgap 40, fore "#000"
+$ python test.py
+
+====================================
+ERROR: test_two_solutions (__main__.TestSolve)
+------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test2.py", line 18, in test_two_solutions
+    [-2, 3])
+AssertionError: [] != [-2, 3]
+
+
+FAILED (failures=1)
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+\# qeq.py
+from math import sqrt
+def solve(a, b, c):
+    d = b ** 2 - 4 * a * c
+    x1 = (-b - sqrt(d)) / (2 * a)
+    x2 = (-b + sqrt(d)) / (2 * a)
+    return [x1, x2]
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 4
+
+%left, size 4, vgap 40, fore "#000"
+$ python test.py
+====================================
+ERROR: test_no_solutions (__main__.TestSolve)
+------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test.py", line 10, in test_no_solutions
+    self.assertEquals(
+  File "qeq.py", line 11, in solve
+    x1 = (-b - sqrt(d)) / (2 * a)
+ValueError: math domain error
+
+Ran 2 tests in 0.001s
+
+FAILED (errors=1)
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+\# qeq.py
+from math import sqrt
+def solve(a, b, c):
+    d = b ** 2 - 4 * a * c
+%fore "#c21"
+    if d < 0: return []
+%fore "#000"
+    x1 = (-b - sqrt(d)) / (2 * a)
+    x2 = (-b + sqrt(d)) / (2 * a)
+    return [x1, x2]
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 4
+
+%left, size 4, vgap 40, fore "#000"
+$ python test.py
+
+...
+
+Ran 2 tests in 0.001s
+
+OK
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+\# test.py
+
+    def test_one_solution(self):
+        # (x - 5)**2 = 0
+        # x**2 - 10x + 25 = 0
+        self.assertEquals(
+              solve(1, -10, 25),
+              [5])
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 4
+
+%left, size 4, vgap 40, fore "#000"
+$ python test.py
+====================================
+ERROR: test_one_solution (__main__.TestSolve)
+------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test2.py", line 25, in test_one_solution
+    [5])
+AssertionError: [5.0, 5.0] != [5]
+
+Ran 3 tests in 0.001s
+
+FAILED (failures=1)
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 2
+
+%left, size 7, vgap 40, fore "#000"
+\# qeq.py
+def solve(a, b, c):
+    d = b ** 2 - 4 * a * c
+    if d < 0: return []
+    x1 = (-b - sqrt(d)) / (2 * a)
+%fore "#c21"
+    if d == 0: return [x1]
+%fore "#000"
+    x2 = (-b + sqrt(d)) / (2 * a)
+    return [x1, x2]
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 4
+
+%left, size 4, vgap 40, fore "#000"
+$ python test.py
+
+...
+
+Ran 3 tests in 0.001s
+
+OK
+# ---------------------------------------------------------------------------
+%page
+
+
+1. Įvedimas
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+\# test.py
+
+class TestInput(unittest.TestCase):
+    sampleinput = [
+      '3, 4, 5',
+      '1, -3, 22',
+      '0.5, -.16, 42.3'
+    ]
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+\# test.py
+
+    def test_input(self):
+        self.assertEquals(
+            readInput(self.sampleinput),
+            [(3, 4, 5),
+             (1, -3, 22),
+             (.5, -0.16, 42.3)])
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 2
+
+%left, size 7, vgap 40, fore "#000"
+\# qeq.py
+%size 2
+
+%size 7
+def readInput(f):
+    """Read input from a file object.
+%size 2
+
+%size 7
+    Each line is of the form
+      a, b, c
+%size 2
+
+%size 7
+    Returns a list of (a, b, c) tuples.
+    """
+    raise NotImplementedError
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 4
+
+%left, size 4, vgap 40, fore "#000"
+$ python test.py
+====================================
+ERROR: test_input (__main__.TestInput)
+------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test2.py", line 37, in test_input
+    self.assertEquals(
+  File "qeq.py", line 28, in readInput
+    raise NotImplementedError
+NotImplementedError
+
+Ran 4 tests in 0.001s
+
+FAILED (errors=1)
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 2
+
+%left, size 7, vgap 40, fore "#000"
+\# qeq.py
+%size 2
+
+%size 7
+import csv
+def readInput(f):
+    results = []
+    for a, b, c in csv.reader(f):
+        results.append((float(a), float(b), float(c)))
+    return results
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 4
+
+%left, size 4, vgap 40, fore "#000"
+$ python test.py
+.
+------------------------------------------------------------------
+Ran 4 tests in 0.001s
+
+OK
+# ---------------------------------------------------------------------------
+%page
+
+
+
+
+3. Išvedimas
+# ---------------------------------------------------------------------------
+%page
+
+
+Praktiškai tas pats.
+StringIO modulis naudingas!
+# ---------------------------------------------------------------------------
+%page
+
+
+%size 3
+
+%size 7
+Jei liko laiko: daugiau pavyzdžių
+# ---------------------------------------------------------------------------
+

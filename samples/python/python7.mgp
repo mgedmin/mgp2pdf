@@ -1,0 +1,608 @@
+#!/usr/bin/env mgp
+# Note: tabs and trailing spaces are *important* in this file
+# - Preamble ----------------------------------------------------------------
+%deffont "standard" xfont "verdana"
+%deffont "thick" xfont "verdana-bold"
+%deffont "em" xfont "verdana-medium-i"
+%default 1 area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%default 2 center, size 5
+%default 3 size 7, vgap 80
+%tab 1 prefix "    "
+# ---------------------------------------------------------------------------
+%page
+%pcache 1 1 0 1
+%ccolor "#134d73"
+%nodefault
+%size 7, font "standard", vgap 20, fore "black", back "white"
+
+
+
+%center, font "standard", size 7
+Programavimo kalba
+%center, font "thick", size 11
+Python
+%size 3
+
+septintoji paskaita
+
+%size 5, font "standard", fore "#134d73"
+Marius Gedminas
+%size 4
+<mgedmin@b4net.lt>
+%size 2
+
+%size 5
+
+%size 4
+http://mg.b4net.lt/python/
+%size 2
+
+
+%mark
+
+
+%fore "black",size 2
+2006 ruduo
+%again
+%left,valign "top",newimage "logo.gif"
+# ---------------------------------------------------------------------------
+%page
+
+
+Antys, tipai, protokolai,
+iteratoriai, generatoriai
+# ---------------------------------------------------------------------------
+%page
+
+%size 3
+
+Statinis tipizavimas,
+Dinaminis tipizavimas,
+Griežtas tipizavimas,
+Silpnas tipizavimas
+# ---------------------------------------------------------------------------
+%page
+
+
+Antiškas tipizavimas
+%font "em"
+(Duck typing)
+# ---------------------------------------------------------------------------
+%page
+
+%newimage "rubber_duck_quacks.png"
+
+%font "em"
+If it looks like a duck and quacks like a duck, it must be a duck.
+# ---------------------------------------------------------------------------
+%page
+
+
+Jei objektas turi reikiamus atributus/metodus, reiškia jis mums tinka
+# ---------------------------------------------------------------------------
+%page
+
+
+%size 6
+Geriau naudoti hasattr/gaudyti exceptionus nei tikrinti type() ar isinstance()
+# ---------------------------------------------------------------------------
+%page
+
+%size 2
+
+Objektai, panašūs į file:
+StringIO
+GzipFile
+Soketai
+...
+# ---------------------------------------------------------------------------
+%page
+
+
+Jie nėra 100% atitikmenys
+(pvz., socketai neturi tell metodo)
+# ---------------------------------------------------------------------------
+%page
+
+
+Privalumas: gali realizuoti tik dalį metodų ir turėti naudingą klasę
+# ---------------------------------------------------------------------------
+%page
+
+
+Trūkumas: kompiliatorius neperspės, jei užmirši realizuoti dalį metodų
+# ---------------------------------------------------------------------------
+%page
+
+
+%size 4
+Nieko naujo: vienos kalbos stengiasi
+apsaugoti neatidžius programuotojus
+tramdomaisiais marškiniais,
+kitos stengiasi netrukdyti dirbti.
+# ---------------------------------------------------------------------------
+%page
+
+
+Objektai, panašūs į file...
+kaip pavadinti jų panašumus?
+# ---------------------------------------------------------------------------
+%page
+
+
+Protokolu
+# ---------------------------------------------------------------------------
+%page
+%mark
+
+
+%again
+%size 4, vgap 40, fore "#134d73"
+
+%size 8, vgap 30
+file protokolas:
+
+%size 7, vgap 20
+read()
+write()
+%size 6
+flush()
+close()
+%size 5
+readline()
+readlines()
+writelines()
+%size 4
+seek()
+tell()
+%size 3
+truncate()
+# ---------------------------------------------------------------------------
+%page
+
+
+Kokie dar yra protokolai?
+# ---------------------------------------------------------------------------
+%page
+%mark
+
+
+%again
+%size 4, vgap 40, fore "#134d73"
+
+%size 8, vgap 10
+Sekos protokolas
+%size 4
+(vartotojo pusė)
+
+%size 7, vgap 20
+x in s
+x not in s
+len(s)
+s[i]
+s[i:j]
+s[i:j:k]
+s * n, n * s
+s + t
+for x in s: ...
+# ---------------------------------------------------------------------------
+%page
+%mark
+
+
+%again
+%size 4, vgap 40, fore "#134d73"
+
+%size 8, vgap 10
+Sekos protokolas
+%size 4
+(rašytojo pusė)
+
+%size 7, vgap 20
+__contains__
+__len__
+__getitem__
+__getslice__
+%size 5
+__mul__, __rmul__
+__add__, __radd__
+# ---------------------------------------------------------------------------
+%page
+%mark
+
+
+%again
+%size 4, vgap 40, fore "#134d73"
+
+%size 8, vgap 10
+Atvaizdžio protokolas
+%size 4
+(vartotojo pusė)
+
+%size 7, vgap 20
+x in s
+x not in s
+len(s)
+s[k]
+s.keys()
+s.values()
+s.items()
+for x in s: ...
+# ---------------------------------------------------------------------------
+%page
+%mark
+
+
+%again
+%size 4, vgap 40, fore "#134d73"
+
+%size 8, vgap 10
+Atvaizdžio protokolas
+%size 4
+(rašytojo pusė)
+
+%size 7, vgap 20
+__contains__
+__len__
+__getitem__
+keys
+values
+items
+__iter__
+# ---------------------------------------------------------------------------
+%page
+
+
+UserDict, UserList moduliai padeda,
+jei norite rašyti savo sekas ar atvaizdžius
+# ---------------------------------------------------------------------------
+%page
+%mark
+
+
+%again
+%size 4, vgap 40, fore "#134d73"
+
+%size 8, vgap 10
+Iteravimo protokolas
+%size 4
+(vartotojo pusė)
+
+%size 7, vgap 20
+for x in s: ...
+iter(s)
+# ---------------------------------------------------------------------------
+%page
+%mark
+
+
+%again
+%size 4, vgap 40, fore "#134d73"
+
+%size 8, vgap 10
+Iteravimo protokolas
+%size 4
+(rašytojo pusė)
+
+%size 7, vgap 20
+__iter__
+# ---------------------------------------------------------------------------
+%page
+
+
+Iteratoriai
+# ---------------------------------------------------------------------------
+%page
+
+
+Yra seka, per kurią galima prabėgti.
+Iteratorius atsimena vietą toje sekoje
+# ---------------------------------------------------------------------------
+%page
+
+
+Analogai: rodyklės, masyvo indeksai
+# ---------------------------------------------------------------------------
+%page
+
+
+%left, vgap 10
+  for x in s:
+      print x
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 10
+  # Jei s yra seka
+  i = 0
+  while True:
+      try:
+          x = s[i]
+          i += 1
+      except IndexError:
+          break
+      print x
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%left, vgap 10
+  # Jei s palaiko iteratoriaus
+  # protokolą
+  i = iter(s)
+  while True:
+      try:
+          x = i.next()
+      except StopIteration:
+          break
+      print x
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%vgap 20
+Iteratorius:
+
+%font "thick", center
+i.next()
+%font "standard", left
+duok kitą elementą arba mesk StopIteration
+
+%font "thick", center
+iter(i)
+%font "standard", left
+grąžink
+%font "thick", cont
+ i
+%font "standard", cont
+ (kad for ciklui būtų galima paduoti iteratorių)
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%vgap 20
+Realizacija
+
+%left
+class MyIter:
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        ...
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+Realizacija / naudojimas
+
+%left, mark
+def __iter__(self):
+def __len__(self):
+def __mul__(self, j):
+%again, right, font "standard", size 7, fore "#134d73"
+iter(i)
+len(i)
+i * j
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+Nedarykite!
+
+%mark
+%size 4, vgap 0
+
+%newimage -raise -50 "dont.png"
+%again
+%fore "#000000", size 7, vgap 10
+x = s.__len__()
+s = w.__str__()
+c = a.__add__(b)
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+Darykite
+
+%vgap 10
+x = len(s)
+s = str(w)
+c = a + b
+# ---------------------------------------------------------------------------
+%page
+
+
+Iteratoriai
+# ---------------------------------------------------------------------------
+%page
+
+
+Generatoriai
+# ---------------------------------------------------------------------------
+%page
+
+
+Pigus būdas rašyti iteratoriams
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%vgap 20
+Generatoriaus pavyzdys
+
+%left
+def oddsquares(s):
+    for x in s:
+        if x % 2 == 1:
+            yield x ** 2
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%vgap 20
+Generatoriaus naudojimas
+
+%left
+for n in oddsquares(range(10)):
+    print n
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+Generatoriaus privalumai
+
+Nekuria ilgo sąrašo atmintyje
+Iškviečiamas tik tiek kartų, kiek reikia
+Galima „išsukti“ algoritmą išvirkščiai
+# ---------------------------------------------------------------------------
+%page
+
+
+os.walk yra generatorius,
+„išverčiantis“ katalogų
+medžio apėjimą išvirkščiai
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%vgap 20
+Kitas pavyzdys
+
+%left
+def fibonacci():
+    a = b = 1
+    while True:
+        yield a
+        a, b = b, a+b
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%vgap 20
+Begalinis generatorius!
+
+
+%left
+for n in fibonacci():
+    print n
+    if n > 1000:
+        break
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%vgap 20
+enumerate
+
+
+%left
+f = file('/etc/motd')
+for n, s in enumerate(f):
+    print "%5d: %s" % (n, s.rstrip())
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%vgap 20
+Jei enumerate nebūtų
+
+%left
+def enumerate(s):
+    n = 0
+    for x in s:
+        yield (n, x)
+        n += 1
+# ---------------------------------------------------------------------------
+%page
+
+
+itertools modulis
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%vgap 20
+itertools modulis
+
+%size 6
+count([n]) -> n, n+1, n+2 ...
+cycle(p) -> p0, p1, ... plast, p0, ...
+repeat(elem[, n]) -> elem, elem, elem ...
+tee(i) -> i1, i2
+chain(p, q) -> p0, p1, ... plast, q0, ...
+izip(p, q) -> (p0, q0), (p1, q1) ...
+ifilter(pred, s) -> filtravimas
+imap(fun, p) -> fun(p0), fun(p1) ...
+...
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%vgap 20
+Negražus triukas
+
+%left
+def pairs(s):
+    i = iter(s)
+    return itertools.izip(i, i)
+
+
+>>> list(pairs([1, 2, 3, 4, 5, 6, 7]))
+[(1, 2), (3, 4), (5, 6)]
+# ---------------------------------------------------------------------------
+%page
+
+
+Rekursyvūs generatoriai
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%vgap 20
+Medžio apėjimas (printinam viską)
+
+%left
+def preorder_tree_walk(node):
+    print node
+    for child in node.children:
+        preorder_tree_walk(child):
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+
+%vgap 20
+Medžio apėjimas (generatorius)
+
+%left
+def preorder_tree_walk(node):
+    yield node
+    for child in node.children:
+        for node in preorder_tree_walk(
+                                               child):
+            yield node
+# ---------------------------------------------------------------------------
+%page
+
+
+Iki

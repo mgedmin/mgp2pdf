@@ -1,0 +1,489 @@
+#!/usr/bin/env mgp
+# Note: tabs and trailing spaces are *important* in this file
+# - Preamble ----------------------------------------------------------------
+%deffont "standard" xfont "verdana"
+%deffont "thick" xfont "verdana-bold"
+%deffont "em" xfont "verdana-medium-i"
+%default 1 area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%default 2 center, size 5
+%default 3 size 7, vgap 80
+##%default 4 font "em", size 7, vgap 10
+##%default 5 font "standard", size 3
+# ---------------------------------------------------------------------------
+%page
+%pcache 1 1 0 1
+%ccolor "#134d73"
+%nodefault
+%size 7, font "standard", vgap 20, fore "black", back "white"
+
+
+
+%center, font "standard", size 7
+Programavimo kalba
+%center, font "thick", size 11
+Python
+%size 3
+
+šeštoji paskaita
+
+%size 5, font "standard", fore "#134d73"
+Marius Gedminas
+%size 4
+<mgedmin@b4net.lt>
+%size 2
+
+%size 5
+
+%size 4
+http://mg.b4net.lt/python/
+%size 2
+
+
+%mark
+
+
+%fore "black",size 2
+2006 ruduo
+%again
+%left,valign "top",newimage "logo.gif"
+# ---------------------------------------------------------------------------
+%page
+
+
+Dokumentaciniai testai
+(doctests)
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+
+def factorial(n):
+    """Compute the factorial of n.
+
+        >>> factorial(5)
+        120
+
+    """
+# ---------------------------------------------------------------------------
+%page
+
+
+Interaktyvios Python sesijos išrašas
+dokumentacinėje eilutėje
+# ---------------------------------------------------------------------------
+%page
+
+
+Kodo naudojimo pavyzdys
+kurio veikimą galima patikrinti
+# ---------------------------------------------------------------------------
+%page
+
+
+Kaip patikrinti?
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+
+def factorial(...):
+    ...
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
+# ---------------------------------------------------------------------------
+%page
+
+
+arba
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+...
+
+if __name__ == '__main__':
+    if '--test' in sys.argv:
+        import doctest
+        doctest.testmod()
+        sys.exit()
+    else:
+        main()
+# ---------------------------------------------------------------------------
+%page
+
+
+arba galima juos įtraukti į
+testų rinkinį
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 6, vgap 40, fore "#000"
+import unittest
+import doctest
+...
+def test_suite():
+    suite = unittest.TestSuite()
+    suite.addTest(doctest.DocTestSuite(
+                    'mypackage.mymodule'))
+    return suite
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')
+# ---------------------------------------------------------------------------
+%page
+
+
+Tik nereikia persistengti!
+# ---------------------------------------------------------------------------
+%page
+
+
+Dokumentacijos eilutės neturėtų
+užgožti paties kodo
+# ---------------------------------------------------------------------------
+%page
+
+
+Alternatyvos:
+atskiri testų moduliai
+tekstiniai failai
+# ---------------------------------------------------------------------------
+%page
+
+
+Dokumentacinių testų modulis
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 6, vgap 40, fore "#000"
+
+def doctest_factorial():
+    """
+    ...
+    """
+
+def doctest_integral():
+    """
+    ...
+    """
+# ---------------------------------------------------------------------------
+%page
+
+
+Dokumentacinių testų failas
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 6, vgap 40, fore "#000"
+Matematinės funkcijos
+-------------------------
+
+Galite skaičiuoti faktorialus:
+
+    >>> from mymath import factorial
+    >>> factorial(4)
+    24
+
+O galite ir neskaičiuoti...
+# ---------------------------------------------------------------------------
+%page
+
+
+reStructured Text
+# ---------------------------------------------------------------------------
+%page
+
+
+O prasmė?
+# ---------------------------------------------------------------------------
+%page
+
+
+Du zuikiai vienu šūviu:
+dokumentacija ir testai
+# ---------------------------------------------------------------------------
+%page
+
+
+Trys zuikiai:
+dokumentacija, testai
+ir dokumentacijos testai
+# ---------------------------------------------------------------------------
+%page
+
+
+Trys dok. testų rūšys:
+1. pavyzdžiai
+2. dokumentacija
+3. testai
+# ---------------------------------------------------------------------------
+%page
+
+
+Pavyzdžiai:
+trumpa funkcijos naudojimo instrukcija
+(dok. eilutėje)
+# ---------------------------------------------------------------------------
+%page
+
+
+Dokumentacija:
+detali paketo/modulio instrukcija
+(tekstiniame faile)
+# ---------------------------------------------------------------------------
+%page
+
+
+Testai:
+rinkinys testų
+(Python modulyje)
+# ---------------------------------------------------------------------------
+%page
+
+
+Testai: o prasmė?
+# ---------------------------------------------------------------------------
+%page
+
+
+unittest ar doctest?
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+\# test.py
+
+class TestSolve(unittest.TestCase):
+
+    def test_no_solutions(self):
+        # x**2 + 4 = 0
+        self.assertEquals(
+              solve(1, 0, 4), [])
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+def doctest_no_solutions(self):
+    """Test for solve().
+
+    x**2 + 4 = 0 has no real solutions
+
+        >>> solve(1, 0, 4)
+        []
+
+    """
+# ---------------------------------------------------------------------------
+%page
+
+
+Rašant dok. testus norisi pridėti paaiškinimų
+# ---------------------------------------------------------------------------
+%page
+
+
+Todėl juos lengviau skaityti
+# ---------------------------------------------------------------------------
+%page
+
+
+Dok. testuose galima naudoti 'print'
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 6, vgap 40, fore "#000"
+The list of calendars is now as follows
+
+    >>> for cal in person.visible_calendars:
+    ...           print '%s (%s)' % (cal.title,
+    ...                              cal.colour)
+    Site-wide calendar (green)
+    My own calendar (blue)
+    My dog's calendar (brown)
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 6, vgap 40, fore "#000"
+We can register a callback
+
+    >>> def callback_fn(arg):
+    ...        print "callback:", arg
+    >>> someobj.add_callback(callback_fn)
+
+which gets called during processing
+
+    >>> someobj.process()
+    callback: 42
+# ---------------------------------------------------------------------------
+%page
+
+
+Skirtumą tarp gauto ir norimo rezultato
+galima pamatyti diff formatu
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 6, vgap 40, fore "#000"
+Failed example:
+    for cal in person.visible_calendars:
+        print '%s (%s)' % (cal.title,
+                           cal.colour)
+Differences (ndiff with -expected +actual):
+     Site-wide calendar (green)
+    -My own calendar (blue)
+    +My calendar (blue)
+     My dog's calendar (brown)
+# ---------------------------------------------------------------------------
+%page
+
+
+Bet tai reikia įjungti
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 6, vgap 40, fore "#000"
+
+
+...
+    suite.addTest(doctest.DocTestSuite(
+                'mypackage.mymodule',
+                optionflags=
+                      doctest.REPORT_NDIFF))
+...
+# ---------------------------------------------------------------------------
+%page
+
+
+Dok. testai leidžia atsakymą lyginti ne griežtai
+(daugtaškiai)
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+The user name is included in the output:
+
+    >>> print_report()
+    Fiscal Report
+    --------------
+    ...
+    Report generated for mgedmin
+    ...
+# ---------------------------------------------------------------------------
+%page
+
+
+Daugtaškis priima bet kokį teksto gabalą
+# ---------------------------------------------------------------------------
+%page
+
+
+Bet jį reikia įjungti
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 6, vgap 40, fore "#000"
+
+
+...
+    suite.addTest(doctest.DocTestSuite(
+                'mypackage.mymodule',
+                optionflags=doctest.ELLIPSIS))
+...
+# ---------------------------------------------------------------------------
+%page
+
+
+Dokumentacinių testų parametrai
+# ---------------------------------------------------------------------------
+%page
+
+%size 3
+
+%size 7
+ELLIPSIS
+NORMALIZE_WHITESPACE
+REPORT_NDIFF
+REPORT_ONLY_FIRST_FAILURE
+# ---------------------------------------------------------------------------
+%page
+
+
+Juos galima įjungti testų viduje
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 7, vgap 40, fore "#000"
+The user name is included in the output:
+    >>> print_report()
+    ...   # doctest: +ELLIPSIS
+    Fiscal Report
+    --------------
+    ...
+    Report generated for mgedmin
+    ...
+# ---------------------------------------------------------------------------
+%page
+
+
+Arba globaliai
+# ---------------------------------------------------------------------------
+%page
+%nodefault,area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%size 3
+
+%left, size 6, vgap 40, fore "#000"
+
+
+...
+    suite.addTest(doctest.DocTestSuite(
+                'mypackage.mymodule',
+                optionflags=
+                      doctest.ELLIPSIS|
+                      doctest.REPORT_NDIFF))
+...
+# ---------------------------------------------------------------------------
+%page
+
+
+Testai kaip projektavimo įrankis
+(„mokslinė fantastika“)
+# ---------------------------------------------------------------------------
+%page
+
+
+%size 3
+
+%size 7
+viskas
+# ---------------------------------------------------------------------------
+

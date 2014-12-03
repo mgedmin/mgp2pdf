@@ -1,0 +1,190 @@
+#!/usr/bin/env mgp
+# Note: tabs and trailing spaces are *important* in this file
+# - Preamble ----------------------------------------------------------------
+%deffont "standard" xfont "verdana"
+%deffont "thick" xfont "verdana-bold"
+%deffont "em" xfont "verdana-medium-i"
+%default 1 area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%default 2 center, size 5
+%default 3 size 7, vgap 80
+##%default 4 font "em", size 7, vgap 10
+##%default 5 font "standard", size 3
+# ---------------------------------------------------------------------------
+%page
+%pcache 1 1 0 1
+%ccolor "#134d73"
+%nodefault
+%size 7, font "standard", vgap 20, fore "black", back "white"
+
+
+
+%center, font "standard", size 7
+Programavimo kalba
+%center, font "thick", size 11
+Python
+
+%size 5, font "standard", fore "#134d73"
+Marius Gedminas
+%size 4
+<mgedmin@b4net.lt>
+%size 2
+
+%size 5
+
+%size 4
+http://mg.b4net.lt/python/
+%size 2
+
+%mark
+
+
+%fore "black",size 2
+2006 ruduo
+%again
+%left,valign "top",newimage "logo.gif"
+# ---------------------------------------------------------------------------
+%page
+
+
+Python
+dinaminė aukšto lygio programavimo kalba
+# ---------------------------------------------------------------------------
+%page
+
+
+print "Hello, world"
+# ---------------------------------------------------------------------------
+%page
+
+
+Tai, kas paprasta - paprasta
+Tai, kas sudėtinga - įmanoma
+# ---------------------------------------------------------------------------
+%page
+
+
+Kas aš?
+# ---------------------------------------------------------------------------
+%page
+
+
+Jūsų dėstytojas
+Marius Gedminas
+# ---------------------------------------------------------------------------
+%page
+
+
+Jūsų dėstytojas
+užsidirba pragyvenimui iš Python
+# ---------------------------------------------------------------------------
+%page
+
+
+Jūsų dėstytojas
+neturi laiko
+# ---------------------------------------------------------------------------
+%page
+
+
+Kas jūs?
+# ---------------------------------------------------------------------------
+%page
+
+
+Pakelkite rankas,
+kas moka Paskalį
+# ---------------------------------------------------------------------------
+%page
+
+
+Pakelkite rankas,
+kas moka C
+# ---------------------------------------------------------------------------
+%page
+
+
+Pakelkite rankas,
+kas moka C++
+# ---------------------------------------------------------------------------
+%page
+
+
+Pakelkite rankas,
+kas moka Java
+# ---------------------------------------------------------------------------
+%page
+
+
+Pakelkite rankas,
+kas moka Python
+# ---------------------------------------------------------------------------
+%page
+
+
+Kas laukia ateityje?
+# ---------------------------------------------------------------------------
+%page
+
+
+Python pagrindai
+sintaksė
+idiomos
+# ---------------------------------------------------------------------------
+%page
+
+
+Geras kodas
+geriausios praktikos
+automatinis testavimas
+# ---------------------------------------------------------------------------
+%page
+
+
+„Baterijos“
+standartinė biblioteka
+# ---------------------------------------------------------------------------
+%page
+
+
+Populiarios bibliotekos
+grafika
+duomenų bazės
+tinklas
+# ---------------------------------------------------------------------------
+%page
+
+
+Atsiskaitymai
+pratybos
+įskaita
+# ---------------------------------------------------------------------------
+%page
+
+
+Pratybos
+trys užduotėlės
+arba viena didelė
+# ---------------------------------------------------------------------------
+%page
+
+
+Pratybos
+sąlygas siunčiat man paštu
+mgedmin@b4net.lt
+aš patvirtinu
+%size 5
+jei tyliu, reiškia viskas gerai
+# ---------------------------------------------------------------------------
+%page
+
+
+Įskaita
+bus lengva
+tikriausiai trumpas testukas
+# ---------------------------------------------------------------------------
+%page
+
+
+%size 5
+
+.

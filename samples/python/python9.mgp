@@ -1,0 +1,188 @@
+#!/usr/bin/env mgp
+# Note: tabs and trailing spaces are *important* in this file
+# - Preamble ----------------------------------------------------------------
+%deffont "standard" xfont "verdana"
+%deffont "thick" xfont "verdana-bold"
+%deffont "em" xfont "verdana-medium-i"
+%default 1 area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%default 2 center, size 5
+%default 3 size 7, vgap 80
+%tab 1 prefix "    "
+# ---------------------------------------------------------------------------
+%page
+%pcache 1 1 0 1
+%ccolor "#134d73"
+%nodefault
+%size 7, font "standard", vgap 20, fore "black", back "white"
+
+
+
+%center, font "standard", size 7
+Programavimo kalba
+%center, font "thick", size 11
+Python
+%size 3
+
+devintoji paskaita
+
+%size 5, font "standard", fore "#134d73"
+Marius Gedminas
+%size 4
+<mgedmin@b4net.lt>
+%size 2
+
+%size 5
+
+%size 4
+http://mg.b4net.lt/python/
+%size 2
+
+
+%mark
+
+
+%fore "black",size 2
+2006 ruduo
+%again
+%left,valign "top",newimage "logo.gif"
+# ---------------------------------------------------------------------------
+%page
+
+
+Lygiagretūs procesai ir gijos
+# ---------------------------------------------------------------------------
+%page
+
+
+Moore dėsnis
+# ---------------------------------------------------------------------------
+%page
+
+
+Moore dėsnis
+neamžinas
+# ---------------------------------------------------------------------------
+%page
+%vgap 10
+
+%newimage "concurrency-ddj.gif"
+%size 2
+
+%size 5
+The Free Lunch Is Over: A Fundamental Turn Toward Concurrency in Software
+# ---------------------------------------------------------------------------
+%page
+
+
+Procesoriai nebegreitėja
+# ---------------------------------------------------------------------------
+%page
+
+
+Galima naudoti daug procesorių vietoje vieno
+# ---------------------------------------------------------------------------
+%page
+
+%size 3
+
+%size 7
+Du pagrindiniai modeliai
+1. Procesai
+2. Gijos
+# ---------------------------------------------------------------------------
+%page
+
+
+Esminis skirtumas tik vienas:
+atmintis daloma arba ne
+# ---------------------------------------------------------------------------
+%page
+
+
+Gijos
+dalinasi visą atmintį
+(su išimtimis)
+# ---------------------------------------------------------------------------
+%page
+
+
+Gijos
+reikia saugotis, kad neužliptų viena ant kitos
+# ---------------------------------------------------------------------------
+%page
+
+
+Procesai
+turi atskirą atmintį
+(su išimtimis)
+# ---------------------------------------------------------------------------
+%page
+
+
+Procesai
+reikia pavargti, kad perduotum duomenis
+# ---------------------------------------------------------------------------
+%page
+
+
+Procesus naudoti saugiau
+bet nebūtinai patogiau
+### ---------------------------------------------------------------------------
+##%page
+##
+##
+##%size 4
+##Kuo skiriasi programa nuo proceso?
+### ---------------------------------------------------------------------------
+##%page
+##
+##
+##%size 4
+##Kuo skiriasi procesas nuo gijos?
+# ---------------------------------------------------------------------------
+%page
+
+
+Gijos Pythone
+# ---------------------------------------------------------------------------
+%page
+
+
+Moduliai
+threading
+Queue
+%size 3
+thread
+(bet pamirškite apie jį)
+# ---------------------------------------------------------------------------
+%page
+
+
+Interaktyvi demonstracija
+# ---------------------------------------------------------------------------
+%page
+
+
+Procesai Pythone
+# ---------------------------------------------------------------------------
+%page
+%vgap 80
+
+
+%vgap 40
+os.system
+os.popen
+os.spawn
+popen2
+commands
+subprocess  # 2.4
+# ---------------------------------------------------------------------------
+%page
+
+
+Interaktyvi demonstracija
+# ---------------------------------------------------------------------------
+%page
+
+
+iki

@@ -1,0 +1,587 @@
+#!/usr/bin/env mgp
+# Note: tabs and trailing spaces are *important* in this file
+# - Preamble ----------------------------------------------------------------
+%deffont "standard" xfont "verdana"
+%deffont "thick" xfont "verdana-bold"
+%deffont "em" xfont "verdana-medium-i"
+%deffont "mono" xfont "andale mono"
+%default 1 area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 75 "vu-logo.png"
+%default 2 center, size 5
+%default 3 size 7, vgap 80
+%tab 1 prefix "    "
+# ---------------------------------------------------------------------------
+%page
+%pcache 1 1 0 1
+%ccolor "#134d73"
+%nodefault
+%size 7, font "standard", vgap 20, fore "black", back "white"
+
+
+
+%center, font "standard", size 7
+Programavimo kalba
+%center, font "thick", size 11
+Python
+%size 3
+
+tryliktoji paskaita
+
+%size 5, font "standard", fore "#134d73"
+Marius Gedminas
+%size 4
+<mgedmin@b4net.lt>
+%size 2
+
+%size 5
+
+%size 4
+http://mg.b4net.lt/python/
+%size 2
+
+
+%mark
+
+
+%fore "black",size 2
+2006 ruduo
+%again
+%left,valign "top",newimage "logo.gif"
+# ---------------------------------------------------------------------------
+%page
+
+%vgap 100
+
+Kartojimas
+arba
+„Ką reikia žinoti per įskaitą“
+# ---------------------------------------------------------------------------
+%page
+
+
+Puiki proga užduoti klausimus
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%size 6, vgap 26
+Sintaksė
+Duomenų tipai
+Standartinė biblioteka
+Išskirtinės situacijos
+Objektai, vardai ir nuorodos
+Vardų veikimo zonos
+Automatizuotas kodo testavimas
+Iteratoriai ir generatoriai
+Procesai ir gijos
+Debugeris ir profaileris
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%size 6, vgap 26
+%font "thick"
+Sintaksė
+%font "standard"
+Duomenų tipai
+Standartinė biblioteka
+Išskirtinės situacijos
+Objektai, vardai ir nuorodos
+Vardų veikimo zonos
+Automatizuotas kodo testavimas
+Iteratoriai ir generatoriai
+Procesai ir gijos
+Debugeris ir profaileris
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%vgap 30
+sakinys = eilutė
+%size 5, vgap 100
+(išskyrus skliaustus, ; ir \\)
+%size 6, vgap 0
+priskyrimo sakinys
+%size 5, vgap 100
+  a = b  a, b = c, d  a += b
+%size 6
+sakinys != reiškinys
+print, return, raise, import, assert, del
+if, for, while, try, def, class
+blokas - sakinių seka, pastumta į dešinę
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%vgap 0
+operatoriai
+%size 1
+
+%size 5
++x  -x  ~x
+x**y
+x*y  x/y  x%y
+x+y  x-y
+x<<y  x>>y
+x&y
+x^y
+x|y
+x<y  x<=y  x==y  x>=y  x>y  x!=y  x in y  x is y
+not x
+x and y
+x or y
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%vgap 0
+literalai
+%size 1
+
+%size 5
+123  0xFF  0377
+12.5  0.32  2.45e-12
+1.0+3.5j  -2j
+'abc'  "abc"  '''abc'''  """abc"""
+u'abc\\u010D'  r'abc\\(.\\)'
+True  False  None
+[a, b, c]  []
+{x: a, y: b, z: c}  {}
+(a, b, c)  (a,)  ()
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%vgap 0
+sąrašai
+%size 1
+
+%size 5
+some_list[3]
+some_list[-3]
+some_list[3:5]
+some_list[1:-1]
+some_list[1:-1:2]
+some_list[::-1]
+[x ** 2 for x in some_list]
+[-x for x in some_list if x < 0]
+[(x, y) for x in one_list for y in other_list]
+[(x, y) for x in one_list for y in other_list if x > y]
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%size 6, vgap 26
+Sintaksė
+%font "thick"
+Duomenų tipai
+%font "standard"
+Standartinė biblioteka
+Išskirtinės situacijos
+Objektai, vardai ir nuorodos
+Vardų veikimo zonos
+Automatizuotas kodo testavimas
+Iteratoriai ir generatoriai
+Procesai ir gijos
+Debugeris ir profaileris
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%vgap 3
+
+
+str  unicode
+int  long
+float  complex
+bool
+tuple  list  dict  set
+file
+# ---------------------------------------------------------------------------
+%page
+
+
+Konstruktorius = tipų keitimas
+(str -> int ir atvirkščiai)
+# ---------------------------------------------------------------------------
+%page
+
+
+Daug naudingų metodų
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%vgap 0
+str
+%size 1
+
+%size 5
+lower  upper  capitalize  title 
+center  ljust  rjust  strip  lstrip  rstrip
+count  find  rfind  index  rindex
+endswith  startswith
+decode  encode  expandtabs
+isalpha  isalnum  isdigit  islower  isupper  istitle  isspace
+join  split  splitlines  replace
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%vgap 0
+list
+%size 1
+
+%size 5
+append  extend  insert
+count  index
+remove  pop
+reverse  sort
+
+
+value in a_list
+a_list[i:j] = some_other_list
+del a_list[i:j]
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%vgap 0
+dict
+%size 1
+
+%size 5
+keys  values  items
+has_key  get  setdefault
+pop  popitem
+clear  update
+copy  fromkeys
+
+key in a_dict
+foo = a_dict[key]
+a_dict[key] = foo
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%vgap 0
+file
+%size 1
+
+%size 5
+read  readline  readlines
+write  writelines
+flush  close
+tell  seek  truncate
+isatty
+
+
+print >> f, 'lia lia'
+for line in f: ...
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%size 6, vgap 26
+Sintaksė
+Duomenų tipai
+%font "thick"
+Standartinė biblioteka
+%font "standard"
+Išskirtinės situacijos
+Objektai, vardai ir nuorodos
+Vardų veikimo zonos
+Automatizuotas kodo testavimas
+Iteratoriai ir generatoriai
+Procesai ir gijos
+Debugeris ir profaileris
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%vgap 0
+Vidinės funkcijos
+
+%size 5
+abs  chr  unichr  ord
+len  range
+divmod  pow
+min  max  sum  zip
+dir  getattr  hasattr
+id  hash
+isinstance  issubclass
+repr
+raw_input  input  eval
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%vgap 0
+Kiti moduliai
+
+%size 5
+os  sys  glob  math  cmath  decimal  random  sets
+datetime  time  optparse  getopt  StringIO
+cStringIO  pickle  cPickle  difflib  textwrap  pprint
+string  re  struct  curses  tempfile  shutil  locale
+gettext  logging  threading  Queue  zipfile  readline
+csv  email  inspect  linecache  traceback  array
+itertools  fileinput  subprocess  socket  pdb  profile
+cgi  urllib  httplib  imaplib  smtplib  xmlrpclib  xml
+audioop  md5  sha  Tkinter  distutils  unittest
+doctest  ConfigParser
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%size 6, vgap 26
+Sintaksė
+Duomenų tipai
+Standartinė biblioteka
+%font "thick"
+Išskirtinės situacijos
+%font "standard"
+Objektai, vardai ir nuorodos
+Vardų veikimo zonos
+Automatizuotas kodo testavimas
+Iteratoriai ir generatoriai
+Procesai ir gijos
+Debugeris ir profaileris
+# ---------------------------------------------------------------------------
+%page
+
+%size 4
+
+%size 6
+try ... except
+try ... finally
+raise
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%vgap 6
+Exception
+KeyError  IndexError
+OSError  IOError
+TypeError  ValueError
+NameError  AttributeError
+SyntaxError  ImportError
+ZeroDivisionError
+RuntimeError
+KeyboardInterrupt
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%size 6, vgap 26
+Sintaksė
+Duomenų tipai
+Standartinė biblioteka
+Išskirtinės situacijos
+%font "thick"
+Objektai, vardai ir nuorodos
+%font "standard"
+Vardų veikimo zonos
+Automatizuotas kodo testavimas
+Iteratoriai ir generatoriai
+Procesai ir gijos
+Debugeris ir profaileris
+# ---------------------------------------------------------------------------
+%page
+
+
+Objektas yra bet kas, ką galima priskirti kintamajam
+# ---------------------------------------------------------------------------
+%page
+
+
+Viskas yra objektai
+(net funkcijos, klasės, moduliai)
+# ---------------------------------------------------------------------------
+%page
+
+
+Du vardai gali rodyti į tą patį objektą
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%size 6, vgap 26
+Sintaksė
+Duomenų tipai
+Standartinė biblioteka
+Išskirtinės situacijos
+Objektai, vardai ir nuorodos
+%font "thick"
+Vardų veikimo zonos
+%font "standard"
+Automatizuotas kodo testavimas
+Iteratoriai ir generatoriai
+Procesai ir gijos
+Debugeris ir profaileris
+# ---------------------------------------------------------------------------
+%page
+
+
+Lokalūs ir globalūs kintamieji
+# ---------------------------------------------------------------------------
+%page
+
+
+Funkcijos funkcijų viduje
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%size 6, vgap 26
+Sintaksė
+Duomenų tipai
+Standartinė biblioteka
+Išskirtinės situacijos
+Objektai, vardai ir nuorodos
+Vardų veikimo zonos
+%font "thick"
+Automatizuotas kodo testavimas
+%font "standard"
+Iteratoriai ir generatoriai
+Procesai ir gijos
+Debugeris ir profaileris
+# ---------------------------------------------------------------------------
+%page
+
+
+unittest
+doctest
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%size 6, vgap 26
+Sintaksė
+Duomenų tipai
+Standartinė biblioteka
+Išskirtinės situacijos
+Objektai, vardai ir nuorodos
+Vardų veikimo zonos
+Automatizuotas kodo testavimas
+%font "thick"
+Iteratoriai ir generatoriai
+%font "standard"
+Procesai ir gijos
+Debugeris ir profaileris
+# ---------------------------------------------------------------------------
+%page
+
+
+for x in anything: ...
+# ---------------------------------------------------------------------------
+%page
+
+
+__iter__
+next
+# ---------------------------------------------------------------------------
+%page
+
+
+yield
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%size 6, vgap 26
+Sintaksė
+Duomenų tipai
+Standartinė biblioteka
+Išskirtinės situacijos
+Objektai, vardai ir nuorodos
+Vardų veikimo zonos
+Automatizuotas kodo testavimas
+Iteratoriai ir generatoriai
+%font "thick"
+Procesai ir gijos
+%font "standard"
+Debugeris ir profaileris
+# ---------------------------------------------------------------------------
+%page
+
+%size 3
+
+%size 6
+os.system
+os.popen
+popen2
+subprocess
+# ---------------------------------------------------------------------------
+%page
+
+
+threading
+Queue
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%size 6, vgap 26
+Sintaksė
+Duomenų tipai
+Standartinė biblioteka
+Išskirtinės situacijos
+Objektai, vardai ir nuorodos
+Vardų veikimo zonos
+Automatizuotas kodo testavimas
+Iteratoriai ir generatoriai
+Procesai ir gijos
+%font "thick"
+Debugeris ir profaileris
+%font "standard"
+# ---------------------------------------------------------------------------
+%page
+
+
+pdb
+import pdb; pdb.set_trace()
+# ---------------------------------------------------------------------------
+%page
+
+
+profile
+# ---------------------------------------------------------------------------
+%page
+%vgap 0
+
+
+%size 6, vgap 26
+Sintaksė
+Duomenų tipai
+Standartinė biblioteka
+Išskirtinės situacijos
+Objektai, vardai ir nuorodos
+Vardų veikimo zonos
+Automatizuotas kodo testavimas
+Iteratoriai ir generatoriai
+Procesai ir gijos
+Debugeris ir profaileris
