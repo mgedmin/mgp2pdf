@@ -2,7 +2,7 @@
 """
 Compare screenshots of MGP presentations with screenshots of PDF files.
 
-Use: compare.py file.pdf file.mgp [outputdir]
+Use: compare.py file1.(pdf|mgp) file2.(pdf|mgp) [outputdir]
 
 If outputdir is omitted, compare.py opens an interactive PyGame window.
 If outputdir is specified, compare.py puts merged slides into the given
@@ -56,7 +56,7 @@ def inform(msg):
 
 def newer(file1, file2, ifnotexist=True):
     try:
-        return os.stat(file1).st_mtime  > os.stat(file2).st_mtime
+        return os.stat(file1).st_mtime > os.stat(file2).st_mtime
     except OSError:
         return ifnotexist
 
