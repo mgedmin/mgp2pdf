@@ -150,6 +150,28 @@ class TestPresentation(unittest.TestCase):
                           '%deffont "B0rk" xfont "No Such Font Srsly No"')
 
 
+@mock.patch('sys.stdout', StringIO())
+@mock.patch('sys.stderr', StringIO())
+class TestMain(unittest.TestCase):
+
+    def test_no_args(self):
+        self.assertRaises(SystemExit, mgp2pdf.main, [])
+
+    def test_output_file_when_multiple_args(self):
+        self.assertRaises(SystemExit, mgp2pdf.main,
+                          ['x.mgp', 'y.mgp', '-o', 'z.pdf'])
+
+    @mock.patch('mgp2pdf.Presentation')
+    def test_input_error_handling(self, mock_Presentation):
+        mock_Presentation.side_effect = mgp2pdf.MgpSyntaxError('no split infinitives plz')
+        mgp2pdf.main(['file1.mgp'])
+
+    @mock.patch('mgp2pdf.Presentation')
+    def test_output_error_handling(self, mock_Presentation):
+        mock_Presentation().makePDF.side_effect = IOError('cannot write there')
+        mgp2pdf.main(['file1.mgp', '-o', '/tmp/file1.pdf'])
+
+
 def test_suite():
     return unittest.TestSuite([
         doctest.DocTestSuite('mgp2pdf'),

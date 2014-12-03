@@ -1037,7 +1037,7 @@ def setUpLogging(verbose=False):
     root.setLevel(logging.DEBUG if verbose else logging.INFO)
 
 
-def main():
+def main(args=None):
     parser = optparse.OptionParser(usage='%prog [options] filename.mgp ...')
     parser.add_option('-v', action='store_true', dest='verbose', default=False,
                       help="print the presentation as text (debug)")
@@ -1045,13 +1045,11 @@ def main():
                       help="output file name or directory (default: input file name with extension changed to .pdf)")
     parser.add_option('--unsafe', action='store_true', default=False,
                       help="enable %filter (security risk)")
-    opts, args = parser.parse_args(sys.argv[1:])
+    opts, args = parser.parse_args(args)
     if opts.outfile and len(args) > 1 and not os.path.isdir(opts.outfile):
-        print >> sys.stderr, "%s must be a directory when you're converting multiple files"
-        sys.exit(1)
+        parser.error("%s must be a directory when you're converting multiple files" % opts.outfile)
     if not args:
-        print >> sys.stderr, "nothing to do (try mgp2pdf -h for help)"
-        sys.exit(1)
+        parser.error("nothing to do, try -h for help")
     setUpLogging(opts.verbose)
     for fn in args:
         log.debug("Loading %s", fn)
