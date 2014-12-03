@@ -951,7 +951,7 @@ class Presentation(object):
                     raise MgpSyntaxError("%s directive expects a quoted string as its %dth arg"
                                          % (parts[0], n + 1))
                 results.append(part[1:-1])
-            else:
+            else: # pragma: nocover
                 assert False, 'unknown argspec %r' % arg
         return tuple(results)
 
@@ -1025,7 +1025,7 @@ class Fonts(object):
             ['fc-match', enginefontname, '-f', '%{file}'],
             stdout=subprocess.PIPE).communicate()[0].strip()
         if not filename:
-            sys.exit('Could not find the font file for %s', enginefontname)
+            sys.exit('Could not find the font file for %s' % enginefontname)
         log.debug("Font %s: %s -> %s" % (name, enginefontname, filename))
         pdfmetrics.registerFont(TTFont(name, filename))
         pdfmetrics.getFont(name)  # just see if raises

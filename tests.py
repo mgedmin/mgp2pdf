@@ -110,6 +110,41 @@ class TestPresentation(unittest.TestCase):
         # is buggy and collapses runs of commas.
         p._handleDirectives('%page, ,size 5')
 
+    def test_newimage_with_unsupported_flag(self):
+        p = mgp2pdf.Presentation()
+        self.assertRaises(mgp2pdf.MgpSyntaxError, p._handleDirectives,
+                          '%newimage -foo 42 "fail.gif"')
+
+    def test_again_without_mark(self):
+        p = mgp2pdf.Presentation()
+        self.assertRaises(mgp2pdf.MgpSyntaxError, p._handleDirectives,
+                          '%page, again')
+
+    def test_bad_arguments(self):
+        p = mgp2pdf.Presentation()
+        self.assertRaises(mgp2pdf.MgpSyntaxError, p._handleDirectives,
+                          '%size')
+        self.assertRaises(mgp2pdf.MgpSyntaxError, p._handleDirectives,
+                          '%font no-quotes')
+        self.assertRaises(mgp2pdf.MgpSyntaxError, p._handleDirectives,
+                          '%font "no-quote')
+        self.assertRaises(mgp2pdf.MgpSyntaxError, p._handleDirectives,
+                          '%font no-quote"')
+
+    def test_font_unsupported_engine(self):
+        p = mgp2pdf.Presentation()
+        self.assertRaises(NotImplementedError, p._handleDirectives,
+                          '%deffont "B0rk" tex "Computer Modern"')
+
+    @mock.patch('subprocess.Popen')
+    def test_font_unsupported_font(self, mock_Popen):
+        p = mgp2pdf.Presentation()
+        # This is seriously theoretical, since fc-match usually picks something
+        # as a fallback even if you're missing a font!  This is why we mock.
+        mock_Popen().communicate.return_value = ('', '')
+        self.assertRaises(SystemExit, p._handleDirectives,
+                          '%deffont "B0rk" xfont "No Such Font Srsly No"')
+
 
 def test_suite():
     return unittest.TestSuite([
