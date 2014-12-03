@@ -72,7 +72,14 @@ def textWrapPositions(s):
 
 
 class Slide(object):
-    """Description of a slide."""
+    """Presentation page builder.
+
+    A presentation page consists of a number of lines that contain
+    text and other objects (e.g. images), collectively called "chunks"
+    for lack of a better name.
+
+    There's also a set of methods for building the slides incrementally.
+    """
 
     def __init__(self):
         self.lines = []
@@ -86,26 +93,51 @@ class Slide(object):
         self.prefix = 0
 
     def setArea(self, w, h):
+        """Change the slide area.
+
+        ``w`` and ``h`` specify the horizontal and vertical percentage
+        (0 < w, h <= 100).
+        """
         self.area = (w, h)
 
     def setFont(self, font):
+        """Change the font for future text additions."""
         self.font = font
 
     def setSize(self, size):
+        """Change the font size for future text additions.
+
+        Units are expressed in percent of the slide area.
+        """
         self.size = size
 
     def setVGap(self, vgap):
+        """Change the extra vertical gap between lines for future text additions.
+
+        Units are expressed in percent of the font size.
+        """
         self.vgap = vgap
 
     def setColor(self, color):
+        """Change the text color for future text additons."""
         self.color = parse_color(color)
 
     def setAlignment(self, alignment):
+        """Change the alignment of the current and subsequent lines."""
         self.alignment = alignment
         if self._cur_line is not None:
             self._cur_line.alignment = alignment
 
     def setPrefix(self, prefix):
+        """Change the prefix for the current and subsequent lines.
+
+        The prefix is basically indentation, indicated as percentage
+        of the slide area width.
+
+        TODO: MagicPoint also supports string prefixes, but we don't
+        support that yet.  Actually we don't support non-zero numeric
+        prefixes either.
+        """
         self.prefix = prefix
         if self._cur_line is not None:
             # XXX: not sure how mgp handles prefix changes in the middle of a
@@ -113,47 +145,99 @@ class Slide(object):
             self._cur_line.prefix = prefix
 
     def currentOrNewLine(self):
+        """Return the line that will be the target of subsequent additions."""
         if self._cur_line is None:
             self._cur_line = Line(self.alignment, self.prefix)
             self.lines.append(self._cur_line)
         return self._cur_line
 
     def closeCurrentLine(self):
+        """Close the current line for additions.
+
+        Makes ``currentOrNewLine()`` return a new empty line.
+
+        Can be undone by ``reopenCurrentLine()``.
+        """
         self._cur_line = None
 
     def reopenCurrentLine(self):
+        """Indicate that subsequent additions should continue the last line.
+
+        (By default they'll start new lines.)
+        """
         if self.lines and self._cur_line is None:
             self._cur_line = self.lines[-1]
 
     def addText(self, text):
+        """Add a new line containing some text."""
         line = self.currentOrNewLine()
         line.add(TextChunk(text, self.font, self.size, self.vgap, self.color))
         self.closeCurrentLine()
 
     def addImage(self, filename, zoom=100, raised_by=0):
+        """Add an image to the current line.
+
+        ``zoom`` is a percentage (100 meaning no scaling).  This assumes
+        that one image pixel represents one point, i.e. the image is
+        assumed to be 72 dpi.
+
+        XXX: shouldn't setArea() influence the image size?
+
+        ``raised_by`` is a baseline adjustment, in points.
+
+        XXX: should it be in points?
+        """
         line = self.currentOrNewLine()
         line.add(Image(filename, zoom, raised_by))
+        # XXX: self.closeCurrentLine()?
 
     def addMark(self):
+        """Add a mark to the current line and return it.
+
+        This mark is can be latter passed to ``addAgain()`` to move
+        the drawing position back and overdraw some text or overlay
+        an image.
+        """
         line = self.currentOrNewLine()
         mark = Mark()
         line.add(mark)
         return mark
 
     def addAgain(self, mark):
+        """Indicate that the subsequent drawing should occur at ``mark``."""
         line = self.currentOrNewLine()
         line.add(Again(mark))
 
     def __str__(self):
+        """Represent the contents of the slide as text."""
         return '\n'.join(map(str, self.lines))
 
     def wordWrap(self, canvas, w, h):
+        """Perform word-wrapping.
+
+        ``canvas`` is the ReportLab drawing canvas.  It can be useful
+        for calculating text extents and such.
+
+        ``w`` and ``h`` specify the available space in points.
+
+        Splits each object in ``self.lines`` into two or more bits,
+        if it doesn't fit horizontally.
+
+        Vertical overflow is ignored.
+        """
         new_lines = []
         for line in self.lines:
             new_lines += line.split(canvas, w, h)
         self.lines = new_lines
 
     def drawOn(self, canvas, pageSize):
+        """Draw the current slide on a ReportLab canvas.
+
+        ``pageSize`` is a tuple (width, height), in points.
+
+        The slide is centered on the page, occupying a certain
+        percentage of it, as specified via ``setArea()``.
+        """
         # canvas.bookmarkPage(title)
         # canvas.addOutlineEntry(title, title, outlineLevel)
         w = pageSize[0] * self.area[0] / 100
@@ -166,20 +250,29 @@ class Slide(object):
 
 
 class Left(object):
+    """Left alignment."""
+
     @staticmethod
     def align(textwidth, boxwidth):
+        """Compute the position of text inside a given box width."""
         return 0
 
 
 class Right(object):
+    """Right alignment."""
+
     @staticmethod
     def align(textwidth, boxwidth):
+        """Compute the position of text inside a given box width."""
         return boxwidth - textwidth
 
 
 class Center(object):
+    """Center alignment."""
+
     @staticmethod
     def align(textwidth, boxwidth):
+        """Compute the position of text inside a given box width."""
         return (boxwidth - textwidth) / 2
 
 
@@ -190,18 +283,30 @@ class Line(object):
         self.chunks = []
         self.alignment = alignment
         self.prefix = 0
+        # XXX: we're ignoring the `prefix` argument!
         # XXX prefix can be a string (usually of whitespace), but that is not
         # yet implemented in size(), split() nor drawOn().
 
     def cloneStyle(self, newchunks):
+        """Create a new Line with the same style but different contents."""
         clone = Line(self.alignment, self.prefix)
         clone.chunks = newchunks
         return clone
 
     def add(self, chunk):
+        """Add a drawable object to this line."""
         self.chunks.append(chunk)
 
     def size(self, canvas, w, h):
+        """Compute the size of this line.
+
+        ``canvas`` is the ReportLab drawing canvas.  It can be useful
+        for calculating text extents and such.
+
+        ``w`` and ``h`` specify the slide area space in points.
+
+        Returns (width, height), in points.
+        """
         myw = myh = 0
         seen_text = False
         if isinstance(self.prefix, int):
@@ -223,6 +328,16 @@ class Line(object):
         return myw, myh
 
     def split(self, canvas, w, h):
+        """Perform word-wrapping if necessary.
+
+        ``canvas`` is the ReportLab drawing canvas.  It can be useful
+        for calculating text extents and such.
+
+        ``w`` and ``h`` specify the slide area space in points.
+
+        Returns a list of Line objects that are supposed to fit inside
+        the requested width.
+        """
         chunks_that_fit = []
         remaining_chunks = list(self.chunks)
         remaining_space = w
@@ -250,6 +365,19 @@ class Line(object):
             return [self]
 
     def drawOn(self, canvas, x, y, w, h):
+        """Render the line.
+
+        ``canvas`` is the ReportLab drawing canvas.
+
+        ``w`` and ``h`` specify the slide area space in points.
+
+        ``x`` and ``y`` specify the origin point for this line.
+
+        Returns (x, y) specifying the origin point for the next line.
+
+        (Reminder: the PDF coordinate space is in points and starts in
+        the lower left corner of the page.)
+        """
         x0, y0 = x, y
         myw, myh = self.size(canvas, w, h)
         if isinstance(self.prefix, int):
@@ -264,6 +392,7 @@ class Line(object):
         return x0, y0 - myh
 
     def __str__(self):
+        """Represent the contents of the line as text."""
         return ''.join(map(str, self.chunks))
 
 
@@ -271,13 +400,50 @@ class SimpleChunk(object):
     """A simple chunk that takes no space, is invisible, and unsplittable."""
 
     def size(self, canvas, w, h):
+        """Compute the size of this chunk.
+
+        ``canvas`` is the ReportLab drawing canvas.  It can be useful
+        for calculating text extents and such.
+
+        ``w`` and ``h`` specify the slide area space in points.  It
+        needs to be passed because so many parameters in MagicPoint
+        are relative to the slide area size.
+        """
         return 0, 0
 
     def drawOn(self, canvas, x, y, w, h):
+        """Render the chunk on canvas.
+
+        ``canvas`` is the ReportLab drawing canvas.
+
+        ``w`` and ``h`` specify the slide area space in points.  It
+        needs to be passed because so many parameters in MagicPoint
+        are relative to the slide area size.
+
+        ``x`` and ``y`` specify the origin point for this chunk.
+
+        Returns (x, y) specifying the origin point for the next chunk.
+        """
         return x, y
 
     def split(self, canvas, w, h, maxw):
+        """Perform word-wrapping if necessary.
+
+        ``canvas`` is the ReportLab drawing canvas.  It can be useful
+        for calculating text extents and such.
+
+        ``w`` and ``h`` specify the slide area space in points.
+
+        ``maxw`` specifies the remaining space available on this line
+
+        Returns a list of chunk objects, the first of which is supposed
+        to fit inside the requested width.
+        """
         return [self]
+
+    def __str__(self):
+        """Represent the contents of the chunk as text."""
+        return '<%s>' % self.__class__.__name__
 
 
 class Mark(SimpleChunk):
@@ -424,6 +590,10 @@ class Presentation(object):
             self.load(file)
 
     def load(self, file):
+        """Parse an .mgp file.
+
+        ``file`` can be a filename or a file-like object.
+        """
         self.basedir = ''
         if not hasattr(file, 'read'):
             self.basedir = os.path.dirname(file)
@@ -633,6 +803,7 @@ class Presentation(object):
         self._directives_used_in_this_line = set()
 
     def __str__(self):
+        """Represent the contents of the presentation as text."""
         res = []
         for n, s in enumerate(self.slides):
             res.append('--- Slide %d ---\n' % (n + 1))
@@ -640,6 +811,10 @@ class Presentation(object):
         return ''.join(res)
 
     def makePDF(self, outfile):
+        """Render the presentation into a PDF.
+
+        ``outfile`` can be a filename or a file-like object.
+        """
         canvas = Canvas(outfile, self.pageSize)
         if self.title:
             canvas.setTitle(self.title)
@@ -655,6 +830,18 @@ class Fonts(object):
     """Manages the fonts used in the presentation."""
 
     def define(self, name, engine, enginefontname):
+        """Define a new font.
+
+        ``name`` is the name that will be used for this font in the
+        presentation text.
+
+        ``engine`` is the font engine.  MagicPoint supports several,
+        but mgp2pdf supports only "xfont".
+
+        ``enginefontname`` is the name of the font according to the
+        font engine.  For ``xfont`` it can be "family", "family-weight"
+        or "family-weight-slant".  Or it can be a fontconfig pattern.
+        """
         if engine != "xfont":
             raise NotImplementedError("unsupported font engine %s" % engine)
         if '-' in enginefontname and ':' not in enginefontname:

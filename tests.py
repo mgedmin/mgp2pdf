@@ -28,6 +28,21 @@ class SmokeTests(unittest.TestCase):
         p.makePDF(pdf)
 
 
+class TestSimpleChunk(unittest.TestCase):
+
+    def test_drawOn(self):
+        canvas = mock.Mock()
+        chunk = mgp2pdf.SimpleChunk()
+        x, y = chunk.drawOn(canvas, 10, 20, 100, 200)
+        self.assertEqual((x, y), (10, 20))
+
+    def test_split(self):
+        canvas = mock.Mock()
+        chunk = mgp2pdf.SimpleChunk()
+        bits = chunk.drawOn(canvas, 100, 50, 200)
+        self.assertEqual(bits, [chunk])
+
+
 class TestImage(unittest.TestCase):
 
     @mock.patch('mgp2pdf.ImageReader')
