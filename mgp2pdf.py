@@ -647,14 +647,6 @@ class Presentation(object):
                 'Missing %endfilter at end of file (%filter on line {0})'
                 .format(filter_lineno))
 
-    def _newPage(self):
-        self.slides.append(Slide())
-        self._lastlineno = 0
-        self._use_defaults = True
-        self._continuing = False
-        self._directives_used_in_this_line = set()
-        self.mark = None
-
     @staticmethod
     def _splitDirectives(line):
         """
@@ -696,7 +688,12 @@ class Presentation(object):
         handler(parts)
 
     def _handleDirective_page(self, parts):
-        self._newPage()
+        self.slides.append(Slide())
+        self._lastlineno = 0
+        self._use_defaults = True
+        self._continuing = False
+        self._directives_used_in_this_line = set()
+        self.mark = None
 
     def _handleDirective_nodefault(self, parts):
         self._use_defaults = False
