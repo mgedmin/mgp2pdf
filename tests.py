@@ -39,7 +39,7 @@ class TestSimpleChunk(unittest.TestCase):
     def test_split(self):
         canvas = mock.Mock()
         chunk = mgp2pdf.SimpleChunk()
-        bits = chunk.drawOn(canvas, 100, 50, 200)
+        bits = chunk.split(canvas, 100, 50, 200)
         self.assertEqual(bits, [chunk])
 
 
