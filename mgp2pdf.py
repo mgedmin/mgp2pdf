@@ -124,9 +124,6 @@ class Slide(object):
     def reopenCurrentLine(self):
         if self.lines and self._cur_line is None:
             self._cur_line = self.lines[-1]
-            return True
-        else:
-            return False
 
     def addText(self, text):
         line = self.currentOrNewLine()
