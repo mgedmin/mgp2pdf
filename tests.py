@@ -98,14 +98,17 @@ class TestPresentation(unittest.TestCase):
                 '%endfilter\n',
                 '# ta-dah!\n',
             ])), [
-                'A cow says:\n',
-                'Filtering through "cowsay" disabled, use --unsafe to enable\n',
-                '# ta-dah!\n',
+                (1, 'A cow says:\n'),
+                (2, 'Filtering through "cowsay" disabled, use --unsafe to enable\n'),
+                (5, '# ta-dah!\n'),
             ])
 
-    def test_empty_directive(self):
+    @mock.patch('mgp2pdf.log')
+    def test_empty_directive(self, mock_log):
         p = mgp2pdf.Presentation()
-        p._handleDirectives('%page,,size 5')
+        # XXX: "%page,,size 5" doesn't trigger this because _splitDirectives()
+        # is buggy and collapses runs of commas.
+        p._handleDirectives('%page, ,size 5')
 
 
 def test_suite():

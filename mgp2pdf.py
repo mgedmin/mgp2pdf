@@ -586,32 +586,37 @@ class Presentation(object):
         self.title = title
         self.unsafe = unsafe
         self.basedir = ''
+        self.lineno = None
         if file:
             self.load(file)
 
-    def load(self, file):
+    def load(self, file, basedir=''):
         """Parse an .mgp file.
 
         ``file`` can be a filename or a file-like object.
         """
-        self.basedir = ''
+        self.basedir = basedir
         if not hasattr(file, 'read'):
-            self.basedir = os.path.dirname(file)
+            if not self.basedir:
+                self.basedir = os.path.dirname(file)
             file = open(file)
-        for line in self.preprocess(file):
+        for lineno, line in self.preprocess(file):
+            self.lineno = lineno
             if line.startswith('%'):
                 self._handleDirectives(line)
             elif line.startswith('#'):
                 pass
             else:
                 self._handleText(line)
+        self.lineno = None
 
     def preprocess(self, file):
         """Handle %filter directives in the source file.
 
         ``file`` is a file-like object.
 
-        Returns a generator that yields preprocessed lines.
+        Returns a generator that yields (lineno, line) with preprocessed lines
+        and line numbers in the original file.
 
         Finds ``%filter`` and ``%endfilter`` directives and pipes the text
         between them through the external command specified (if self.unsafe
@@ -650,12 +655,12 @@ class Presentation(object):
                     log.warning("Ignoring %filter directive on line {0} in safe mode".format(filter_lineno))
                     output = 'Filtering through "%s" disabled, use --unsafe to enable\n' % filter_cmd
                 for line in output.splitlines(True):
-                    yield line
+                    yield filter_lineno, line
                 filter_cmd = None
             elif filter_cmd:
                 data_to_filter.append(line)
             else:
-                yield line
+                yield lineno, line
         if filter_cmd is not None:
             raise MgpSyntaxError(
                 'Missing %endfilter at end of file (%filter on line {0})'
@@ -706,8 +711,9 @@ class Presentation(object):
         parts = self._splitArgs(directive)
         if not parts:
             # Huh, an empty directive.  We end up here if we encounter
-            # something like "%foo, , bar".  This should probably emit
-            # a syntax error or something.
+            # something like "%foo, , bar".  This should probably abort
+            # with a syntax error or something.
+            log.debug("Ignoring empty directive on line {0}".format(self.lineno))
             return
         word = parts[0]
         self._directives_used_in_this_line.add(word)
