@@ -1,0 +1,259 @@
+#!/usr/bin/env mgp
+# Note: tabs and trailing spaces are *important* in this file
+# - Preamble ----------------------------------------------------------------
+%deffont "standard" xfont "verdana"
+%deffont "thick" xfont "verdana-bold"
+%deffont "em" xfont "verdana-medium-i"
+%default 1 area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+%default 2 center, size 5
+%default 3 size 8, vgap 80
+%default 4 font "em", size 7, vgap 10
+%default 5 font "standard", size 3
+# ---------------------------------------------------------------------------
+%page
+%pcache 1 1 0 1
+%ccolor "#134d73"
+%nodefault
+%size 7, font "standard", vgap 20, fore "black", back "white"
+
+
+%center, font "thick", size 11
+DocTests
+%center, font "standard", size 7
+At Lightning Speed
+
+%size 5, font "standard", fore "#134d73"
+Marius Gedminas
+%size 4
+<marius@pov.lt>
+%size 2
+
+%size 5
+Programmers of Vilnius
+%size 4
+http://pov.lt/
+%size 2
+
+%newimage "povlogo.png"
+
+
+%fore "black"
+EuroPython 2005
+# ---------------------------------------------------------------------------
+%page
+
+
+doctests
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+
+def factorial(n):
+    """Compute the factorial of n.
+
+        >>> factorial(5)
+        120
+
+    """
+# ---------------------------------------------------------------------------
+%page
+
+people (e.g. me) say
+doctest is better than unittest
+# ---------------------------------------------------------------------------
+%page
+
+first impression
+huh?
+# ---------------------------------------------------------------------------
+%page
+
+
+won't test overwhelm code?
+# ---------------------------------------------------------------------------
+%page
+
+I didn't get it until I read
+Jim Fulton's PyCon 2004 talk
+Literate Testing: Automated Testing with doctest 
+
+http://www.python.org/pycon/dc2004/papers/4/PyCon2004DocTestUnit.pdf
+# ---------------------------------------------------------------------------
+%page
+
+%newimage "lightbulb.gif"
+# ---------------------------------------------------------------------------
+%page
+
+
+don't abuse docstrings
+# ---------------------------------------------------------------------------
+%page
+
+
+short illustrative examples only
+# ---------------------------------------------------------------------------
+%page
+
+
+put extensive tests in a separate test module
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+
+def doctest_one_thing():
+    """Test one thing
+
+        ...
+    """
+
+def doctest_another_thing():
+    """Test another thing
+
+        ...
+    """
+# ---------------------------------------------------------------------------
+%page
+
+why not just use unittest?
+nice extra features
+(since Python 2.4)
+# ---------------------------------------------------------------------------
+%page
+
+
+whitespace normalization
+# ---------------------------------------------------------------------------
+%page
+
+
+ellipsis notation
+# ---------------------------------------------------------------------------
+%page
+
+
+unified diffs
+# ---------------------------------------------------------------------------
+%page
+
+%newimage "schoolbell.png"
+SchoolBell: mostly doctests
+# ---------------------------------------------------------------------------
+%page
+
+
+4 kinds of doctests
+# ---------------------------------------------------------------------------
+%page
+
+1
+function docstrings
+# ---------------------------------------------------------------------------
+%page
+
+2
+unit tests
+# ---------------------------------------------------------------------------
+%page
+
+3
+page tests
+# ---------------------------------------------------------------------------
+%page
+
+4
+developer documentation
+# ---------------------------------------------------------------------------
+%page
+
+
+stream of consciousness testing
+# ---------------------------------------------------------------------------
+%page
+
+
+Phillip J. Eby's weblog
+Stream of Conciousness Testing
+
+http://dirtsimple.org/2004/11/stream-of-consciousness-testing.html
+# ---------------------------------------------------------------------------
+%page
+
+
+the end
+## # ---------------------------------------------------------------------------
+## %page
+## 
+## Doctests in docstrings
+## 
+## %% code %%
+## %font "standard", size 5
+## def compute_q_coefficient(x, y, z):
+##     """Compute the q coefficient as per blah blah blah.
+## 
+##         >>> compute_q_coefficient(0, 0, 0)
+##         42
+##         >>> compute_q_coefficient(1, 0, 0)
+##         23
+##     ... 900 lines later...
+##         >>> compute_q_coefficient(72, -352, 99.4)
+##         -1.582864e-0025
+##     """
+## %% end code %%
+## # ---------------------------------------------------------------------------
+## %page
+## 
+## Doctests in docstrings (2)
+## 
+## 	Don't do that!
+## # ---------------------------------------------------------------------------
+## %page
+## 
+## Doctests in docstrings (3)
+## 
+## 	Only include short examples in docstrings.
+## 	Test all corner cases in a separate test module.
+## 	Pattern: test functions that do nothing and act as containers for docstrings.
+## # ---------------------------------------------------------------------------
+## %page
+## 
+## Four Kinds of Doctests
+## 
+## %pause, size 6
+## 	Function docstrings: 
+## %font "em", cont
+## short
+## %font "standard", cont
+##  usage examples
+## %pause, size 6
+## 	Unit test modules: bunch of functions with empty bodies and doctests in docstrings
+## %pause, size 6
+## 	Documentation: ReStructured text files with embedded doctests
+## %pause, size 6
+## 	Functional tests: text files with embedded doctests
+## # ---------------------------------------------------------------------------
+## %page
+## 
+## Further Reading
+## 
+## 	Jim Fulton's PyCon 2004 presentation
+## %font "em", cont
+## Literate Testing: Automated Testing with doctest 
+## %font "standard", size 3
+##            http://www.python.org/pycon/dc2004/papers/4/PyCon2004DocTestUnit.pdf
+## 
+## 	
+## %font "em", cont
+## Stream of Conciousness Testing
+## %font "standard", cont
+##  in Phillip J. Eby's weblog
+## %font "standard", size 3
+##            http://dirtsimple.org/2004/11/stream-of-consciousness-testing.html
+## 
+## # ---------------------------------------------------------------------------

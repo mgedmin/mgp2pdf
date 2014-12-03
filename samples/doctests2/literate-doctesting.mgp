@@ -1,0 +1,1087 @@
+#!/usr/bin/env mgp
+# Note: tabs and trailing spaces are *important* in this file
+# - Preamble ----------------------------------------------------------------
+%deffont "standard" xfont "verdana"
+%deffont "thick" xfont "verdana-bold"
+%deffont "em" xfont "verdana-medium-i"
+%deffont "mono" xfont "andale mono"
+%default 1 area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+%default 2 center, size 5
+%default 3 size 8, vgap 80
+%default 4 font "em", size 7, vgap 10
+%default 5 font "standard", size 3
+# ---------------------------------------------------------------------------
+%page
+%pcache 1 1 0 1
+%ccolor "#134d73"
+%nodefault
+%size 7, font "standard", vgap 20, fore "black", back "white"
+
+
+%center, font "thick", size 11
+Literate Doctesting
+%center, font "standard", size 7
+
+
+%size 5, font "standard", fore "#134d73"
+Marius Gedminas
+%size 4
+<marius@pov.lt>
+%size 2
+
+%size 5
+Programmers of Vilnius
+%size 4
+http://pov.lt/
+%size 2
+
+%newimage "povlogo.png"
+
+
+%fore "black"
+EuroPython 2006
+# ---------------------------------------------------------------------------
+%page
+
+
+# This talk is about
+doctests
+# ---------------------------------------------------------------------------
+%page
+
+
+# I think you already know what they are.  If not, then
+imagine an interactive Python session
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ 2 + 2
+%font "standard"
+4
+
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ 
+%cont, font "thick"
+if
+%cont, font "standard"
+ 2 * 2 == 4:
+%font "standard"
+
+%cont, font "mono", fore "#00aaaa"
+...
+%cont, font "standard", fore "#134d73"
+     
+%cont, font "thick"
+print
+%cont, font "standard"
+ 
+%cont, fore "#13734d"
+'My Python is sane today'
+%cont, fore "#134d73"
+
+%font "standard"
+My Python is sane today
+# ---------------------------------------------------------------------------
+%page
+
+
+# now
+copy & paste
+# everything, including the interpreter prompt
+# ---------------------------------------------------------------------------
+%page
+
+
+# You can now
+run and verify
+# that every expression gives the expected result, automatically
+# ---------------------------------------------------------------------------
+%page
+
+
+doctests serve two purposes
+# ---------------------------------------------------------------------------
+%page
+
+
+documentation and tests
+# ---------------------------------------------------------------------------
+%page
+
+
+documentation
+# first
+# ---------------------------------------------------------------------------
+%page
+
+
+you develop a Python package
+# ---------------------------------------------------------------------------
+%page
+
+
+you create a README.txt file
+# ---------------------------------------------------------------------------
+%page
+
+
+documentation for users of this package
+# ---------------------------------------------------------------------------
+%page
+
+
+documentation should have examples
+# ---------------------------------------------------------------------------
+%page
+
+
+(I'm a user.  I love examples.)
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+
+%center, size 8, vgap 80
+
+if you put doctests into the README, then you have real, working examples
+# ---------------------------------------------------------------------------
+%page
+
+
+(and they get tested)
+# ---------------------------------------------------------------------------
+%page
+
+
+# here's an
+example
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+moneylaundry
+============
+
+This is a package that helps you launder money.
+
+    
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ 
+%cont, font "thick"
+from
+%cont, font "standard"
+ moneylaundry 
+%cont, font "thick"
+import
+%cont, font "standard"
+ launder
+%font "standard"
+    
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ money = 
+%cont, fore "#13734d"
+'$1,000,000.00'
+%cont, fore "#134d73"
+
+%font "standard"
+    
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ launder(money)
+%font "standard"
+    Decimal("1000000.00")
+
+# ---------------------------------------------------------------------------
+%page
+
+
+some advice
+# ---------------------------------------------------------------------------
+%page
+
+
+focus on documentation
+# ---------------------------------------------------------------------------
+%page
+
+
+tell a story
+# ---------------------------------------------------------------------------
+%page
+
+
+do not put complicated setup code into the README
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+
+%center, size 8, vgap 80
+
+do not put comprehensive tests for all imaginable corner cases into the README
+# ---------------------------------------------------------------------------
+%page
+
+
+hooking things up
+# ---------------------------------------------------------------------------
+%page
+
+
+unittest is not a bad framework
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+\# tests.py
+
+
+%cont, font "thick"
+import
+%cont, font "standard"
+ unittest
+
+%cont, font "thick"
+import
+%cont, font "standard"
+ doctest
+
+
+%cont, font "thick"
+def
+%cont, font "standard"
+ test_suite():
+    
+%cont, font "thick"
+return
+%cont, font "standard"
+ doctest.DocFileSuite(
+                        
+%cont, fore "#13734d"
+'README.txt'
+%cont, fore "#134d73"
+)
+
+
+%cont, font "thick"
+if
+%cont, font "standard"
+ __name__ == 
+%cont, fore "#13734d"
+'__main__'
+%cont, fore "#134d73"
+:
+    unittest.main(defaultTest=
+%cont, fore "#13734d"
+'test_suite'
+%cont, fore "#134d73"
+)
+# ---------------------------------------------------------------------------
+%page
+
+
+DocFileSuite is for plain text files
+(there's also DocTestSuite that I'll mention later)
+# ---------------------------------------------------------------------------
+%page
+
+
+Complicated setup code?
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+
+%cont, font "thick"
+def
+%cont, font "standard"
+ setUp(test):
+    ...
+
+
+%cont, font "thick"
+def
+%cont, font "standard"
+ tearDown(test):
+    ...
+
+
+%cont, font "thick"
+def
+%cont, font "standard"
+ test_suite():
+    
+%cont, font "thick"
+return
+%cont, font "standard"
+ doctest.DocFileSuite(
+                        
+%cont, fore "#13734d"
+'README.txt'
+%cont, fore "#134d73"
+,
+                        setUp=setUp,
+                        tearDown=tearDown)
+# ---------------------------------------------------------------------------
+%page
+
+
+you can put things into test.globs
+# ---------------------------------------------------------------------------
+%page
+
+
+do not abuse
+# ---------------------------------------------------------------------------
+%page
+
+
+make the README easy to understand
+# ---------------------------------------------------------------------------
+%page
+
+
+useful technique for API design:
+# ---------------------------------------------------------------------------
+%page
+
+
+write the README first
+# ---------------------------------------------------------------------------
+%page
+
+
+then implement it
+# ---------------------------------------------------------------------------
+%page
+
+
+you can do this in many iterative steps, large or small
+# ---------------------------------------------------------------------------
+%page
+
+
+documentation (again)
+# ---------------------------------------------------------------------------
+%page
+
+
+short examples in docstrings
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+
+%cont, font "thick"
+def
+%cont, font "standard"
+ blend(color1, color2, alpha=0.5):
+    """Blend two colors together.
+
+        >>> blend(
+%cont, fore "#13734d"
+'#ff0000'
+%cont, fore "#134d73"
+, 
+%cont, fore "#13734d"
+'#ffffee'
+%cont, fore "#134d73"
+, 0.5)
+        
+%cont, fore "#13734d"
+'#ff776f'
+%cont, fore "#134d73"
+
+        >>> blend(
+%cont, fore "#13734d"
+'#ff0000'
+%cont, fore "#134d73"
+, 
+%cont, fore "#13734d"
+'#ffffee'
+%cont, fore "#134d73"
+, 0.75)
+        
+%cont, fore "#13734d"
+'#ffbbaa'
+%cont, fore "#134d73"
+
+
+    """
+
+# ---------------------------------------------------------------------------
+%page
+
+
+*short*
+# ---------------------------------------------------------------------------
+%page
+
+
+testing these
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+\# tests.py
+
+%cont, font "thick"
+import
+%cont, font "standard"
+ unittest
+
+%cont, font "thick"
+import
+%cont, font "standard"
+ doctest
+
+
+%cont, font "thick"
+def
+%cont, font "standard"
+ test_suite():
+    
+%cont, font "thick"
+return
+%cont, font "standard"
+ unittest.TestSuite([
+            doctest.DocFileSuite(
+%cont, fore "#13734d"
+'README.txt'
+%cont, fore "#134d73"
+),
+            doctest.DocTestSuite(
+%cont, fore "#13734d"
+'colors'
+%cont, fore "#134d73"
+),
+        ])
+
+
+%cont, font "thick"
+if
+%cont, font "standard"
+ __name__ == 
+%cont, fore "#13734d"
+'__main__'
+%cont, fore "#134d73"
+:
+    unittest.main(defaultTest=
+%cont, fore "#13734d"
+'test_suite'
+%cont, fore "#134d73"
+)
+# ---------------------------------------------------------------------------
+%page
+
+
+DocFileSuite is for plain text files
+DocTestSuite is for docstrings in Python modules
+# ---------------------------------------------------------------------------
+%page
+
+
+enough about documentation
+# ---------------------------------------------------------------------------
+%page
+
+
+testing
+# ---------------------------------------------------------------------------
+%page
+
+
+you can use traditional unittest TestCases
+# ---------------------------------------------------------------------------
+%page
+
+
+or you can use doctests
+# ---------------------------------------------------------------------------
+%page
+
+
+or even both
+# ---------------------------------------------------------------------------
+%page
+
+
+doctests have some advantages
+# ---------------------------------------------------------------------------
+%page
+
+
+doctests invite English descriptions
+# I feel more compelled to describe what I'm doing in English
+#when I write a doctest than when I write a unit test
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+
+%center, size 8, vgap 80
+
+plus there are some nice doctest features to make life easier
+# ---------------------------------------------------------------------------
+%page
+
+
+general pattern of doctests
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+short paragraph that explains what the next chunk is all about
+
+    
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ short chunk
+%font "standard"
+    
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ of Python code
+%font "standard"
+
+another
+
+    
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ another
+%font "standard"
+
+etc.
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+
+%center, size 8, vgap 80
+
+You can process such text files with a ReStructuredText processor
+# TODO: screenshot
+# ---------------------------------------------------------------------------
+%page
+
+
+Alternative: put doctests into Python modules in a subpackage
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+\# tests.py
+
+%cont, font "thick"
+import
+%cont, font "standard"
+ unittest
+
+%cont, font "thick"
+import
+%cont, font "standard"
+ doctest
+
+
+%cont, font "thick"
+def
+%cont, font "standard"
+ doctest_this():
+    """Test this
+
+    If X then Y
+
+       >>> this(X)
+       Y
+
+    """
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+\# tests.py, continued
+
+
+%cont, font "thick"
+def
+%cont, font "standard"
+ doctest_that():
+    """
+    If Z then Q
+
+       >>> this(Z)
+       Q
+
+    """
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+\# tests.py, continued
+
+
+%cont, font "thick"
+def
+%cont, font "standard"
+ test_suite():
+    
+%cont, font "thick"
+return
+%cont, font "standard"
+ unittest.TestSuite([
+            doctest.DocFileSuite(
+%cont, fore "#13734d"
+'README.txt'
+%cont, fore "#134d73"
+),
+            doctest.DocTestSuite(
+%cont, fore "#13734d"
+'colors'
+%cont, fore "#134d73"
+),
+            doctest.DocTestSuite(),
+                # no module name = this file
+        ])
+
+
+%cont, font "thick"
+if
+%cont, font "standard"
+ __name__ == 
+%cont, fore "#13734d"
+'__main__'
+%cont, fore "#134d73"
+:
+    unittest.main(defaultTest=
+%cont, fore "#13734d"
+'test_suite'
+%cont, fore "#134d73"
+)
+# ---------------------------------------------------------------------------
+%page
+
+
+which is better?
+it's up to you
+# ---------------------------------------------------------------------------
+%page
+
+
+just don't mix long tests and code in the same module
+# ---------------------------------------------------------------------------
+%page
+
+
+about those nice features
+# ---------------------------------------------------------------------------
+%page
+
+
+wildcards
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+-- real life --
+
+Python 2.4.3 (#2, Apr 27 2006, 14:43:58)
+
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ object()
+%font "standard"
+<object object at 0xb7d88448>
+
+-- doctest --
+
+Call a class to make an object
+
+  
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ object()        # doctest: +ELLIPSIS
+%font "standard"
+  <object object at ...>
+# ---------------------------------------------------------------------------
+%page
+
+
+diffs
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ 
+%cont, font "thick"
+print
+%cont, font "standard"
+ 
+%cont, fore "#13734d"
+'\\n'
+%cont, fore "#134d73"
+.join(sorted(some_dict))
+%font "standard"
+
+%cont, font "mono", fore "#00aaaa"
+...
+%cont, font "standard", fore "#134d73"
+     # doctest: +REPORT_NDIFF
+%font "standard"
+alpha
+beta
+gama
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+Failed example:
+    print '\\n'.join(sorted(some_dict))
+        # doctest: +REPORT_NDIFF
+Differences (ndiff with -expected +actual):
+%font "mono"
+    alpha
+  - beta
+  + delta
+  - gama
+  + gamma
+  ?    +
+# ---------------------------------------------------------------------------
+%page
+
+
+sadly diffs + ellipses do not mix well
+# ---------------------------------------------------------------------------
+%page
+
+
+there's also whitespace normalization
+# ---------------------------------------------------------------------------
+%page
+
+
+\# doctest: +NORMALIZE_WHITESPACE
+# ---------------------------------------------------------------------------
+%page
+
+
+useful when you compare, say, generated HTML
+# ---------------------------------------------------------------------------
+%page
+
+
+makes diffs even harder to read :(
+# ---------------------------------------------------------------------------
+%page
+
+
+flags can be specified globally
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+#
+
+
+doctest.DocFileSuite(
+%cont, fore "#13734d"
+'README.txt'
+%cont, fore "#134d73"
+,
+            optionflags=doctest.ELLIPSIS
+                       |doctest.REPORT_NDIFF)
+# ---------------------------------------------------------------------------
+%page
+
+
+real-life example
+# ---------------------------------------------------------------------------
+%page
+
+
+functional test of a web app with zope.testbrowser
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+When we look at the front page, we see a welcome message
+
+  
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ browser = Browser()
+%font "standard"
+  
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ browser.open(
+%cont, fore "#13734d"
+'http://localhost/'
+%cont, fore "#134d73"
+)
+%font "standard"
+  
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ 
+%cont, fore "#13734d"
+'Welcome'
+%cont, fore "#134d73"
+ 
+%cont, font "thick"
+in
+%cont, font "standard"
+ browser.contents
+%font "standard"
+  True
+
+There's a login link
+
+  
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ browser.getLink(
+%cont, fore "#13734d"
+'Log in'
+%cont, fore "#134d73"
+).click()
+%font "standard"
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+We can now type the username and password, and log in
+
+  
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ browser.getControl(
+%font "standard"
+  
+%cont, font "mono", fore "#00aaaa"
+...
+%cont, font "standard", fore "#134d73"
+         
+%cont, fore "#13734d"
+'User Name'
+%cont, fore "#134d73"
+).value = 
+%cont, fore "#13734d"
+'marius'
+%cont, fore "#134d73"
+
+%font "standard"
+  
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ browser.getControl(
+%font "standard"
+  
+%cont, font "mono", fore "#00aaaa"
+...
+%cont, font "standard", fore "#134d73"
+         
+%cont, fore "#13734d"
+'Password'
+%cont, fore "#134d73"
+).value = 
+%cont, fore "#13734d"
+'sekrit'
+%cont, fore "#134d73"
+
+%font "standard"
+  
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ browser.getControl(
+%cont, fore "#13734d"
+'Log in'
+%cont, fore "#134d73"
+).click()
+%font "standard"
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+%left, size 6, vgap 10
+And now my home page shows that I've got mail
+
+  
+%cont, font "mono", fore "#00aaaa"
+>>>
+%cont, font "standard", fore "#134d73"
+ 
+%cont, font "thick"
+print
+%cont, font "standard"
+ browser.contents
+%font "standard"
+  <BLANKLINE>
+  
+%cont, font "mono", fore "#00aaaa"
+...
+%cont, font "standard", fore "#134d73"
+
+%font "standard"
+  <h1>Hello, Marius</h1>
+  
+%cont, font "mono", fore "#00aaaa"
+...
+%cont, font "standard", fore "#134d73"
+
+%font "standard"
+  <div class="info">
+    You have mail!
+  </div>
+  
+%cont, font "mono", fore "#00aaaa"
+...
+%cont, font "standard", fore "#134d73"
+
+%font "standard"
+
+# ---------------------------------------------------------------------------
+%page
+
+
+testbrowser works with Zope 3, and with real HTTP servers
+# ---------------------------------------------------------------------------
+%page
+
+
+I'm sure you could hook it up with WSGI and other things
+# ---------------------------------------------------------------------------
+%page
+
+
+so, do doctests always win?
+# ---------------------------------------------------------------------------
+%page
+
+
+# well...
+there are some downsides
+# ---------------------------------------------------------------------------
+%page
+
+
+you cannot step through a doctest with pdb
+# ---------------------------------------------------------------------------
+%page
+
+
+(nothing else comes into mind)
+# ---------------------------------------------------------------------------
+%page
+
+
+summary
+# ---------------------------------------------------------------------------
+%page
+%nodefault
+%area 90 90, vgap 60, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+
+
+%center, size 8, vgap 80
+documentation (README.txt, docstrings)
+tests (unit, functional)
+%font "em"
+keep them separate
+# ---------------------------------------------------------------------------
+%page
+
+
+acknowledgements
+# ---------------------------------------------------------------------------
+%page
+
+
+Jim Fulton's PyCon 2004 talk
+Literate Testing: Automated Testing with doctest
+
+
+http://www.python.org/pycon/dc2004/papers/4/PyCon2004DocTestUnit.pdf
+# ---------------------------------------------------------------------------
+%page
+
+
+Phillip J. Eby's weblog
+Stream of Conciousness Testing
+
+
+http://dirtsimple.org/2004/11/stream-of-consciousness-testing.html
+# ---------------------------------------------------------------------------
+%page
+
+
+that's it
+question time
+
+
+... is there any time left?
+# ---------------------------------------------------------------------------
