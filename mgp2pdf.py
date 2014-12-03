@@ -329,8 +329,13 @@ class Image(SimpleChunk):
 
     def drawOn(self, canvas, x, y, w, h):
         myw, myh = self.size(canvas, w, h)
-        canvas.drawImage(self.filename, x, y - myh + self.raised_by, myw, myh,
-                         mask='auto')
+        try:
+            canvas.drawImage(self.filename, x, y - myh + self.raised_by, myw, myh,
+                             mask='auto')
+        except Exception:
+            log.debug("Exception in canvas.drawImage:", exc_info=True)
+            log.warning("Could not render image %s", self.filename)
+
         return x + myw, y
 
     def __str__(self):
@@ -454,6 +459,7 @@ class Presentation(object):
                                              stdout=subprocess.PIPE)
                     output = child.communicate(''.join(data_to_filter))[0]
                 else:
+                    log.warning("Ignoring %filter directive in safe mode")
                     output = 'Filtering through "%s" disabled, use --unsafe to enable' % filter_cmd
                 for line in output.splitlines(True):
                     yield line
@@ -701,17 +707,29 @@ def main():
         sys.exit(1)
     setUpLogging(opts.verbose)
     for fn in args:
-        title = os.path.splitext(os.path.basename(fn))[0]
-        p = Presentation(fn, title, unsafe=opts.unsafe)
-        outfile = os.path.splitext(fn)[0] + '.pdf'
-        if opts.outfile:
-            if os.path.isdir(opts.outfile):
-                outfile = os.path.join(opts.outfile, os.path.basename(outfile))
-            else:
-                outfile = opts.outfile
-        p.makePDF(outfile)
+        log.debug("Loading %s", fn)
+        try:
+            title = os.path.splitext(os.path.basename(fn))[0]
+            p = Presentation(fn, title, unsafe=opts.unsafe)
+        except Exception as e:
+            log.debug("Exception while parsing input file", exc_info=True)
+            log.error("Error loading %s: %s: %s",
+                      fn, e.__class__.__name__, e)
+            continue
         if opts.verbose:
-            print p
+            print(p)
+        try:
+            outfile = os.path.splitext(fn)[0] + '.pdf'
+            if opts.outfile:
+                if os.path.isdir(opts.outfile):
+                    outfile = os.path.join(opts.outfile, os.path.basename(outfile))
+                else:
+                    outfile = opts.outfile
+            p.makePDF(outfile)
+        except Exception as e:
+            log.debug("Exception while rendering PDF", exc_info=True)
+            log.error("Error generating %s: %s: %s",
+                      outfile, e.__class__.__name__, e)
 
 
 if __name__ == '__main__':
