@@ -120,6 +120,10 @@ class TestPresentation(unittest.TestCase):
         self.assertRaises(mgp2pdf.MgpSyntaxError, p._handleDirectives,
                           '%page, again')
 
+    def test_arg_parsing_string_or_number(self):
+        p = mgp2pdf.Presentation()
+        self.assertEqual(p._parseArgs(["test", '"foo"', '10'], 'SS'), ("foo", 10))
+
     def test_bad_arguments(self):
         p = mgp2pdf.Presentation()
         self.assertRaises(mgp2pdf.MgpSyntaxError, p._handleDirectives,
