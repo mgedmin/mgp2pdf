@@ -680,7 +680,7 @@ def main():
     parser.add_option('-v', action='store_true', dest='verbose', default=False,
                       help="print the presentation as text (debug)")
     parser.add_option('-o', action='store', dest='outfile',
-                      help="output file name (default: input file name with extension changed to .pdf)")
+                      help="output file name or directory (default: input file name with extension changed to .pdf)")
     parser.add_option('--unsafe', action='store_true', default=False,
                       help="enable %filter (security risk)")
     try:
@@ -688,8 +688,8 @@ def main():
     except optparse.OptParseError, e:
         print >> sys.stderr, e
         sys.exit(1)
-    if opts.outfile and len(args) > 1:
-        print >> sys.stderr, "-o not allowed when there is more than one file"
+    if opts.outfile and len(args) > 1 and not os.path.isdir(opts.outfile):
+        print >> sys.stderr, "%s must be a directory when you're converting multiple files"
         sys.exit(1)
     if not args:
         print >> sys.stderr, "nothing to do (try mgp2pdf -h for help)"
@@ -698,10 +698,12 @@ def main():
     for fn in args:
         title = os.path.splitext(os.path.basename(fn))[0]
         p = Presentation(fn, title, unsafe=opts.unsafe)
+        outfile = os.path.splitext(fn)[0] + '.pdf'
         if opts.outfile:
-            outfile = opts.outfile
-        else:
-            outfile = os.path.splitext(fn)[0] + '.pdf'
+            if os.path.isdir(opts.outfile):
+                outfile = os.path.join(opts.outfile, os.path.basename(outfile))
+            else:
+                outfile = opts.outfile
         p.makePDF(outfile)
         if opts.verbose:
             print p
