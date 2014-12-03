@@ -417,11 +417,14 @@ class Presentation(object):
         self._directives_used_in_this_line = set()
         self.title = title
         self.unsafe = unsafe
+        self.basedir = ''
         if file:
             self.load(file)
 
     def load(self, file):
+        self.basedir = ''
         if not hasattr(file, 'read'):
+            self.basedir = os.path.dirname(file)
             file = open(file)
         for line in self.preprocess(file):
             if line.startswith('%'):
@@ -446,6 +449,7 @@ class Presentation(object):
                     raise MgpSyntaxError('%endfilter without matching %filter')
                 if self.unsafe:
                     child = subprocess.Popen(filter_cmd, shell=True,
+                                             cwd=self.basedir,
                                              stdin=subprocess.PIPE,
                                              stdout=subprocess.PIPE)
                     output = child.communicate(''.join(data_to_filter))[0]
@@ -573,7 +577,8 @@ class Presentation(object):
                 raised_by = v
             else:
                 raise MgpSyntaxError("newimage %s not handled yet" % k)
-        self.slides[-1].addImage(args[-1], zoom, raised_by)
+        filename = os.path.join(self.basedir, args[-1])
+        self.slides[-1].addImage(filename, zoom, raised_by)
 
     def _handleDirective_mark(self, parts):
         self.mark = self.slides[-1].addMark()

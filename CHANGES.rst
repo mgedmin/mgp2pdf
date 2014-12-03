@@ -9,6 +9,8 @@ Changelog
 
 - ``-o DIRECTORY`` is now supported.
 
+- Interpret image paths relative to the location of the mgp file.
+
 
 0.9 (2014-05-09)
 ~~~~~~~~~~~~~~~~
