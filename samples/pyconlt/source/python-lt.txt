@@ -1,0 +1,11 @@
+.logo pylogo.gif
+.listpage
+
+Lietuvos Python bendruomenė
+
+IRC: #python-lt (irc.freenode.net)
+
+Mailing list: <python@konf.lt>
+(http://www.konf.lt/mailman/listinfo/python)
+
+.footer susitiksime ten!

@@ -1,0 +1,238 @@
+.title Python paketai
+.author Marius Gedminas
+.email <marius@pov.lt>
+.conference PyCon-LT 2012
+.titlepage
+# ---------------------------------------------------------------------------
+.page apklausa
+.heading Klausytojų apklausa (1/3)
+
+Kas iš jūsų naudoja Pythoną?
+
+.footer pakelkite rankas
+# ---------------------------------------------------------------------------
+.page apklausa
+.heading Klausytojų apklausa (2/3)
+
+Kas iš jūsų naudoja Unixiškas OS?
+
+.footer pakelkite rankas
+# ---------------------------------------------------------------------------
+.page apklausa
+.heading Klausytojų apklausa (3/3)
+
+Kas iš jūsų naudoja Windowsus?
+
+.footer pakelkite rankas
+# ---------------------------------------------------------------------------
+.page
+.heading Python
+
+Didelė standartinė biblioteka
+"batteries included"
+
+.subpage
+
+to kartais nepakanka
+# ---------------------------------------------------------------------------
+.page
+.heading Bet yra daugiau!
+
+PyPI
+the Python Package Index
+
+.footer http://pypi.python.org/pypi
+.subpage
+"sūrio parduotuvė"
+
+.footer Cheeseshop
+# ---------------------------------------------------------------------------
+.page
+
+Tas žodis "Package"
+
+# ---------------------------------------------------------------------------
+.page
+.heading Kas yra "paketas" (1/2)
+
+katalogas su __init__.py
+
+
+import somepackage
+
+.footer (siauroji reikšmė)
+# ---------------------------------------------------------------------------
+.page
+.heading Kas yra "paketas" (2/2)
+
+rinkinys failų
+
+gali būti biblioteka
+gali būti taikomoji programa
+gali būti įrankis
+
+platinamas, diegiamas kaip vienetas
+
+.footer (plačioji reikšmė)
+# ---------------------------------------------------------------------------
+.page
+
+Kaip naudoti PyPI paketus
+# ---------------------------------------------------------------------------
+.pageoftext shell
+.heading Kaip naudoti PyPI paketus
+
+#
+
+sudo apt-get install python-virtualenv
+
+.footer (jei naudojate Debian/Ubuntu)
+.subpage
+.footer
+
+virtualenv sandbox
+cd sandbox
+
+.subpage
+
+bin/pip install pyramid
+
+.subpage
+
+bin/python -c 'import pyramid'
+
+.subpage
+
+bin/pcreate -s pyramid_starter ~/MyApp
+
+.subpage
+cd .. && rm -r sandbox
+# ---------------------------------------------------------------------------
+.page
+
+Kam reikia virtualenv?
+# ---------------------------------------------------------------------------
+.page
+.heading Kam reikia virtualenv? (1/2)
+
+kad nesipjautų su sisteminiais paketais
+# ---------------------------------------------------------------------------
+.page
+.heading Kam reikia virtualenv? (2/2)
+
+skirtingos bibliotekų versijos skirtingiems projektams
+# ---------------------------------------------------------------------------
+.page
+
+Kaip kurti paketus
+# ---------------------------------------------------------------------------
+.pageoftext filetree
+.heading Failų medis
+
+~/src/
+    ManoNuostabusPaketas/
+.subpage
+        README.rst
+.subpage
+        CHANGES.rst
+.subpage
+        setup.py
+.subpage
+        MANIFEST.in
+.subpage
+        Makefile
+.subpage
+        src/
+            manopaketas/
+                __init__.py
+                modulis.py
+.subpage
+                tests/
+                    __init__.py
+                    test_modulis.py
+# ---------------------------------------------------------------------------
+.pageoftext python
+.heading setup.py
+
+from setuptools import setup
+readme = open('README.rst').read()
+setup(
+  name='ManoPaketas',
+  version='1.0.0',
+.subpage
+  author='Marius Gedminas',
+  author_email='marius@gedmin.as',
+  url='http://mg.pov.lt/ManoPaketas',
+.subpage
+  licence='MIT',
+.subpage
+  description='Pavyzdys',
+  long_description=readme,
+.subpage
+  packages=['manopaketas'],
+.subpage
+  install_requires=['pyramid'])
+# ---------------------------------------------------------------------------
+.pageoftext manifest
+.heading MANIFEST.in
+
+include *.txt
+include MANIFEST.in
+include Makefile
+recursive-include src *.png
+# ---------------------------------------------------------------------------
+.pageoftext makefile
+.heading Makefile
+
+default:
+    virtualenv .
+    bin/python setup.py develop
+
+.subpage
+
+test:
+    bin/python setup.py test
+
+.subpage
+
+run:
+    bin/myscript
+
+.subpage
+
+release:
+    python setup.py sdist register upload
+
+.footer (tik atviro kodo paketams!)
+# ---------------------------------------------------------------------------
+.listpage
+
+Pilnesni pavyzdžiai
+
+https://github.com/mgedmin/ShoppingList
+(make run sukuria vietoje virtualenv'ą)
+
+https://github.com/mgedmin/eazysvn
+(make release magija)
+
+# ---------------------------------------------------------------------------
+.listpage
+
+Kiti įdomūs įrankiai
+
+zc.buildout
+.subpage
+Sphinx
+.subpage
+tox
+.subpage
+http://readthedocs.org
+.subpage
+http://travis-ci.org
+# ---------------------------------------------------------------------------
+.page
+
+Klausimų yra?
+
+.footer http://gedmin.as/pyconlt2012
+# ---------------------------------------------------------------------------

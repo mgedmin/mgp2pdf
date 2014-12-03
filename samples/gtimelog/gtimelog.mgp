@@ -1,0 +1,102 @@
+#!/usr/bin/env mgp
+# Note: tabs and trailing spaces are *important* in this file
+# - Preamble ----------------------------------------------------------------
+%deffont "standard" xfont "verdana"
+%deffont "thick" xfont "verdana-bold"
+%deffont "em" xfont "verdana-medium-i"
+%deffont "mono" xfont "andale mono"
+%default 1 area 90 90, vgap 260, size 8, font "standard", fore "#134d73", back "white", right, newimage -zoom 50 "povlogo.png"
+%default 2 center, size 5
+%default 3 size 8, vgap 80
+%default 4 font "em", size 7, vgap 10
+%default 5 font "standard", size 3
+# ---------------------------------------------------------------------------
+%page
+%pcache 1 1 0 1
+%ccolor "#134d73"
+%nodefault
+%size 7, font "standard", vgap 20, fore "black", back "white"
+
+
+%center, font "thick", size 11
+GTimeLog
+%center, font "standard", size 7
+
+
+%size 5, font "standard", fore "#134d73"
+Marius Gedminas
+%size 4
+<marius@pov.lt>
+%size 2
+
+%size 5
+Programmers of Vilnius
+%size 4
+http://pov.lt/
+%size 2
+
+%newimage "povlogo.png"
+
+
+%fore "black"
+EuroPython 2007
+# ---------------------------------------------------------------------------
+%page
+
+
+A simple tool to keep track of time
+# ---------------------------------------------------------------------------
+%page
+
+
+Written in Python with pygtk
+# ---------------------------------------------------------------------------
+%page
+
+
+Optimized to not get in my way
+
+# ---------------------------------------------------------------------------
+%page
+
+
+(demo)
+# ---------------------------------------------------------------------------
+%page
+
+
+It's not finished
+# ---------------------------------------------------------------------------
+%page
+
+
+No user interface for configuration
+you get to edit a text file
+# ---------------------------------------------------------------------------
+%page
+
+
+Doesn't get your favourite editor/mailer from your desktop preferences
+# ---------------------------------------------------------------------------
+%page
+
+
+Reporting interface could be better
+# ---------------------------------------------------------------------------
+%page
+
+
+If you're interested, find me
+I'll stay around for the sprints
+# ---------------------------------------------------------------------------
+%page
+
+
+Or send me patches
+(and I'll ignore them for a long time)
+# ---------------------------------------------------------------------------
+%page
+
+
+URL?  Just Google "gtimelog"
+http://mg.pov.lt/gtimelog/
