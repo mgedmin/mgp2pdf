@@ -31,6 +31,21 @@ class MgpSyntaxError(Exception):
 
 
 def parse_color(color):
+    """Parse a named color or '#rgb'/'#rrggbb'
+
+        >>> parse_color('#3366cc')
+        Color(.2,.4,.8,1)
+        >>> parse_color('#c96')
+        Color(.8,.6,.4,1)
+
+    The only hardcoded named colors are black and white:
+
+        >>> parse_color('black')
+        Color(0,0,0,1)
+        >>> parse_color('white')
+        Color(1,1,1,1)
+
+    """
     color = {'black': '#000000', 'white': '#ffffff'}.get(color, color)
     if len(color) == 4 and color.startswith('#'):
         r, g, b = color[1:]
