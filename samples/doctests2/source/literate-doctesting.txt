@@ -1,0 +1,543 @@
+.title Literate Doctesting
+.author Marius Gedminas
+.email <marius@pov.lt>
+.conference EuroPython 2006
+.titlepage
+# ---------------------------------------------------------------------------
+.page
+
+# This talk is about
+doctests
+# ---------------------------------------------------------------------------
+.page
+
+# I think you already know what they are.  If not, then
+imagine an interactive Python session
+# ---------------------------------------------------------------------------
+.pageoftext
+
+>>> 2 + 2
+4
+>>> if 2 * 2 == 4:
+...     print 'My Python is sane today'
+My Python is sane today
+# ---------------------------------------------------------------------------
+.page
+
+# now
+copy & paste
+# everything, including the interpreter prompt
+# ---------------------------------------------------------------------------
+.page
+
+# You can now
+run and verify
+# that every expression gives the expected result, automatically
+# ---------------------------------------------------------------------------
+.page
+
+doctests serve two purposes
+# ---------------------------------------------------------------------------
+.page
+
+documentation and tests
+# ---------------------------------------------------------------------------
+.page
+
+documentation
+# first
+# ---------------------------------------------------------------------------
+.page
+
+you develop a Python package
+# ---------------------------------------------------------------------------
+.page
+
+you create a README.txt file
+# ---------------------------------------------------------------------------
+.page
+
+documentation for users of this package
+# ---------------------------------------------------------------------------
+.page
+
+documentation should have examples
+# ---------------------------------------------------------------------------
+.page
+
+(I'm a user.  I love examples.)
+# ---------------------------------------------------------------------------
+.midpage
+
+if you put doctests into the README, then you have real, working examples
+# ---------------------------------------------------------------------------
+.page
+
+(and they get tested)
+# ---------------------------------------------------------------------------
+.page
+
+# here's an
+example
+# ---------------------------------------------------------------------------
+.pageoftext
+
+moneylaundry
+============
+
+This is a package that helps you launder money.
+
+    >>> from moneylaundry import launder
+    >>> money = '$1,000,000.00'
+    >>> launder(money)
+    Decimal("1000000.00")
+
+# ---------------------------------------------------------------------------
+.page
+
+some advice
+# ---------------------------------------------------------------------------
+.page
+
+focus on documentation
+# ---------------------------------------------------------------------------
+.page
+
+tell a story
+# ---------------------------------------------------------------------------
+.page
+
+do not put complicated setup code into the README
+# ---------------------------------------------------------------------------
+.midpage
+
+do not put comprehensive tests for all imaginable corner cases into the README
+# ---------------------------------------------------------------------------
+.page
+
+##hooking things up
+so, we have the README
+what next?
+# ---------------------------------------------------------------------------
+.page
+
+unittest is not a bad framework
+# ---------------------------------------------------------------------------
+.pageofcode
+
+\# tests.py
+
+import unittest
+import doctest
+
+def test_suite():
+    return doctest.DocFileSuite(
+                        'README.txt')
+
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')
+# ---------------------------------------------------------------------------
+.page
+
+DocFileSuite is for plain text files
+(there's also DocTestSuite that I'll mention later)
+# ---------------------------------------------------------------------------
+.page
+
+Complicated setup code?
+# ---------------------------------------------------------------------------
+.pageofcode
+
+def setUp(test):
+    ...
+
+def tearDown(test):
+    ...
+
+def test_suite():
+    return doctest.DocFileSuite(
+                        'README.txt',
+                        setUp=setUp,
+                        tearDown=tearDown)
+# ---------------------------------------------------------------------------
+.page
+
+you can put things into test.globs
+# ---------------------------------------------------------------------------
+.page
+
+do not abuse
+# ---------------------------------------------------------------------------
+.page
+
+make the README easy to understand
+# ---------------------------------------------------------------------------
+.page
+
+useful technique for API design:
+# ---------------------------------------------------------------------------
+.page
+
+write the README first
+# ---------------------------------------------------------------------------
+.page
+
+then implement it
+# ---------------------------------------------------------------------------
+.page
+
+you can do this in many iterative steps, large or small
+# ---------------------------------------------------------------------------
+.page
+
+documentation (again)
+# ---------------------------------------------------------------------------
+.page
+
+short examples in docstrings
+# ---------------------------------------------------------------------------
+.pageofcode
+\# colors.py
+
+def blend(color1, color2, alpha=0.5):
+    """Blend two colors together.
+
+        >>> blend('#ff0000', '#ffffee', 0.5)
+        '#ff776f'
+        >>> blend('#ff0000', '#ffffee', 0.75)
+        '#ffbbaa'
+
+    """
+
+# ---------------------------------------------------------------------------
+.page
+
+*short*
+# ---------------------------------------------------------------------------
+.page
+
+testing these
+# ---------------------------------------------------------------------------
+.pageofcode
+
+\# tests.py
+import unittest
+import doctest
+
+def test_suite():
+    return unittest.TestSuite([
+            doctest.DocFileSuite('README.txt'),
+            doctest.DocTestSuite('colors'),
+        ])
+
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')
+# ---------------------------------------------------------------------------
+.page
+
+DocTestSuite is for docstrings in Python modules
+DocFileSuite is for plain text files
+# ---------------------------------------------------------------------------
+.page
+
+enough about documentation
+# ---------------------------------------------------------------------------
+.page
+
+testing
+# ---------------------------------------------------------------------------
+.page
+
+you can use traditional unittest TestCases
+# ---------------------------------------------------------------------------
+.page
+
+or you can use doctests
+# ---------------------------------------------------------------------------
+.page
+
+or even both
+# ---------------------------------------------------------------------------
+.page
+
+doctests have some advantages
+# ---------------------------------------------------------------------------
+.page
+
+doctests invite English descriptions
+# I feel more compelled to describe what I'm doing in English
+#when I write a doctest than when I write a unit test
+# ---------------------------------------------------------------------------
+.midpage
+
+plus there are some nice doctest features to make life easier
+# ---------------------------------------------------------------------------
+.page
+
+general pattern of doctests
+# ---------------------------------------------------------------------------
+.pageoftext
+
+short paragraph that explains what the next chunk is all about
+
+    >>> short chunk
+    >>> of Python code
+
+another
+
+    >>> another
+
+etc.
+# ---------------------------------------------------------------------------
+.midpage
+
+You can process such text files with a ReStructuredText processor
+# TODO: screenshot
+# ---------------------------------------------------------------------------
+.midpage
+
+Another option for tests: put doctests into Python modules in a subpackage
+# ---------------------------------------------------------------------------
+.pageofcode
+
+\# tests.py
+import unittest
+import doctest
+
+def doctest_this():
+    """Test this
+
+    If X then Y
+
+       >>> this(X)
+       Y
+
+    """
+# ---------------------------------------------------------------------------
+.pageofcode
+\# tests.py, continued
+
+def doctest_that():
+    """
+    If Z then Q
+
+       >>> this(Z)
+       Q
+
+    """
+# ---------------------------------------------------------------------------
+.pageofcode
+\# tests.py, continued
+
+def test_suite():
+    return unittest.TestSuite([
+            doctest.DocFileSuite('README.txt'),
+            doctest.DocTestSuite('colors'),
+            doctest.DocTestSuite(),
+                # no module name = this file
+        ])
+
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')
+# ---------------------------------------------------------------------------
+.page
+
+which is better?
+it's up to you
+# ---------------------------------------------------------------------------
+.page
+
+just don't mix long tests and code in the same module
+# ---------------------------------------------------------------------------
+.page
+
+about those nice features
+# ---------------------------------------------------------------------------
+.page
+
+wildcards
+# ---------------------------------------------------------------------------
+.pageoftext
+
+-- real life --
+
+Python 2.4.3 (#2, Apr 27 2006, 14:43:58)
+>>> object()
+<object object at 0xb7d88448>
+
+-- doctest --
+
+Call a class to make an object
+
+  >>> object()        # doctest: +ELLIPSIS
+  <object object at ...>
+# ---------------------------------------------------------------------------
+.page
+
+diffs
+# ---------------------------------------------------------------------------
+.pageoftext
+
+>>> print '\\n'.join(sorted(some_dict))
+...     # doctest: +REPORT_NDIFF
+alpha
+beta
+gama
+# ---------------------------------------------------------------------------
+.pageoftext
+
+Failed example:
+    print '\\n'.join(sorted(some_dict))
+        # doctest: +REPORT_NDIFF
+Differences (ndiff with -expected +actual):
+.monospace
+    alpha
+  - beta
+  + delta
+  - gama
+  + gamma
+  ?    +
+# ---------------------------------------------------------------------------
+.page
+
+sadly diffs + ellipses do not mix well
+# ---------------------------------------------------------------------------
+.page
+
+there's also whitespace normalization
+# ---------------------------------------------------------------------------
+.page
+
+\# doctest: +NORMALIZE_WHITESPACE
+# ---------------------------------------------------------------------------
+.page
+
+useful when you compare, say, generated HTML
+# ---------------------------------------------------------------------------
+.page
+
+makes diffs even harder to read :(
+# ---------------------------------------------------------------------------
+.page
+
+flags can be specified globally
+# ---------------------------------------------------------------------------
+.pageofcode
+
+#
+
+
+doctest.DocFileSuite('README.txt',
+            optionflags=doctest.ELLIPSIS
+                       |doctest.REPORT_NDIFF)
+# ---------------------------------------------------------------------------
+.page
+
+real-life example
+# ---------------------------------------------------------------------------
+.page
+
+functional test of a web app with zope.testbrowser
+# ---------------------------------------------------------------------------
+.pageoftext
+
+When we look at the front page, we see a welcome message
+
+  >>> browser = Browser()
+  >>> browser.open('http://localhost/')
+  >>> 'Welcome' in browser.contents
+  True
+
+There's a login link
+
+  >>> browser.getLink('Log in').click()
+# ---------------------------------------------------------------------------
+.pageoftext
+We can now type the username and password, and log in
+
+  >>> browser.getControl(
+  ...         'User Name').value = 'marius'
+  >>> browser.getControl(
+  ...         'Password').value = 'sekrit'
+  >>> browser.getControl('Log in').click()
+# ---------------------------------------------------------------------------
+.pageoftext
+
+And now my home page shows that I've got mail
+
+  >>> print browser.contents
+  <BLANKLINE>
+  ...
+  <h1>Hello, Marius</h1>
+  ...
+  <div class="info">
+    You have mail!
+  </div>
+  ...
+
+# ---------------------------------------------------------------------------
+.page
+
+testbrowser works with Zope 3, and with real HTTP servers
+# ---------------------------------------------------------------------------
+.page
+
+I'm sure you could hook it up with WSGI and other things
+# ---------------------------------------------------------------------------
+.page
+
+so, do doctests always win?
+# ---------------------------------------------------------------------------
+.page
+
+# well...
+there are some downsides
+# ---------------------------------------------------------------------------
+.page
+
+you cannot step through a doctest with pdb
+# ---------------------------------------------------------------------------
+.page
+
+(nothing else comes into mind)
+# ---------------------------------------------------------------------------
+.page
+
+summary
+# ---------------------------------------------------------------------------
+.bigpage
+
+documentation (README.txt, docstrings)
+tests (unit, functional)
+.italic
+keep them separate
+# ---------------------------------------------------------------------------
+.page
+
+acknowledgements
+# ---------------------------------------------------------------------------
+.page
+
+Jim Fulton's PyCon 2004 talk
+Literate Testing: Automated Testing with doctest
+
+
+http://www.python.org/pycon/dc2004/papers/4/PyCon2004DocTestUnit.pdf
+# ---------------------------------------------------------------------------
+.page
+
+Phillip J. Eby's weblog
+Stream of Conciousness Testing
+
+
+http://dirtsimple.org/2004/11/stream-of-consciousness-testing.html
+# ---------------------------------------------------------------------------
+.page
+
+that's it
+question time
+
+
+.nosyntax
+... is there any time left?
+# ---------------------------------------------------------------------------
