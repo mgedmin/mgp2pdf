@@ -42,6 +42,10 @@ class TestSimpleChunk(unittest.TestCase):
         bits = chunk.split(canvas, 100, 50, 200)
         self.assertEqual(bits, [chunk])
 
+    def test_repr(self):
+        chunk = mgp2pdf.SimpleChunk()
+        self.assertEqual(str(chunk), '<SimpleChunk>')
+
 
 class TestImage(unittest.TestCase):
 
@@ -54,6 +58,19 @@ class TestImage(unittest.TestCase):
         img = mgp2pdf.Image('image.png')
         x, y = img.drawOn(canvas, 10, 20, 100, 200)
         self.assertEqual((x, y), (60, 20))
+
+
+class TestTextChunk(unittest.TestCase):
+
+    def test_split_when_it_cant(self):
+        canvas = mock.Mock()
+        canvas.stringWidth = lambda s, font, size: len(s) * 7
+        chunk = mgp2pdf.TextChunk("this-is-a-very-long, unsplittable, word",
+                                  "Arial", 6, 0, mgp2pdf.parse_color("black"))
+        bits = chunk.split(canvas, 1024, 768, 130)
+        self.assertEqual(len(bits), 2)
+        self.assertEqual(bits[0].text, "this-is-a-very-long,")
+        self.assertEqual(bits[1].text, "unsplittable, word")
 
 
 def test_suite():
