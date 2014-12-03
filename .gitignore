@@ -4,3 +4,7 @@ dist/
 *.pyc
 tmp/
 .coverage
+bin/
+include/
+lib/
+local/
