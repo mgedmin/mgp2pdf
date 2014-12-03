@@ -103,6 +103,10 @@ class TestPresentation(unittest.TestCase):
                 '# ta-dah!\n',
             ])
 
+    def test_empty_directive(self):
+        p = mgp2pdf.Presentation()
+        p._handleDirectives('%page,,size 5')
+
 
 def test_suite():
     return unittest.TestSuite([

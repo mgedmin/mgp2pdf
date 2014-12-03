@@ -607,6 +607,20 @@ class Presentation(object):
                 self._handleText(line)
 
     def preprocess(self, file):
+        """Handle %filter directives in the source file.
+
+        ``file`` is a file-like object.
+
+        Returns a generator that yields preprocessed lines.
+
+        Finds ``%filter`` and ``%endfilter`` directives and pipes the text
+        between them through the external command specified (if self.unsafe
+        is True) OR emits a warning and replaces the text with an error
+        message (if self.unsafe is False).
+
+        Can raise MgpSyntaxError if the directives are unbalanced or
+        ill-formed.
+        """
         filter_cmd = None
         filter_lineno = None
         data_to_filter = []
@@ -666,9 +680,19 @@ class Presentation(object):
         return [s.strip() for s in re.findall('(?:[^ "]|"[^"]*")+', line)]
 
     def _handleDirectives(self, line):
+        """Handle a directive line
+
+        The line starts with '%' and contains a number of comma-separated
+        MagicPoint directives with arguments.
+        """
         line = line[1:].strip()
         parts = self._splitDirectives(line)
         if parts[0].startswith('default'):
+            # "%default <n>" is a special prefix that consumes all the other
+            # directives on this line.  It means "for the rest of the file,
+            # pretend that all the directives specified here show up on
+            # line <n> in each slide" (unless %nodefault is used for that
+            # slide, of course).
             args = self._splitArgs(parts[0])
             n = int(args[1])
             parts[0] = ' '.join(args[2:])
@@ -678,9 +702,13 @@ class Presentation(object):
                 self._handleDirective(part.strip())
 
     def _handleDirective(self, directive):
+        """Handle a single directive with arguments."""
         parts = self._splitArgs(directive)
         if not parts:
-            return # warn maybe
+            # Huh, an empty directive.  We end up here if we encounter
+            # something like "%foo, , bar".  This should probably emit
+            # a syntax error or something.
+            return
         word = parts[0]
         self._directives_used_in_this_line.add(word)
         handler = getattr(self, '_handleDirective_%s' % word,
@@ -688,6 +716,10 @@ class Presentation(object):
         handler(parts)
 
     def _handleDirective_page(self, parts):
+        """Handle %page.
+
+        Starts a new slide.
+        """
         self.slides.append(Slide())
         self._lastlineno = 0
         self._use_defaults = True
@@ -696,57 +728,132 @@ class Presentation(object):
         self.mark = None
 
     def _handleDirective_nodefault(self, parts):
+        """Handle %nodefault.
+
+        Suppresses the application of %default rules for this page.
+        """
         self._use_defaults = False
 
     def _handleDirective_area(self, parts):
+        """Handle %area <w> <h>.
+
+        Specifies the usable slide area in percent.
+        """
         w, h = self._parseArgs(parts, "nn")
         self.slides[-1].setArea(w, h)
 
     def _handleDirective_deffont(self, parts):
+        """Handle %deffont "<name>" <engine> "<font-name>".
+
+        Defines a named font, to be used with %font <name>.
+        """
         # XXX this is not entirely correct
         name, engine, enginefont = self._parseArgs(parts, "sws")
         self.fonts.define(name, engine, enginefont)
 
     def _handleDirective_font(self, parts):
+        """Handle %font <name>.
+
+        Selects the named font (previously defined with %deffont) for
+        text.
+        """
         name, = self._parseArgs(parts, "s")
         self.slides[-1].setFont(name)
 
     def _handleDirective_prefix(self, parts):
+        """Handle %prefix <prefix>.
+
+        Specifies left indentation (in percent of the slide area size) or a
+        string to be prepended to each line of text.
+        """
         prefix, = self._parseArgs(parts, "S")
         self.slides[-1].setPrefix(prefix)
 
     def _handleDirective_size(self, parts):
+        """Handle %size <font-size>.
+
+        Specifies font size (as percent of the slide area height).
+        """
         size, = self._parseArgs(parts, "n")
         self.slides[-1].setSize(size)
 
     def _handleDirective_vgap(self, parts):
+        """Handle %vgap <percent>.
+
+        Specifies extra line spacing, as percentage of the font size.
+        """
         vgap, = self._parseArgs(parts, "n")
         self.slides[-1].setVGap(vgap)
 
     def _handleDirective_fore(self, parts):
+        """Handle %fore "<color>".
+
+        Specifies text color.
+        """
         color, = self._parseArgs(parts, "s")
         self.slides[-1].setColor(color)
 
     def _handleDirective_left(self, parts):
+        """Handle %left.
+
+        Specifies left-adjustment.
+        """
         self.slides[-1].setAlignment(Left)
         self._directives_used_in_this_line.add('right')
         self._directives_used_in_this_line.add('center')
 
     def _handleDirective_right(self, parts):
+        """Handle %right.
+
+        Specifies right-adjustment.
+        """
         self.slides[-1].setAlignment(Right)
         self._directives_used_in_this_line.add('left')
         self._directives_used_in_this_line.add('center')
 
     def _handleDirective_center(self, parts):
+        """Handle %center.
+
+        Specifies center-adjustment.
+        """
         self.slides[-1].setAlignment(Center)
         self._directives_used_in_this_line.add('left')
         self._directives_used_in_this_line.add('right')
 
     def _handleDirective_cont(self, parts):
+        """Handle %cont.
+
+        Suppresses the line break.
+
+        Example::
+
+            %fore "#00cc00"
+            Hello
+            %fore "#cc0000"
+            World
+
+        would print a green "Hello" and a red "World" on two different lines,
+        while ::
+
+            %fore "#00cc00"
+            Hello
+            %fore "#cc0000", cont
+            World
+
+        would print them on the same line.
+        """
         self.slides[-1].reopenCurrentLine()
         self._continuing = True
 
     def _handleDirective_newimage(self, parts):
+        """Handle %newimage [-<flag> <value>] [...] "<filename>".
+
+        Supported flags include:
+
+            -zoom <percent>
+            -raise <amount>
+
+        """
         n = (len(parts) - 1) / 2
         args = self._parseArgs(parts, "wn" * n + "s")
         zoom = 100
@@ -762,18 +869,63 @@ class Presentation(object):
         self.slides[-1].addImage(filename, zoom, raised_by)
 
     def _handleDirective_mark(self, parts):
+        """Handle %mark.
+
+        Puts an invisible marker on the line so you can go back and overdraw
+        it.
+
+        Example::
+
+            %mark
+            %left
+            Left-aligned text
+            %again
+            %right
+            Right-aligned text
+
+        puts "Left-aligned text" and "Right-aligned text" on the same line.
+        """
         self.mark = self.slides[-1].addMark()
 
     def _handleDirective_again(self, parts):
+        """Handle %again.
+
+        Moves back to the screen location of the last %mark.
+
+        Example::
+
+            %mark
+            %left
+            Left-aligned text
+            %again
+            %right
+            Right-aligned text
+
+        puts "Left-aligned text" and "Right-aligned text" on the same line.
+        """
         if not self.mark:
             raise MgpSyntaxError("%again without %mark")
         self._handleText('')
         self.slides[-1].addAgain(self.mark)
 
     def _handleUnknownDirective(self, parts):
+        """Handle an unrecognized directive."""
+        # XXX: emit a warning maybe?
         pass
 
     def _parseArgs(self, parts, argspec):
+        """Validate and convert arguments into the desired data types.
+
+        ``parts`` is a list of strings, as returned by ``_splitArgs()``.
+
+        ``argspec`` is a string describing the type of each argument::
+
+            'S': either a number or a quoted string
+            's': a quoted string
+            'n': a decimal number
+            'w': a bare word
+
+        """
         if len(parts) != 1 + len(argspec):
             raise MgpSyntaxError("%s directive expects %d args, got %d"
                                  % (parts[0], len(argspec), len(parts) - 1))
@@ -798,6 +950,7 @@ class Presentation(object):
         return tuple(results)
 
     def _handleText(self, line):
+        """Handle a line of text that is not a comment or a directive."""
         if not self._continuing:
             self._lastlineno += 1
             if self._use_defaults:
