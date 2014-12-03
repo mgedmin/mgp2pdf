@@ -22,7 +22,8 @@ Usage
 
 ::
 
-    mgp2pdf slides.mgp [-o output.pdf]
+    mgp2pdf [--unsafe] slides.mgp [-o output.pdf]
+    mgp2pdf [--unsafe] slides.mgp ...
 
 
 Why another converter?
@@ -58,7 +59,7 @@ Report bugs at https://github.com/mgedmin/mgp2pdf/issues.
 Licence: GPL v2 or later (http://www.gnu.org/copyleft/gpl.html)
 
 .. image:: https://travis-ci.org/mgedmin/mgp2pdf.svg?branch=master
-    :target: https://travis-ci.org/mgedmin/mgp2pdf
+  :target: https://travis-ci.org/mgedmin/mgp2pdf
 
 .. image:: https://coveralls.io/repos/mgedmin/mgp2pdf/badge.png
   :target: https://coveralls.io/r/mgedmin/mgp2pdf

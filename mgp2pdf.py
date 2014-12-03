@@ -410,12 +410,13 @@ class Presentation(object):
 
     pageSize = landscape(Screen_1024x768_at_72_dpi)
 
-    def __init__(self, file=None, title=None):
+    def __init__(self, file=None, title=None, unsafe=False):
         self.defaultDirectives = {}
         self.fonts = Fonts()
         self.slides = []
         self._directives_used_in_this_line = set()
         self.title = title
+        self.unsafe = unsafe
         if file:
             self.load(file)
 
@@ -443,11 +444,13 @@ class Presentation(object):
             elif line.startswith('%endfilter'):
                 if not filter_cmd:
                     raise MgpSyntaxError('%endfilter without matching %filter')
-                # UNSAFE -- should have a cmdline option to turn this on
-                child = subprocess.Popen(filter_cmd, shell=True,
-                                         stdin=subprocess.PIPE,
-                                         stdout=subprocess.PIPE)
-                output = child.communicate(''.join(data_to_filter))[0]
+                if self.unsafe:
+                    child = subprocess.Popen(filter_cmd, shell=True,
+                                             stdin=subprocess.PIPE,
+                                             stdout=subprocess.PIPE)
+                    output = child.communicate(''.join(data_to_filter))[0]
+                else:
+                    output = 'Filtering through "%s" disabled, use --unsafe to enable' % filter_cmd
                 for line in output.splitlines(True):
                     yield line
                 filter_cmd = None
@@ -673,11 +676,13 @@ def setUpLogging(verbose=False):
 
 
 def main():
-    parser = optparse.OptionParser()
+    parser = optparse.OptionParser(usage='%prog [options] filename.mgp ...')
     parser.add_option('-v', action='store_true', dest='verbose', default=False,
                       help="print the presentation as text (debug)")
     parser.add_option('-o', action='store', dest='outfile',
-                      help="override output file name")
+                      help="output file name (default: input file name with extension changed to .pdf)")
+    parser.add_option('--unsafe', action='store_true', default=False,
+                      help="enable %filter (security risk)")
     try:
         opts, args = parser.parse_args(sys.argv[1:])
     except optparse.OptParseError, e:
@@ -692,7 +697,7 @@ def main():
     setUpLogging(opts.verbose)
     for fn in args:
         title = os.path.splitext(os.path.basename(fn))[0]
-        p = Presentation(fn, title)
+        p = Presentation(fn, title, unsafe=opts.unsafe)
         if opts.outfile:
             outfile = opts.outfile
         else:
