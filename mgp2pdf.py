@@ -608,17 +608,24 @@ class Presentation(object):
 
     def preprocess(self, file):
         filter_cmd = None
+        filter_lineno = None
         data_to_filter = []
-        for line in file:
+        for lineno, line in enumerate(file, 1):
             if line.startswith('%filter'):
+                if filter_cmd is not None:
+                    raise MgpSyntaxError(
+                        'Cannot nest %filter directives (line {0}, previous'
+                        ' %filter on line {1}), did you forget %endfilter?'
+                        .format(lineno, filter_lineno))
                 filter_cmd = line[len('%filter'):].strip()
-                if not filter_cmd.startswith('"') or not filter_cmd.startswith('"'):
+                if not filter_cmd.startswith('"') or not filter_cmd.endswith('"'):
                     raise MgpSyntaxError("%filter directive expects a quoted string")
                 filter_cmd = filter_cmd[1:-1]
+                filter_lineno = lineno
                 data_to_filter = []
             elif line.startswith('%endfilter'):
                 if not filter_cmd:
-                    raise MgpSyntaxError('%endfilter without matching %filter')
+                    raise MgpSyntaxError('%endfilter on line {0} without matching %filter'.format(lineno))
                 if self.unsafe:
                     child = subprocess.Popen(filter_cmd, shell=True,
                                              cwd=self.basedir,
@@ -626,8 +633,8 @@ class Presentation(object):
                                              stdout=subprocess.PIPE)
                     output = child.communicate(''.join(data_to_filter))[0]
                 else:
-                    log.warning("Ignoring %filter directive in safe mode")
-                    output = 'Filtering through "%s" disabled, use --unsafe to enable' % filter_cmd
+                    log.warning("Ignoring %filter directive on line {0} in safe mode".format(filter_lineno))
+                    output = 'Filtering through "%s" disabled, use --unsafe to enable\n' % filter_cmd
                 for line in output.splitlines(True):
                     yield line
                 filter_cmd = None
@@ -635,6 +642,10 @@ class Presentation(object):
                 data_to_filter.append(line)
             else:
                 yield line
+        if filter_cmd is not None:
+            raise MgpSyntaxError(
+                'Missing %endfilter at end of file (%filter on line {0})'
+                .format(filter_lineno))
 
     def _newPage(self):
         self.slides.append(Slide())

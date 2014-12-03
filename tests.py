@@ -73,6 +73,37 @@ class TestTextChunk(unittest.TestCase):
         self.assertEqual(bits[1].text, "unsplittable, word")
 
 
+class TestPresentation(unittest.TestCase):
+
+    def test_preprocess_errors(self):
+        p = mgp2pdf.Presentation()
+        # %filter expects an argument that is a quoted string
+        self.assertRaises(mgp2pdf.MgpSyntaxError, list, p.preprocess(['%filter bad\n', '%endfilter\n']))
+        self.assertRaises(mgp2pdf.MgpSyntaxError, list, p.preprocess(['%filter "bad\n', '%endfilter\n']))
+        # %endfilter without a matching %filter
+        self.assertRaises(mgp2pdf.MgpSyntaxError, list, p.preprocess(['%endfilter\n']))
+        # two %filter directives in a row
+        self.assertRaises(mgp2pdf.MgpSyntaxError, list, p.preprocess(['%filter "cat"\n', '%filter "mouse"\n', '%endfilter\n']))
+        # missing %endfilter at the end
+        self.assertRaises(mgp2pdf.MgpSyntaxError, list, p.preprocess(['%filter "cat"\n']))
+
+    @mock.patch('mgp2pdf.log')
+    def test_preprocess_safe_mode(self, mock_log):
+        p = mgp2pdf.Presentation()
+        self.assertEqual(
+            list(p.preprocess([
+                'A cow says:\n',
+                '%filter "cowsay"\n',
+                'Hello\n',
+                '%endfilter\n',
+                '# ta-dah!\n',
+            ])), [
+                'A cow says:\n',
+                'Filtering through "cowsay" disabled, use --unsafe to enable\n',
+                '# ta-dah!\n',
+            ])
+
+
 def test_suite():
     return unittest.TestSuite([
         doctest.DocTestSuite('mgp2pdf'),
