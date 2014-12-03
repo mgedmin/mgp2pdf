@@ -12,3 +12,4 @@ my slides.
 The PDFs are from http://gedmin.as/study/python/slides/
 
 Current mgp2pdf fails to convert the mgp files with an exception inside PIL!
+https://bitbucket.org/rptlab/reportlab/issue/51/transparent-png-causes-a-typeerror-cannot
