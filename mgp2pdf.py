@@ -1045,11 +1045,7 @@ def main():
                       help="output file name or directory (default: input file name with extension changed to .pdf)")
     parser.add_option('--unsafe', action='store_true', default=False,
                       help="enable %filter (security risk)")
-    try:
-        opts, args = parser.parse_args(sys.argv[1:])
-    except optparse.OptParseError, e:
-        print >> sys.stderr, e
-        sys.exit(1)
+    opts, args = parser.parse_args(sys.argv[1:])
     if opts.outfile and len(args) > 1 and not os.path.isdir(opts.outfile):
         print >> sys.stderr, "%s must be a directory when you're converting multiple files"
         sys.exit(1)
