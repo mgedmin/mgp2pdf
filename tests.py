@@ -48,6 +48,24 @@ class SmokeTests(unittest.TestCase):
         str(p)
 
 
+class TestLine(unittest.TestCase):
+
+    @mock.patch('mgp2pdf.ImageReader')
+    def test_size_line_with_images_only(self, mock_ImageReader):
+        mock_ImageReader().getSize.return_value = 100, 50
+        line = mgp2pdf.Line()
+        line.add(mgp2pdf.Image('cat.png'))
+        line.add(mgp2pdf.TextChunk('', 'Helvetica', 10, 0,
+                                   mgp2pdf.parse_color('black')))
+        canvas = mock.Mock()
+        canvas.stringWidth = lambda s, font, size: len(s) * 7
+        w, h = line.size(canvas, 1024, 768)
+        # TBH I'm not 100% sure this is correct, but at some point I
+        # thought so.  I ought to find which of the documents under
+        # samples/ triggered this special case.
+        self.assertEqual((w, h), (100, 51))
+
+
 class TestSimpleChunk(unittest.TestCase):
 
     def test_drawOn(self):

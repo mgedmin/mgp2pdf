@@ -14,3 +14,19 @@ surprisingly
 %newimage "povlogo.png"
 %cont, newimage -zoom 50 "povlogo.png"
 %newimage "povlogo.png"
+%page
+
+Trying to figure out how vgap
+affects image positioning
+---
+%mark, left
+No vgap:
+%vgap 0, newimage "povlogo.png"
+
+Next line
+Last line
+%again, right
+100% vgap:
+%vgap 100, newimage "povlogo.png"
+
+Next line
