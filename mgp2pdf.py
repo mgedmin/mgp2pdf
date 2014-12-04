@@ -30,6 +30,16 @@ class MgpSyntaxError(Exception):
     pass
 
 
+COLORS = dict(
+    black="#000",
+    white="#fff",
+    red="#f00",
+    green="#0f0",
+    blue="#00f",
+    yellow="#ff0",
+)
+
+
 def parse_color(color):
     """Parse a named color or '#rgb'/'#rrggbb'
 
@@ -38,18 +48,25 @@ def parse_color(color):
         >>> parse_color('#c96')
         Color(.8,.6,.4,1)
 
-    The only hardcoded named colors are black and white:
+    Some colors can be looked up by name
 
         >>> parse_color('black')
         Color(0,0,0,1)
         >>> parse_color('white')
         Color(1,1,1,1)
 
+        >>> parse_color('fuchsia')
+        Traceback (most recent call last):
+          ...
+        MgpSyntaxError: Unrecognized color: 'fuchsia'
+
     """
-    color = {'black': '#000000', 'white': '#ffffff'}.get(color, color)
+    color = COLORS.get(color, color)
     if len(color) == 4 and color.startswith('#'):
         r, g, b = color[1:]
         color = '#' + r + r + g + g + b + b
+    if not color.startswith('#'):
+        raise MgpSyntaxError('Unrecognized color: %s' % repr(color))
     return HexColor(color)
 
 
