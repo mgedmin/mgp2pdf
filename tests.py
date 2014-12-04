@@ -95,6 +95,16 @@ class TestTextChunk(unittest.TestCase):
 
 class TestPresentation(unittest.TestCase):
 
+    @mock.patch('mgp2pdf.open', create=True, new_callable=mock.mock_open)
+    def test_load_from_file(self, mock_open):
+        lines = ['%page\n', 'Hello\n']
+        mock_open.return_value.__iter__.return_value = lines
+        p = mgp2pdf.Presentation('subdir/filename.mgp')
+        self.assertEqual(p.basedir, 'subdir')
+        self.assertEqual(str(p),
+                         "--- Slide 1 ---\n"
+                         "Hello\n")
+
     def test_preprocess_errors(self):
         p = mgp2pdf.Presentation()
         # %filter expects an argument that is a quoted string
