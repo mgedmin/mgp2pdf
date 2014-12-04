@@ -11,7 +11,9 @@ import mgp2pdf
 sample_mgp = """\
 # This is an MGP file
 %%%%%%%%%%% This is also a comment
+%default 1 font "Helvetica", vgap 1, fore "black", prefix ""
 %page
+%area 90 90
 %nodefault
 %left
 Hello
@@ -19,6 +21,21 @@ Hello
 Ancient
 %right
 World!
+%page
+This line is ...
+%cont, center, prefix ""
+centered!
+%page
+%mark
+Hello
+%again
+World
+%page
+Let us word wrap the text because the text is very long and doesn't fit ok?
+%page
+THISLINECANNOTBESPLITANYWHEREHAHAHAHAHAHAAHAHAHAHAHAAAHAHAHAHAAA
+%page
+aren't\ttabs\tfun!
 """
 
 
@@ -28,6 +45,7 @@ class SmokeTests(unittest.TestCase):
         p = mgp2pdf.Presentation(StringIO(sample_mgp), title="Sample")
         pdf = StringIO()
         p.makePDF(pdf)
+        str(p)
 
 
 class TestSimpleChunk(unittest.TestCase):
