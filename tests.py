@@ -1,3 +1,4 @@
+import sys
 import doctest
 import unittest
 from cStringIO import StringIO
@@ -177,6 +178,13 @@ class TestPresentation(unittest.TestCase):
                           '%font no-quote"')
 
     def test_deffont(self):
+        # fc-match isn't the right solution for Windows, which is actually
+        # a real problem if I want to make mgp2pdf useful on Windows.  Oh
+        # well, let's wait for demand to appear first.
+        if sys.platform == 'win32':
+            # There's no test skipping mechanism on Python 2.6 :(
+            print("Skipping test_deffont on Windows")
+            return
         p = mgp2pdf.Presentation()
         p._handleDirectives('%deffont "mono" xfont "Monospace"')
         p._handleDirectives('%deffont "bold" xfont "Sans-bold"')
