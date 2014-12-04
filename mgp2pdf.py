@@ -19,6 +19,9 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
 
 
+PY3 = bytes is not str
+
+
 log = logging.getLogger('mgp2pdf')
 
 
@@ -660,7 +663,12 @@ class Presentation(object):
                                              cwd=self.basedir,
                                              stdin=subprocess.PIPE,
                                              stdout=subprocess.PIPE)
-                    output = child.communicate(''.join(data_to_filter))[0]
+                    stdin = ''.join(data_to_filter)
+                    if PY3:
+                        stdin = stdin.encode('UTF-8')
+                    output = child.communicate(stdin)[0]
+                    if PY3:
+                        output = output.decode('UTF-8')
                 else:
                     log.warning("Ignoring %filter directive on line {0} in safe mode".format(filter_lineno))
                     output = 'Filtering through "%s" disabled, use --unsafe to enable\n' % filter_cmd

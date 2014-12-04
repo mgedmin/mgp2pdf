@@ -181,7 +181,7 @@ class TestPresentation(unittest.TestCase):
 
     @mock.patch('subprocess.Popen')
     def test_preprocess_unsafe_mode(self, mock_Popen):
-        mock_Popen().communicate.return_value = ('Moo!\nMoooo!\n', '')
+        mock_Popen().communicate.return_value = (b'Moo!\nMoooo!\n', '')
         p = mgp2pdf.Presentation(unsafe=True)
         self.assertEqual(
             list(p.preprocess([
