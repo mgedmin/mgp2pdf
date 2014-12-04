@@ -232,7 +232,7 @@ class TestMain(unittest.TestCase):
 
     @mock.patch('mgp2pdf.Presentation')
     def test_input_error_handling(self, mock_Presentation):
-        mock_Presentation.side_effect = mgp2pdf.MgpSyntaxError('no split infinitives plz')
+        mock_Presentation().load.side_effect = mgp2pdf.MgpSyntaxError('no split infinitives plz')
         mgp2pdf.main(['file1.mgp'])
 
     @mock.patch('mgp2pdf.Presentation')

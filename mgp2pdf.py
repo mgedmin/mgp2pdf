@@ -1084,13 +1084,18 @@ def main(args=None):
     setUpLogging(opts.verbose)
     for fn in args:
         log.debug("Loading %s", fn)
+        title = os.path.splitext(os.path.basename(fn))[0]
+        p = Presentation(title=title, unsafe=opts.unsafe)
         try:
-            title = os.path.splitext(os.path.basename(fn))[0]
-            p = Presentation(fn, title, unsafe=opts.unsafe)
+            p.load(fn)
         except Exception as e:
             log.debug("Exception while parsing input file", exc_info=True)
-            log.error("Error loading %s: %s: %s",
-                      fn, e.__class__.__name__, e)
+            if p.lineno:
+                lineno = " (line {0})".format(p.lineno)
+            else:
+                lineno = ""
+            log.error("Error loading %s: %s: %s%s",
+                      fn, e.__class__.__name__, e, lineno)
             continue
         if opts.verbose:
             print(p)
