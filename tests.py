@@ -106,11 +106,11 @@ class TestPresentation(unittest.TestCase):
                 (5, '# ta-dah!\n'),
             ])
 
-    @mock.patch('mgp2pdf.open', create=True, new_callable=mock.MagicMock)
+    @mock.patch('mgp2pdf.open', create=True, new_callable=mock.mock_open)
     def test_preprocess_includes(self, mock_open):
         p = mgp2pdf.Presentation()
         lines = ['Included line 1\n', 'Included line 2\n']
-        mock_open.return_value.__enter__.return_value.__iter__.return_value = lines
+        mock_open.return_value.__iter__.return_value = lines
         self.assertEqual(
             list(p.preprocess([
                 'A cow says:\n',
