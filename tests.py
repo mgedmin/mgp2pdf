@@ -9,6 +9,7 @@ import mgp2pdf
 
 sample_mgp = """\
 # This is an MGP file
+%%%%%%%%%%% This is also a comment
 %page
 %nodefault
 %left

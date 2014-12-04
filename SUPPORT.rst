@@ -7,6 +7,7 @@ MagicPoint directives (or should I call them "commands")?
 Supported:
 
 - # comment lines
+- %% comment lines
 - %size
 - %fore
 - %left
@@ -36,7 +37,6 @@ Ignored:
 
 Unsupported:
 
-- %% comment lines
 - .mgprc
 - \\ escaping
 - \\ line continuation

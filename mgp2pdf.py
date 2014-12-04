@@ -602,10 +602,10 @@ class Presentation(object):
             file = open(file)
         for lineno, line in self.preprocess(file):
             self.lineno = lineno
-            if line.startswith('%'):
-                self._handleDirectives(line)
-            elif line.startswith('#'):
+            if line.startswith(('#', '%%')):
                 pass
+            elif line.startswith('%'):
+                self._handleDirectives(line)
             else:
                 self._handleText(line)
         self.lineno = None
