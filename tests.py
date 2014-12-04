@@ -1,11 +1,17 @@
 import sys
 import doctest
 import unittest
-from cStringIO import StringIO
+try:
+    from cStringIO import StringIO, StringIO as BytesIO
+except ImportError:
+    from io import StringIO, BytesIO
 
 import mock
 
 import mgp2pdf
+
+
+PY2 = (bytes is str)
 
 
 sample_mgp = """\
@@ -43,9 +49,29 @@ class SmokeTests(unittest.TestCase):
 
     def test_conversion(self):
         p = mgp2pdf.Presentation(StringIO(sample_mgp), title="Sample")
-        pdf = StringIO()
+        pdf = BytesIO()
         p.makePDF(pdf)
         str(p)
+
+
+class TestColorParsing(unittest.TestCase):
+
+    def test_parseColor(self):
+        self.assertRaises(mgp2pdf.MgpSyntaxError, mgp2pdf.parse_color,
+                          'fuchsia')
+
+
+class TestTextWrapping(unittest.TestCase):
+
+    def test_textWrapPositions_unicode(self):
+        text = u'neangli\u0161kas tekstas'
+        expected = [text, u'neangli\u0161kas']
+        if PY2:
+            text = text.encode('UTF-8')
+            expected = [s.encode('UTF-8') for s in expected]
+        positions = mgp2pdf.textWrapPositions(text)
+        substrings = [text[:pos] for pos in positions]
+        self.assertEqual(substrings, expected)
 
 
 class TestLine(unittest.TestCase):

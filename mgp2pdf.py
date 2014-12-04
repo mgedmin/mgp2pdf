@@ -55,11 +55,6 @@ def parse_color(color):
         >>> parse_color('white')
         Color(1,1,1,1)
 
-        >>> parse_color('fuchsia')
-        Traceback (most recent call last):
-          ...
-        MgpSyntaxError: Unrecognized color: 'fuchsia'
-
     """
     color = COLORS.get(color, color)
     if len(color) == 4 and color.startswith('#'):
@@ -77,8 +72,6 @@ def textWrapPositions(s):
         [16, 10, 4]
         >>> textWrapPositions('a  good  day')
         [12, 7, 1]
-        >>> textWrapPositions(u'neangli\u0161kas tekstas'.encode('UTF-8'))
-        [20, 12]
 
     """
     poses = [len(s)]
@@ -538,7 +531,7 @@ class TextChunk(object):
     def _splitIntoRuns(self, text=None):
         if text is None:
             text = self.text
-        return map(None, re.split('(\t)', text))
+        return re.split('(\t)', text)
 
     def _calcSizes(self, w, h):
         fontSize = h * self.fontSize / 100
@@ -729,7 +722,7 @@ class Presentation(object):
         handler = getattr(self, '_handleSpecialDirective_%s' % word, None)
         if handler is not None:
             # Special directives that take <list-of-directives> as arguments
-            parts = filter(None, args[:2] + [' '.join(args[2:])] + parts[1:])
+            parts = [p for p in args[:2] + [' '.join(args[2:])] + parts[1:] if p]
             handler(parts)
         else:
             for part in parts:
@@ -916,7 +909,7 @@ class Presentation(object):
             -raise <percent>
 
         """
-        n = (len(parts) - 1) / 2
+        n = (len(parts) - 1) // 2
         args = self._parseArgs(parts, "wn" * n + "s")
         zoom = 100
         raised_by = 0
