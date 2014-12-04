@@ -916,8 +916,12 @@ class Presentation(object):
 
     def _handleUnknownDirective(self, parts):
         """Handle an unrecognized directive."""
-        # XXX: emit a warning maybe?
-        pass
+        directive = parts[0]
+        if directive in ('pcache', 'ccolor', 'system', 'noop'):
+            # These are meaningless for PDF or literal no-ops.
+            return
+        log.debug("Ignoring unrecognized directive %{0} on line {1}"
+                  .format(directive, self.lineno))
 
     def _parseArgs(self, parts, argspec):
         """Validate and convert arguments into the desired data types.

@@ -110,6 +110,19 @@ class TestPresentation(unittest.TestCase):
         # is buggy and collapses runs of commas.
         p._handleDirectives('%page, ,size 5')
 
+    @mock.patch('mgp2pdf.log')
+    def test_unknown_directives(self, mock_log):
+        p = mgp2pdf.Presentation()
+        p._handleDirectives('%vfcap "foo"')
+        p._handleDirectives('%nosuchdirectiveactually')
+
+    @mock.patch('mgp2pdf.log')
+    def test_noop_directives(self, mock_log):
+        p = mgp2pdf.Presentation()
+        p._handleDirectives('%noop')
+        p._handleDirectives('%ccolor "#444"')
+        p._handleDirectives('%pcache 1 1 0 1"')
+
     def test_newimage_with_unsupported_flag(self):
         p = mgp2pdf.Presentation()
         self.assertRaises(mgp2pdf.MgpSyntaxError, p._handleDirectives,
