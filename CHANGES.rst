@@ -11,6 +11,10 @@ Changelog
 
 - Interpret image paths relative to the location of the mgp file.
 
+- Support Python 3.3 and up in addition to 2.6 and 2.7.
+  NOTE: this is work in progress, some slides get converted incorrectly
+  (e.g. slide 44 of python3.pdf).
+
 
 0.9 (2014-05-09)
 ~~~~~~~~~~~~~~~~
