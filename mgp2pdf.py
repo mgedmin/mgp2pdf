@@ -721,6 +721,9 @@ class Presentation(object):
                           self._handleUnknownDirective)
         handler(parts)
 
+    def inPreamble(self):
+        return len(self.slides) == 0
+
     def _handleDirective_page(self, parts):
         """Handle %page.
 
@@ -961,6 +964,8 @@ class Presentation(object):
 
     def _handleText(self, line):
         """Handle a line of text that is not a comment or a directive."""
+        if self.inPreamble():
+            raise MgpSyntaxError('No text allowed in the preamble')
         if not self._continuing:
             self._lastlineno += 1
             if self._use_defaults:

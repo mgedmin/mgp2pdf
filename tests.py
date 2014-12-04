@@ -163,6 +163,10 @@ class TestPresentation(unittest.TestCase):
         self.assertRaises(SystemExit, p._handleDirectives,
                           '%deffont "B0rk" xfont "No Such Font Srsly No"')
 
+    def test_text_in_preamble(self):
+        p = mgp2pdf.Presentation()
+        self.assertRaises(mgp2pdf.MgpSyntaxError, p._handleText, 'text in preamble')
+
 
 @mock.patch('sys.stdout', StringIO())
 @mock.patch('sys.stderr', StringIO())
