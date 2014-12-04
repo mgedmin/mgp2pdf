@@ -263,6 +263,20 @@ class TestPresentation(unittest.TestCase):
                          "# This starts with a hash and has a \\\n")
         # The test is incomplete: \xHH is not yet supported
 
+    @mock.patch('mgp2pdf.ImageReader')
+    def test_newimage(self, mock_ImageReader):
+        p = mgp2pdf.Presentation()
+        p._handleDirectives('%page')
+        p._handleDirectives('%newimage "cat.png"')
+        self.assertEqual(str(p),
+                         "--- Slide 1 ---\n"
+                         "[cat.png]\n")
+        p._handleDirectives('%page')
+        p._handleDirectives('%newimage -zoom 50 -raise 14 "dog.png"')
+        image = p.slides[-1].lines[-1].chunks[-1]
+        self.assertEqual(image.zoom, 50)
+        self.assertEqual(image.raised_by, 14)
+
 
 @mock.patch('sys.stdout', StringIO())
 @mock.patch('sys.stderr', StringIO())

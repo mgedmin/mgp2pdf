@@ -200,9 +200,7 @@ class Slide(object):
 
         XXX: shouldn't setArea() influence the image size?
 
-        ``raised_by`` is a baseline adjustment, in points.
-
-        XXX: should it be in points?
+        ``raised_by`` is a baseline adjustment, in percentage of image size.
         """
         line = self.currentOrNewLine()
         line.add(Image(filename, zoom, raised_by))
@@ -498,7 +496,7 @@ class Image(SimpleChunk):
     def __init__(self, filename, zoom=100, raised_by=0):
         self.filename = filename
         self.zoom = zoom
-        self.raised_by = 0
+        self.raised_by = raised_by
         self.image = ImageReader(filename)
 
     def size(self, canvas, w, h):
@@ -509,8 +507,9 @@ class Image(SimpleChunk):
 
     def drawOn(self, canvas, x, y, w, h):
         myw, myh = self.size(canvas, w, h)
+        raised_by = self.raised_by * myh / 100
         try:
-            canvas.drawImage(self.filename, x, y - myh + self.raised_by, myw, myh,
+            canvas.drawImage(self.filename, x, y - myh + raised_by, myw, myh,
                              mask='auto')
         except Exception:
             log.debug("Exception in canvas.drawImage:", exc_info=True)
@@ -914,7 +913,7 @@ class Presentation(object):
         Supported flags include:
 
             -zoom <percent>
-            -raise <amount>
+            -raise <percent>
 
         """
         n = (len(parts) - 1) / 2

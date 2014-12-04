@@ -15,7 +15,6 @@ Supported:
 - %right
 - %cont
 - %nodefault
-- %newimage
 - %default
 - %page
 - %vgap
@@ -32,6 +31,10 @@ Partially supported:
 - %deffont (only one directive accepted, if multiple are present they'll be mishandled)
 - %area (xoffset/yoffset not allowed)
 - %tab (parsing is done, but it has no effet)
+- %newimage (only -zoom, -raise [which isn't supported by mgp itself!])
+  (not supported bits include: -colors, -xysize, -xyzoom, -scrzoom, -xscrzoom, -yscrzoom, -xyscrzoom, -rotate)
+  (can't possibly support: -zoomonclk)
+  (not supported: applying fore/back colors to monochrome images)
 
 Ignored:
 
