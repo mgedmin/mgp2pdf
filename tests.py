@@ -87,6 +87,8 @@ class TestPresentation(unittest.TestCase):
         self.assertRaises(mgp2pdf.MgpSyntaxError, list, p.preprocess(['%filter "cat"\n', '%filter "mouse"\n', '%endfilter\n']))
         # missing %endfilter at the end
         self.assertRaises(mgp2pdf.MgpSyntaxError, list, p.preprocess(['%filter "cat"\n']))
+        # ill-formed %include
+        self.assertRaises(mgp2pdf.MgpSyntaxError, list, p.preprocess(['%include "bad\n']))
 
     @mock.patch('mgp2pdf.log')
     def test_preprocess_safe_mode(self, mock_log):
@@ -102,6 +104,23 @@ class TestPresentation(unittest.TestCase):
                 (1, 'A cow says:\n'),
                 (2, 'Filtering through "cowsay" disabled, use --unsafe to enable\n'),
                 (5, '# ta-dah!\n'),
+            ])
+
+    @mock.patch('mgp2pdf.open', create=True, new_callable=mock.MagicMock)
+    def test_preprocess_includes(self, mock_open):
+        p = mgp2pdf.Presentation()
+        lines = ['Included line 1\n', 'Included line 2\n']
+        mock_open.return_value.__enter__.return_value.__iter__.return_value = lines
+        self.assertEqual(
+            list(p.preprocess([
+                'A cow says:\n',
+                '%include "cowspeech.txt"\n',
+                '# ta-dah!\n',
+            ])), [
+                (1, 'A cow says:\n'),
+                (2, 'Included line 1\n'),
+                (2, 'Included line 2\n'),
+                (3, '# ta-dah!\n'),
             ])
 
     def test_special_directives(self):

@@ -23,6 +23,7 @@ Supported:
 - %again
 - %filter/%endfilter
 - %font
+- %include
 
 Partially supported:
 
@@ -44,7 +45,6 @@ Unsupported:
 - .mgprc
 - \\ line continuation
 - %tab <id> and &id
-- %include
 - %back
 - %bgrad
 - %leftfill

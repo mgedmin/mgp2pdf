@@ -677,6 +677,21 @@ class Presentation(object):
                 filter_cmd = None
             elif filter_cmd:
                 data_to_filter.append(line)
+            elif line.startswith('%include'):
+                # %include is valid only in the preamble, perhaps we
+                # should watch for %page directives?
+                filename = line[len('%include'):].strip()
+                if not filename.startswith('"') or not filename.endswith('"'):
+                    raise MgpSyntaxError("%include directive expects a quoted string")
+                filename = os.path.join(self.basedir, filename[1:-1])
+                with open(filename) as f:
+                    # basedir handling for nested includes might be wrong
+                    # (does mgp even allow nested includes?)
+                    for n, line in self.preprocess(f):
+                        # Line numbers: do we report the correct
+                        # linenumber for the wrong filename?  Or the line
+                        # number of the %include directive? in the right file?
+                        yield lineno, line
             else:
                 yield lineno, line
         if filter_cmd is not None:
