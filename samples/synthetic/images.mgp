@@ -1,0 +1,16 @@
+%default 1 fore "black", back "white", center
+%page
+
+So, -raise doesn't appear to do anything
+
+%newimage "povlogo.png"
+%cont, newimage -raise 25 "povlogo.png"
+%newimage "povlogo.png"
+%page
+
+Zoom aligns the top edges of the images,
+surprisingly
+
+%newimage "povlogo.png"
+%cont, newimage -zoom 50 "povlogo.png"
+%newimage "povlogo.png"
