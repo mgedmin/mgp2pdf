@@ -321,10 +321,13 @@ class TestMain(unittest.TestCase):
     def test_input_error_handling(self, mock_Presentation):
         mock_Presentation().load.side_effect = mgp2pdf.MgpSyntaxError('no split infinitives plz')
         mgp2pdf.main(['file1.mgp'])
+        mock_Presentation().lineno = 0
+        mgp2pdf.main(['file1.mgp'])
 
     @mock.patch('mgp2pdf.Presentation')
     def test_output_error_handling(self, mock_Presentation):
         mock_Presentation().makePDF.side_effect = IOError('cannot write there')
+        mgp2pdf.main(['file1.mgp', '-o', '/tmp/', '-v'])
         mgp2pdf.main(['file1.mgp', '-o', '/tmp/file1.pdf'])
 
 
