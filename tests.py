@@ -125,6 +125,24 @@ class TestPresentation(unittest.TestCase):
                 (5, '# ta-dah!\n'),
             ])
 
+    @mock.patch('subprocess.Popen')
+    def test_preprocess_unsafe_mode(self, mock_Popen):
+        mock_Popen().communicate.return_value = ('Moo!\nMoooo!\n', '')
+        p = mgp2pdf.Presentation(unsafe=True)
+        self.assertEqual(
+            list(p.preprocess([
+                'A cow says:\n',
+                '%filter "cowsay"\n',
+                'Hello\n',
+                '%endfilter\n',
+                '# ta-dah!\n',
+            ])), [
+                (1, 'A cow says:\n'),
+                (2, 'Moo!\n'),
+                (2, 'Moooo!\n'),
+                (5, '# ta-dah!\n'),
+            ])
+
     @mock.patch('mgp2pdf.open', create=True, new_callable=mock.mock_open)
     def test_preprocess_includes(self, mock_open):
         p = mgp2pdf.Presentation()
