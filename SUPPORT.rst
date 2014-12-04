@@ -25,20 +25,22 @@ Supported:
 - %font
 
 Partially supported:
+
+- \\ escaping (\\xHH is not supported)
 - %prefix (doesn't actually do anything due to a bug)
 - %deffont (only one directive accepted, if multiple are present they'll be mishandled)
 - %area (xoffset/yoffset not allowed)
 
 Ignored:
-- %ccolor (ignored)
-- %pcache (ignored)
-- %system (pointless for PDFs anyway)
-- %noop
+
+- %ccolor (pointless for PDFs)
+- %pcache (pointless for PDFs)
+- %system (pointless for PDFs)
+- %noop (it's supposed to do nothing)
 
 Unsupported:
 
 - .mgprc
-- \\ escaping
 - \\ line continuation
 - %back
 - %bgrad
@@ -70,3 +72,5 @@ Unsupported:
 - %setsup
 - %sup
 - %sub
+
+Unsupported directives produce warnings in verbose mode and are ignored.

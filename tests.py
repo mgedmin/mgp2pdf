@@ -167,6 +167,15 @@ class TestPresentation(unittest.TestCase):
         p = mgp2pdf.Presentation()
         self.assertRaises(mgp2pdf.MgpSyntaxError, p._handleText, 'text in preamble')
 
+    def test_backslash_escaping(self):
+        p = mgp2pdf.Presentation()
+        p._handleDirectives('%page')
+        p._handleText("\\# This starts with a hash and has a \\\\")
+        self.assertEqual(str(p),
+                         "--- Slide 1 ---\n"
+                         "# This starts with a hash and has a \\\n")
+        # The test is incomplete: \xHH is not yet supported
+
 
 @mock.patch('sys.stdout', StringIO())
 @mock.patch('sys.stderr', StringIO())
