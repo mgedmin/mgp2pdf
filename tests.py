@@ -104,6 +104,14 @@ class TestPresentation(unittest.TestCase):
                 (5, '# ta-dah!\n'),
             ])
 
+    def test_special_directives(self):
+        p = mgp2pdf.Presentation()
+        args = []
+        p._handleSpecialDirective_test = args.append
+        p._handleDirectives('%test 5 foo x y, bar "a, b", baz')
+        self.assertEqual(args,
+                         [['test', '5', 'foo x y', 'bar "a, b"', 'baz']])
+
     @mock.patch('mgp2pdf.log')
     def test_empty_directive(self, mock_log):
         p = mgp2pdf.Presentation()
@@ -149,19 +157,53 @@ class TestPresentation(unittest.TestCase):
         self.assertRaises(mgp2pdf.MgpSyntaxError, p._handleDirectives,
                           '%font no-quote"')
 
-    def test_font_unsupported_engine(self):
+    def test_deffont(self):
+        p = mgp2pdf.Presentation()
+        p._handleDirectives('%deffont "mono" xfont "Monospace"')
+        p._handleDirectives('%deffont "bold" xfont "Sans-bold"')
+        p._handleDirectives('%deffont "bolditalic" xfont "Sans-bold-i"')
+        p._handleDirectives('%page')
+        self.assertRaises(mgp2pdf.MgpSyntaxError, p._handleDirectives,
+                          '%deffont "italic" xfont "Sans-regular-i"')
+
+    def test_deffont_unsupported_engine(self):
         p = mgp2pdf.Presentation()
         self.assertRaises(NotImplementedError, p._handleDirectives,
                           '%deffont "B0rk" tex "Computer Modern"')
 
     @mock.patch('subprocess.Popen')
-    def test_font_unsupported_font(self, mock_Popen):
+    def test_deffont_unsupported_font(self, mock_Popen):
         p = mgp2pdf.Presentation()
         # This is seriously theoretical, since fc-match usually picks something
         # as a fallback even if you're missing a font!  This is why we mock.
         mock_Popen().communicate.return_value = ('', '')
         self.assertRaises(SystemExit, p._handleDirectives,
                           '%deffont "B0rk" xfont "No Such Font Srsly No"')
+
+    def test_default(self):
+        p = mgp2pdf.Presentation()
+        p._handleDirectives('%default 1')
+        self.assertEqual(p.defaultDirectives[1], [])
+        p._handleDirectives('%default 3 fore "black", center, font "bold", size 6')
+        self.assertEqual(p.defaultDirectives[3],
+                         ['fore "black"', 'center', 'font "bold"', 'size 6'])
+        p._handleDirectives('%page')
+        self.assertRaises(mgp2pdf.MgpSyntaxError, p._handleDirectives,
+                          '%default 1 left')
+
+    def test_tab(self):
+        p = mgp2pdf.Presentation()
+        p._handleDirectives('%tab 1')
+        self.assertEqual(p.tabDirectives[1], [])
+        p._handleDirectives('%tab 2 prefix "  ", icon box black 50')
+        self.assertEqual(p.tabDirectives[2],
+                         ['prefix "  "', 'icon box black 50'])
+        p._handleDirectives('%tab 2 prefix "  ", icon box black 50')
+        self.assertEqual(p.tabDirectives[2],
+                         ['prefix "  "', 'icon box black 50'])
+        p._handleDirectives('%page')
+        self.assertRaises(mgp2pdf.MgpSyntaxError, p._handleDirectives,
+                          '%tab 1 left')
 
     def test_text_in_preamble(self):
         p = mgp2pdf.Presentation()

@@ -30,6 +30,7 @@ Partially supported:
 - %prefix (doesn't actually do anything due to a bug)
 - %deffont (only one directive accepted, if multiple are present they'll be mishandled)
 - %area (xoffset/yoffset not allowed)
+- %tab (parsing is done, but it has no effet)
 
 Ignored:
 
@@ -42,6 +43,8 @@ Unsupported:
 
 - .mgprc
 - \\ line continuation
+- %tab <id> and &id
+- %include
 - %back
 - %bgrad
 - %leftfill
@@ -60,7 +63,6 @@ Unsupported:
 - %image
 - %icon
 - %bimage
-- %tab
 - %hgap
 - %pause
 - %vfcap

@@ -580,6 +580,7 @@ class Presentation(object):
 
     def __init__(self, file=None, title=None, unsafe=False):
         self.defaultDirectives = {}
+        self.tabDirectives = {}
         self.fonts = Fonts()
         self.slides = []
         self._directives_used_in_this_line = set()
@@ -692,19 +693,44 @@ class Presentation(object):
         """
         line = line[1:].strip()
         parts = self._splitDirectives(line)
-        if parts[0].startswith('default'):
-            # "%default <n>" is a special prefix that consumes all the other
-            # directives on this line.  It means "for the rest of the file,
-            # pretend that all the directives specified here show up on
-            # line <n> in each slide" (unless %nodefault is used for that
-            # slide, of course).
-            args = self._splitArgs(parts[0])
-            n = int(args[1])
-            parts[0] = ' '.join(args[2:])
-            self.defaultDirectives[n] = parts
+        args = self._splitArgs(parts[0])
+        word = args[0]
+        handler = getattr(self, '_handleSpecialDirective_%s' % word, None)
+        if handler is not None:
+            # Special directives that take <list-of-directives> as arguments
+            parts = filter(None, args[:2] + [' '.join(args[2:])] + parts[1:])
+            handler(parts)
         else:
             for part in parts:
                 self._handleDirective(part.strip())
+
+    def _handleSpecialDirective_default(self, parts):
+        """Handle %default <linenum> <list-of-directives>."""
+        if not self.inPreamble():
+            raise MgpSyntaxError("%default must be used in the preamble")
+        lineno, = self._parseArgs(parts[:2], "n")
+        self.defaultDirectives[lineno] = parts[2:]
+
+    def _handleSpecialDirective_tab(self, parts):
+        """Handle %tab <tabnum> <list-of-directives>."""
+        if not self.inPreamble():
+            raise MgpSyntaxError("%tab must be used in the preamble")
+        tabid, = self._parseArgs(parts[:2], "S")
+        self.tabDirectives[tabid] = parts[2:]
+
+    def _handleSpecialDirective_deffont(self, parts):
+        """Handle %deffont "<name>" <list-of-directives>
+
+        Defines a named font, to be used with %font <name>.
+        """
+        if not self.inPreamble():
+            raise MgpSyntaxError("%tab must be used in the preamble")
+        name, = self._parseArgs(parts[:2], "s")
+        for directive in parts[2:]:
+            args = self._splitArgs(directive)
+            engine = args[0]
+            enginefont, = self._parseArgs(args, "s")
+            self.fonts.define(name, engine, enginefont)
 
     def _handleDirective(self, directive):
         """Handle a single directive with arguments."""
@@ -722,6 +748,11 @@ class Presentation(object):
         handler(parts)
 
     def inPreamble(self):
+        """Are we still in the preamble?
+
+        The preamble is the part of the input file before the first %page
+        directive.
+        """
         return len(self.slides) == 0
 
     def _handleDirective_page(self, parts):
@@ -750,15 +781,6 @@ class Presentation(object):
         """
         w, h = self._parseArgs(parts, "nn")
         self.slides[-1].setArea(w, h)
-
-    def _handleDirective_deffont(self, parts):
-        """Handle %deffont "<name>" <engine> "<font-name>".
-
-        Defines a named font, to be used with %font <name>.
-        """
-        # XXX this is not entirely correct
-        name, engine, enginefont = self._parseArgs(parts, "sws")
-        self.fonts.define(name, engine, enginefont)
 
     def _handleDirective_font(self, parts):
         """Handle %font <name>.
