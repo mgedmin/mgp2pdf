@@ -13,6 +13,9 @@ Changelog
 
 - Support Python 3.3 and up in addition to 2.6 and 2.7.
 
+- More accurate text positioning (mgp2pdf no longer truncates the
+  corrdinates to integral point values).
+
 
 0.9 (2014-05-09)
 ~~~~~~~~~~~~~~~~
