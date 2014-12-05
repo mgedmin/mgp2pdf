@@ -5,8 +5,13 @@ This is a quick-and-dirty MagicPoint_ to PDF converter.
 
 .. _MagicPoint: http://member.wide.ad.jp/wg/mgp/
 
-It supports only a subset of MagicPoint, specifically, the subset I used
-in my slides.
+It supports only a subset of MagicPoint, specifically, the subset I've
+used in my slides so far.  If you send me your slide decks, I'll make
+mgp2pdf handle them too.
+
+SUPPORT.rst has a list of supported and unsupported features.
+
+BUGS.rst has a list of known bugs.
 
 
 Installation
@@ -22,8 +27,9 @@ Usage
 
 ::
 
-    mgp2pdf [--unsafe] slides.mgp [-o output.pdf]
-    mgp2pdf [--unsafe] slides.mgp ...
+    mgp2pdf [-v] [--unsafe] slides.mgp [-o output.pdf]
+    mgp2pdf [-v] [--unsafe] slides.mgp ... [-o directory]
+    mgp2pdf [-h|--help]
 
 
 Why another converter?
@@ -49,10 +55,7 @@ Resources
 
 There's a web page, of sorts, at http://mg.pov.lt/mgp2pdf
 
-The source code can be found in this Git repository:
-https://github.com/mgedmin/mgp2pdf.
-
-To check it out, use ``git clone https://github.com/mgedmin/mgp2pdf``.
+The source code can be found at https://github.com/mgedmin/mgp2pdf.
 
 Report bugs at https://github.com/mgedmin/mgp2pdf/issues.
 
@@ -61,6 +64,6 @@ Licence: GPL v2 or later (http://www.gnu.org/copyleft/gpl.html)
 .. image:: https://travis-ci.org/mgedmin/mgp2pdf.svg?branch=master
   :target: https://travis-ci.org/mgedmin/mgp2pdf
 
-.. image:: https://coveralls.io/repos/mgedmin/mgp2pdf/badge.png
+.. image:: https://coveralls.io/repos/mgedmin/mgp2pdf/badge.png?branch=master
   :target: https://coveralls.io/r/mgedmin/mgp2pdf
 
