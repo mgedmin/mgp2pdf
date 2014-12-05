@@ -83,14 +83,17 @@ def choose_tempdir(filename):
                         '.compare-' + os.path.basename(filename))
 
 
-def mgp_to_images(filename):
+def mgp_to_images(filename, use_xvfb=True):
     tempdir = choose_tempdir(filename)
     timestampfile = os.path.join(tempdir, 'timestamp')
     if newer(filename, timestampfile):
         try_mkdir(tempdir)
         touch(timestampfile)
         inform("Converting %s to images" % filename)
-        system(MGP, '-U', '-E', 'png', '-D', tempdir, filename)
+        command = (MGP, '-o', '-g', '1024x768', '-U', '-E', 'png', '-D', tempdir, filename)
+        if use_xvfb:
+            command = ('xvfb-run', '-a', '-s', '-screen 0 1280x800x24') + command
+        system(*command)
     return sorted(glob.glob(os.path.join(tempdir, 'mgp?????.png')))
 
 
