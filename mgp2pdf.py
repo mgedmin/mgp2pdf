@@ -464,6 +464,7 @@ class Mark(SimpleChunk):
 
     def __init__(self):
         self.pos = None
+        self.used = False
 
     def drawOn(self, canvas, x, y, w, h):
         self.pos = x, y
@@ -481,7 +482,11 @@ class Again(SimpleChunk):
 
     def drawOn(self, canvas, x, y, w, h):
         assert self.mark.pos is not None, "Mark not initialized yet!"
+        if self.mark.used:
+            # a mark can be used only once
+            return x, y
         mx, my = self.mark.pos
+        self.mark.used = True
         return x, my
 
     def __str__(self):
