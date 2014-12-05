@@ -20,6 +20,11 @@ Conversion issues:
   from 2006 has the same problem, might be just a bug in my slides.  Maybe I
   used a different screen resolution during the presentation.)
 
-- python3.pdf, slide 44: image positioning is wrong (was okay in 2006).
-
-- python7.pdf, slide 33: image positioning is wrong (was okay in 2006).
+- python3.pdf, slide 44 and also python7.pdf, slide 33 (same slide):
+  I used %newimage -raise -50 in the original .mgp files.  mgp2pdf ignored
+  the -raise due to a bug, so the original PDF from 2006 acts as if -raise
+  wasn't specified.  Today's mgp also ignores -raise.  I don't remember
+  what was happening with mgp in 2006.  Today's mgp2pdf handles -raise,
+  which makes it clear the 50% shift I specified is wrong, so I adjusted
+  the .mgp.  Anyway, if your PDFs do not match the original, that's the
+  reason.

@@ -377,7 +377,7 @@ Nedarykite!
 %mark
 %size 4, vgap 0
 
-%newimage -raise -50 "dont.png"
+%newimage -raise -5 "dont.png"
 %again
 %fore "#000000", size 7, vgap 10
 x = s.__len__()
