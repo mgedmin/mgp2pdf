@@ -308,6 +308,50 @@ class TestPresentation(unittest.TestCase):
         self.assertRaises(mgp2pdf.MgpSyntaxError, p._handleDirectives,
                           '%default 1 left')
 
+    def test_application_of_defaults(self):
+        p = mgp2pdf.Presentation()
+        p.load(StringIO('\n'.join([
+            '%default 1 left',
+            '%default 2 center',
+            '%default 3 right',
+            '%page',
+            'a',
+            'b',
+            '%cont',
+            'b',
+            'c',
+        ])))
+        self.assertEqual(str(p),
+                         "--- Slide 1 ---\n"
+                         "a\n"
+                         "bb\n"
+                         "c\n")
+        self.assertEqual([line.alignment for line in p.slides[0].lines],
+                         [mgp2pdf.Left, mgp2pdf.Center, mgp2pdf.Right])
+
+    @mock.patch('mgp2pdf.ImageReader')
+    def test_application_of_defaults_when_images_are_involved(self, mock_ImageReader):
+        mock_ImageReader().getSize.return_value = 100, 50
+        p = mgp2pdf.Presentation()
+        p.load(StringIO('\n'.join([
+            '%default 1 left',
+            '%default 2 center',
+            '%default 3 right',
+            '%page',
+            'a',
+            '%newimage "b.png"',
+            '%cont',
+            'b',
+            'c',
+        ])))
+        self.assertEqual(str(p),
+                         "--- Slide 1 ---\n"
+                         "a\n"
+                         "[b.png]b\n"
+                         "c\n")
+        self.assertEqual([line.alignment for line in p.slides[0].lines],
+                         [mgp2pdf.Left, mgp2pdf.Center, mgp2pdf.Right])
+
     def test_tab(self):
         p = mgp2pdf.Presentation()
         p._handleDirectives('%tab 1')
