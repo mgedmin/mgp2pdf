@@ -1,0 +1,40 @@
+#
+# How do %mark/%again directives work?
+#
+%default 1 fore "black", back "white", size 7, area 90 90
+# ----------------------------------------------------------------------
+%page
+
+Question 1:
+    can I use %again twice with the same mark?
+
+%mark, left
+Left
+more left
+%again, center
+# There's a very curious drawing bug in mgp: on first presentation
+# it shows "CenterCenter", and then when you force a redraw, it draws it
+# correctly
+Center
+more center
+%again, right
+Right
+more right
+
+%left
+Answer: No
+# ----------------------------------------------------------------------
+%page
+
+Workaround:
+    place %mark after using %again
+
+%mark, left
+Left
+more left
+%again, mark, center
+Center
+more center
+%again, right
+Right
+more right
