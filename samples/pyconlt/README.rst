@@ -1,6 +1,6 @@
 My talk from PyConLT 2012
 
-The PDF is also from 2012 (both of them; dunno why I've got two!)
+The PDF is also from 2012
 
 This is another presentation where I couldn't use mgp (lack of UTF-8
 support) and so had to rely on mgp2pdf exclusively.  This means any
