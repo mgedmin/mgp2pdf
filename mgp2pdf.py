@@ -3,6 +3,8 @@
 A quick-and-dirty MagicPoint to PDF converter.
 """
 
+from __future__ import division
+
 import os
 import re
 import sys
