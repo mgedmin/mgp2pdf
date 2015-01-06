@@ -7,3 +7,4 @@ include LICENCE
 include Makefile
 include .gitignore
 include .coveragerc
+prune samples

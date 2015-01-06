@@ -48,7 +48,7 @@ endif
 	$(VCS_EXPORT) && \
 	cd tmp && \
 	tar xvzf ../dist/$$pkg_and_version.tar.gz && \
-	diff -ur $$pkg_and_version tree -x PKG-INFO -x setup.cfg -x '*.egg-info' && \
+	diff -ur $$pkg_and_version tree -x PKG-INFO -x setup.cfg -x '*.egg-info' -x samples -x 'samples/*' && \
 	cd $$pkg_and_version && \
 	make dist check && \
 	cd .. && \
@@ -58,7 +58,7 @@ endif
 	cd ../two/ && \
 	tar xvzf ../$$pkg_and_version/dist/$$pkg_and_version.tar.gz && \
 	cd .. && \
-	diff -ur one two -x SOURCES.txt && \
+	diff -ur one two -x SOURCES.txt -x samples -x 'samples/*' && \
 	cd .. && \
 	rm -rf tmp && \
 	echo "sdist seems to be ok"
