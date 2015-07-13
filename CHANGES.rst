@@ -4,6 +4,8 @@ Changelog
 0.10.1 (unreleased)
 ~~~~~~~~~~~~~~~~~~~
 
+- Drop Python 2.6 support.
+
 
 0.10 (2015-01-06)
 ~~~~~~~~~~~~~~~~~
