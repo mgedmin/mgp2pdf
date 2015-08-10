@@ -42,6 +42,7 @@ COLORS = dict(
     green="#0f0",
     blue="#00f",
     yellow="#ff0",
+    cyan="#0ff",
 )
 
 
