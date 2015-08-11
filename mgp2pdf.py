@@ -758,7 +758,7 @@ class Presentation(object):
         Defines a named font, to be used with %font <name>.
         """
         if not self.inPreamble():
-            raise MgpSyntaxError("%tab must be used in the preamble")
+            raise MgpSyntaxError("%deffont must be used in the preamble")
         name, = self._parseArgs(parts[:2], "s")
         for directive in parts[2:]:
             args = self._splitArgs(directive)
