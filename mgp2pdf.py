@@ -1085,7 +1085,7 @@ class Fonts(object):
             elif enginefontname.count('-') == 2:
                 # family-weight-slant
                 family, weight, slant = enginefontname.split('-')
-                slant = {'i': 'italic', 'm': 'roman'}[slant]
+                slant = {'i': 'italic', 'r': 'roman'}[slant]
                 enginefontname = '%s:weight=%s:slant=%s' % (family, weight, slant)
         filename = subprocess.Popen(
             ['fc-match', enginefontname, '-f', '%{file}'],
