@@ -6,8 +6,21 @@ python:
     - 3.4
     - 3.5
     - pypy
+addons:
+  apt:
+    sources:
+      - pypy
+    packages:
+      - pypy
+      - pypy-dev
 install:
-    - travis_retry pip install coverage coveralls -e .
+    - if [ "$TRAVIS_PYTHON_VERSION" = "pypy" ];
+        then virtualenv -p /usr/bin/pypy ~/.venv;
+             . ~/.venv/bin/activate;
+      fi
+    - python --version
+    - pip --version
+    - pip install coverage coveralls mock -e .
 script:
     - coverage run --source=mgp2pdf.py tests.py
 after_success:
