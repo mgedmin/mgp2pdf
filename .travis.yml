@@ -22,7 +22,12 @@ install:
     - pip --version
     - pip install coverage coveralls mock -e .
 script:
-    - coverage run --source=mgp2pdf.py tests.py
+    - if [ "$TRAVIS_PYTHON_VERSION" = "pypy" ];
+        then python tests.py;
+      fi
+    - if [ "$TRAVIS_PYTHON_VERSION" != "pypy" ];
+        then coverage run --source=mgp2pdf.py tests.py;
+      fi
 after_success:
     - coveralls
 notifications:
