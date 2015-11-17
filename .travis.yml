@@ -6,6 +6,9 @@ python:
     - 3.4
     - 3.5
     - pypy
+matrix:
+  allow_failures:
+    - python: pypy
 install:
     - travis_retry pip install coverage coveralls -e .
 script:
