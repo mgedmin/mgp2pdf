@@ -1,0 +1,26 @@
+version: build-{build}-{branch}
+
+environment:
+  global:
+    # At the moment there are no ReportLab wheels for Python 3.5 on PyPI.
+    PIP_FIND_LINKS: "https://debesis.gedmin.as/wheels/"
+  matrix:
+    # http://www.appveyor.com/docs/installed-software#python lists available
+    # versions
+    - PYTHON: "C:\\Python27"
+    - PYTHON: "C:\\Python33"
+    - PYTHON: "C:\\Python34"
+    - PYTHON: "C:\\Python35"
+
+init:
+  - "echo %PYTHON%"
+
+install:
+  - "set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - python --version
+  - pip install tox
+
+build: off
+
+test_script:
+  - tox -e py
