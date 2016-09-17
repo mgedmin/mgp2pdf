@@ -1,8 +1,19 @@
 Changelog
 ---------
 
-0.10.1 (unreleased)
+0.10.1 (2016-09-17)
 ~~~~~~~~~~~~~~~~~~~
+
+- Correctly recognize ``...-...-r`` fonts as roman
+  (`GH #6 <https://github.com/mgedmin/mgp2pdf/pull/6>`_).
+
+- Add support for ``cyan`` color
+  (`GH #5 <https://github.com/mgedmin/mgp2pdf/pull/5>`_).
+
+- Fix typo in error message
+  (`GH #4 <https://github.com/mgedmin/mgp2pdf/pull/4>`_).
+
+- Add Python 3.5 support.
 
 - Drop Python 2.6 support.
 
