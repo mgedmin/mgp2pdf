@@ -3,7 +3,7 @@ include *.py
 include *.rst
 include *.ini
 include *.yml
-include LICENCE
+include LICENSE
 include Makefile
 include .gitignore
 include .coveragerc
