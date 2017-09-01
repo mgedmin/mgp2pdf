@@ -4,7 +4,7 @@ Changelog
 0.10.2 (unreleased)
 ~~~~~~~~~~~~~~~~~~~
 
-- Nothing changed yet.
+- Add Python 3.6 support (no actual code changes required).
 
 
 0.10.1 (2016-09-17)
