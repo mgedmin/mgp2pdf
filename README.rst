@@ -53,13 +53,13 @@ bugs for missing features, and I'll see what I can do.
 Resources
 ---------
 
-There's a web page, of sorts, at http://mg.pov.lt/mgp2pdf
+There's a web page, of sorts, at https://mg.pov.lt/mgp2pdf
 
 The source code can be found at https://github.com/mgedmin/mgp2pdf.
 
 Report bugs at https://github.com/mgedmin/mgp2pdf/issues.
 
-Licence: GPL v2 or later (http://www.gnu.org/copyleft/gpl.html)
+Licence: GPL v2 or later (https://www.gnu.org/copyleft/gpl.html)
 
 .. image:: https://travis-ci.org/mgedmin/mgp2pdf.svg?branch=master
   :target: https://travis-ci.org/mgedmin/mgp2pdf

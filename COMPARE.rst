@@ -29,17 +29,17 @@ Sources:
 
 - Google search for "pdf diff" or "pdf compare"
 
-  - http://superuser.com/questions/517004/tool-for-performing-a-pdf-diff
+  - https://superuser.com/questions/517004/tool-for-performing-a-pdf-diff
 
-    - http://www.cs.ox.ac.uk/people/cas.cremers/misc/pdfdiff.html
+    - https://www.cs.ox.ac.uk/people/cas.cremers/misc/pdfdiff.html
       (relies on pdftotext)
 
-  - http://superuser.com/questions/46123/how-to-compare-the-differences-between-two-pdf-files-on-windows
+  - https://superuser.com/questions/46123/how-to-compare-the-differences-between-two-pdf-files-on-windows
 
-    - apt-get install diffpdf (package of http://www.qtrac.eu/diffpdf.html)
+    - apt-get install diffpdf (package of https://www.qtrac.eu/diffpdf.html)
     - https://github.com/vslavik/diff-pdf
 
-  - http://stackoverflow.com/questions/145657/tool-to-compare-large-numbers-of-pdf-files
+  - https://stackoverflow.com/questions/145657/tool-to-compare-large-numbers-of-pdf-files
 
     - Nice idea in one answer: compare PDF content directly, ignoring irrelevant
       changes ::
@@ -58,10 +58,10 @@ Sources:
 
     - https://github.com/vslavik/diff-pdf
     - https://github.com/JoshData/pdf-diff
-    - https://github.com/zeliboba/DiffPDF-app (import of http://www.qtrac.eu/diffpdf.html)
+    - https://github.com/zeliboba/DiffPDF-app (import of https://www.qtrac.eu/diffpdf.html)
     - https://github.com/hyperjeff/PDF-Diff (text only)
-    - https://github.com/witwall/diffpdf (import of http://www.qtrac.eu/diffpdf.html)
-    - https://github.com/apex-hughin/DiffPDF (import of http://www.qtrac.eu/diffpdf.html)
+    - https://github.com/witwall/diffpdf (import of https://www.qtrac.eu/diffpdf.html)
+    - https://github.com/apex-hughin/DiffPDF (import of https://www.qtrac.eu/diffpdf.html)
     - https://github.com/apark0114/pdfBox (no README)
     - https://github.com/koyachi/diff_pdf_image (small Ruby script, grayscales and composes as different color channels)
     - https://github.com/momeni/visual-pdf-diff (small shell script that composes two pdfs with imagemagick)
@@ -111,13 +111,13 @@ in this very repository:
 - Written in Python.
 - Relies on external tools: ImageMagick.
 
-`DiffPDF <http://www.qtrac.eu/diffpdf.html>`__
+`DiffPDF <https://www.qtrac.eu/diffpdf.html>`__
 
 - Packaged for Ubuntu (apt-get install diffpdf).
 - Upstream no longer open source.
 - Interactive.
 
-`ComparePDF <http://www.qtrac.eu/comparepdf.html>`__
+`ComparePDF <https://www.qtrac.eu/comparepdf.html>`__
 
 - Packaged for Ubuntu (apt-get install comparepdf).
 - Automated.
@@ -125,7 +125,7 @@ in this very repository:
 
 `vslavik/diff-pdf <https://github.com/vslavik/diff-pdf>`__
 
-- Website: http://vslavik.github.io/diff-pdf/
+- Website: https://vslavik.github.io/diff-pdf/
 - Uses overlaid red/green channels to compose an image from two sources.
 - Automated.
 - Can produce a report as PDF.
@@ -160,6 +160,6 @@ in this very repository:
 
 - Automated.
 - Produces PDF report using Pillow's ImageChops for highlighting differenes, using
-  http://stackoverflow.com/questions/18341754/color-in-red-diffrencies-between-two-pictures
+  https://stackoverflow.com/questions/18341754/color-in-red-diffrencies-between-two-pictures
 - Written in Python.
 - Relies on ImageMagick via Wand (ctypes-based wrapper).

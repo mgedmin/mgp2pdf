@@ -5,7 +5,7 @@ environment:
     # At the moment there are no ReportLab wheels for Python 3.5 on PyPI.
     PIP_FIND_LINKS: "https://debesis.gedmin.as/wheels/"
   matrix:
-    # http://www.appveyor.com/docs/installed-software#python lists available
+    # https://www.appveyor.com/docs/installed-software#python lists available
     # versions
     - PYTHON: "C:\\Python27"
     - PYTHON: "C:\\Python33"
