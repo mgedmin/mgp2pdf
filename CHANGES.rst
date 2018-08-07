@@ -4,7 +4,7 @@ Changelog
 0.10.2 (unreleased)
 ~~~~~~~~~~~~~~~~~~~
 
-- Add Python 3.6 support (no actual code changes required).
+- Add Python 3.6 and 3.7 support (no actual code changes required).
 
 - Drop Python 3.3 support.
 
