@@ -8,6 +8,10 @@ Changelog
 
 - Drop Python 3.3 support.
 
+- Stop using :weight=bold and such when passing font patterns to fc-match;
+  specify :weight=200 etc.  Fixes "Unable to parse the pattern" from fc-match
+  and "Could not find the font file for Sans:weight=bold" from mgp2pdf.
+
 
 0.10.1 (2016-09-17)
 ~~~~~~~~~~~~~~~~~~~

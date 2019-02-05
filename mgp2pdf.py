@@ -1062,6 +1062,32 @@ class Presentation(object):
 class Fonts(object):
     """Manages the fonts used in the presentation."""
 
+    weights = {
+        # https://www.freedesktop.org/software/fontconfig/fontconfig-user.html
+        'thin': 0,
+        'extralight': 40,
+        'ultralight': 40,
+        'light': 50,
+        'demilight': 55,
+        'semilight': 55,
+        'book': 75,
+        'regular': 80,
+        'normal': 80,
+        'medium': 100,
+        'demibold': 180,
+        'semibold': 180,
+        'bold': 200,
+        'extrabold': 205,
+        'black': 210,
+        'heavy': 210,
+    }
+
+    slants = {
+        'roman': 0,
+        'italic': 100,
+        'oblique': 110,
+    }
+
     def define(self, name, engine, enginefontname):
         """Define a new font.
 
@@ -1081,10 +1107,12 @@ class Fonts(object):
             if enginefontname.count('-') == 1:
                 # family-weight
                 family, weight = enginefontname.split('-')
+                weight = self.weights.get(weight, weight)
                 enginefontname = '%s:weight=%s' % (family, weight)
             elif enginefontname.count('-') == 2:
                 # family-weight-slant
                 family, weight, slant = enginefontname.split('-')
+                weight = self.weights.get(weight, weight)
                 slant = {'i': 'italic', 'r': 'roman'}[slant]
                 enginefontname = '%s:weight=%s:slant=%s' % (family, weight, slant)
         filename = subprocess.Popen(
