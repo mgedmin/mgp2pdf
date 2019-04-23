@@ -6,7 +6,7 @@ Changelog
 
 - Add Python 3.6 and 3.7 support (no actual code changes required).
 
-- Drop Python 3.3 support.
+- Drop Python 3.3 and 3.4 support.
 
 - Stop using :weight=bold and such when passing font patterns to fc-match;
   specify :weight=200 etc.  Fixes "Unable to parse the pattern" from fc-match
