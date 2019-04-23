@@ -1,7 +1,7 @@
 Changelog
 ---------
 
-0.10.2 (unreleased)
+0.10.2 (2019-04-23)
 ~~~~~~~~~~~~~~~~~~~
 
 - Add Python 3.6 and 3.7 support (no actual code changes required).

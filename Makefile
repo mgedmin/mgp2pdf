@@ -3,6 +3,8 @@ PYTHON := python
 FILE_WITH_VERSION := setup.py
 FILE_WITH_CHANGELOG := CHANGES.rst
 
+DISTCHECK_DIFF_OPTS = $(DISTCHECK_DIFF_DEFAULT_OPTS) -x samples -x 'samples/*'
+
 
 .PHONY: all
 all:
@@ -11,7 +13,7 @@ all:
 
 .PHONY: test check
 test check:
-	detox
+	tox -p auto
 
 .PHONY: coverage
 coverage:
