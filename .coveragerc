@@ -1,5 +1,5 @@
 [run]
-source = mgp2pdf.py
+source = mgp2pdf
 
 [report]
 exclude_lines =
