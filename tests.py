@@ -1,6 +1,7 @@
 import sys
 import doctest
 import unittest
+from contextlib import closing
 try:
     from cStringIO import StringIO, StringIO as BytesIO
 except ImportError:
@@ -139,10 +140,9 @@ class TestTextChunk(unittest.TestCase):
 
 class TestPresentation(unittest.TestCase):
 
-    @mock.patch('mgp2pdf.open', create=True, new_callable=mock.mock_open)
+    @mock.patch('mgp2pdf.open', create=True)
     def test_load_from_file(self, mock_open):
-        lines = ['%page\n', 'Hello\n']
-        mock_open.return_value.__iter__.return_value = lines
+        mock_open.return_value = StringIO('%page\nHello\n')
         p = mgp2pdf.Presentation('subdir/filename.mgp')
         self.assertEqual(p.basedir, 'subdir')
         self.assertEqual(str(p),
@@ -197,11 +197,11 @@ class TestPresentation(unittest.TestCase):
                 (5, '# ta-dah!\n'),
             ])
 
-    @mock.patch('mgp2pdf.open', create=True, new_callable=mock.mock_open)
+    @mock.patch('mgp2pdf.open', create=True)
     def test_preprocess_includes(self, mock_open):
         p = mgp2pdf.Presentation()
         lines = ['Included line 1\n', 'Included line 2\n']
-        mock_open.return_value.__iter__.return_value = lines
+        mock_open.return_value = closing(StringIO(''.join(lines)))
         self.assertEqual(
             list(p.preprocess([
                 'A cow says:\n',
