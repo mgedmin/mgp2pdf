@@ -1,3 +1,6 @@
+[run]
+source = mgp2pdf.py
+
 [report]
 exclude_lines =
     pragma: nocover

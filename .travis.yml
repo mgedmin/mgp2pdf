@@ -6,9 +6,9 @@ python:
     - 3.6
     - 3.7
 install:
-    - travis_retry pip install coverage coveralls -e .
+    - pip install coverage coveralls pytest mock -e .
 script:
-    - coverage run --source=mgp2pdf.py tests.py
+    - coverage run -m pytest
 after_success:
     - coveralls
 notifications:
