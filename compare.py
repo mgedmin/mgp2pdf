@@ -51,7 +51,7 @@ class Error(Exception):
 
 
 def inform(msg):
-    print msg
+    print(msg)
 
 
 def newer(file1, file2, ifnotexist=True):
@@ -68,8 +68,8 @@ def try_mkdir(dirname):
         pass
 
 
-def touch(filename):
-    file(filename, 'w').close()
+def destructive_touch(filename):
+    open(filename, 'w').close()
 
 
 def system(*cmd):
@@ -88,11 +88,16 @@ def mgp_to_images(filename, use_xvfb=True):
     timestampfile = os.path.join(tempdir, 'timestamp')
     if newer(filename, timestampfile):
         try_mkdir(tempdir)
-        touch(timestampfile)
+        destructive_touch(timestampfile)
         inform("Converting %s to images" % filename)
-        command = (MGP, '-o', '-g', '1024x768', '-U', '-E', 'png', '-D', tempdir, filename)
+        command = [
+            MGP, '-o', '-g', '1024x768', '-U', '-E', 'png', '-D', tempdir,
+            filename
+        ]
         if use_xvfb:
-            command = ('xvfb-run', '-a', '-s', '-screen 0 1280x800x24') + command
+            command = [
+                'xvfb-run', '-a', '-s', '-screen 0 1280x800x24'
+            ] + command
         system(*command)
     return sorted(glob.glob(os.path.join(tempdir, 'mgp?????.png')))
 
@@ -102,7 +107,7 @@ def pdf_to_images(filename):
     timestampfile = os.path.join(tempdir, 'timestamp')
     if newer(filename, timestampfile):
         try_mkdir(tempdir)
-        touch(timestampfile)
+        destructive_touch(timestampfile)
         inform("Converting %s to images" % filename)
         system(PDFTOPPM, filename, os.path.join(tempdir, 'img'))
         for ppm in glob.glob(os.path.join(tempdir, 'img*.ppm')):
@@ -127,7 +132,7 @@ class ImageComparator:
         self.outputdir = outputdir
 
     def load(self, filename):
-        import Image
+        from PIL import Image
         img = Image.open(filename)
         if img.mode != 'RGB':
             img = img.convert('RGB')
@@ -136,7 +141,7 @@ class ImageComparator:
         return img
 
     def compare(self, images):
-        import Image
+        from PIL import Image
         try_mkdir(self.outputdir)
         for idx, (img1, img2) in enumerate(images):
             outfile = os.path.join(self.outputdir, 'slide%05d.png' % (idx+1))
@@ -164,12 +169,13 @@ class PygameComparator:
             return
         self._did_init = True
 
-        import pygame, pygame.locals
+        import pygame
         pygame.init()
         self._set_mode()
 
     def _set_mode(self, fullscreen=None):
-        import pygame, pygame.locals
+        import pygame
+        import pygame.locals
         if fullscreen is None:
             fullscreen = self.fullscreen
         else:
@@ -179,14 +185,12 @@ class PygameComparator:
 
     def compare(self, images):
         self.init()
-        self.idx = 0
-        while self.idx < len(images):
-            self.compare_image(*images[self.idx])
-            self.idx += 1
+        for (self.idx, (img1, img2)) in enumerate(images):
+            self.compare_image(img1, img2)
 
     def compare_image(self, img1, img2):
         self.init()
-        import pygame, pygame.locals
+        import pygame
         pygame.display.set_caption('Comparing %s and %s: slide %s'
                                    % (self.filename1, self.filename2,
                                       self.idx+1))
@@ -198,7 +202,7 @@ class PygameComparator:
         self._wait_for_key()
 
     def _draw(self):
-        import pygame, pygame.locals
+        import pygame
         self.img1.set_alpha(255)
         self.img2.set_alpha(128)
         self.screen.blit(self.img1, (0, 0))
@@ -206,13 +210,14 @@ class PygameComparator:
         pygame.display.flip()
 
     def _draw_one(self, img):
-        import pygame, pygame.locals
+        import pygame
         img.set_alpha(255)
         self.screen.blit(img, (0, 0))
         pygame.display.flip()
 
     def _wait_for_key(self):
-        import pygame, pygame.locals
+        import pygame
+        import pygame.locals
         while True:
             event = pygame.event.wait()
             if event.type == pygame.locals.QUIT:
@@ -251,8 +256,8 @@ def compare(file1, file2, comparator=None):
     images1 = to_images(file1)
     images2 = to_images(file2)
     if len(images1) != len(images2):
-        print "%s has %d slides, but %s has %d slides" % (file1, len(images1),
-                                                          file2, len(images2))
+        print("%s has %d slides, but %s has %d slides" % (file1, len(images1),
+                                                          file2, len(images2)))
     if not comparator:
         return
     comparator.compare(zip(images1, images2))
@@ -264,8 +269,7 @@ def setup_extra_path(extrapath):
 
 def main():
     if len(sys.argv) not in (3, 4):
-        print >> sys.stderr, "Use: compare.py filename.pdf filename.mgp [outputdir]"
-        sys.exit(1)
+        sys.exit("Use: compare.py filename.pdf filename.mgp [outputdir]")
     setup_extra_path(EXTRAPATH)
     file1, file2 = sys.argv[1], sys.argv[2]
     if len(sys.argv) == 4:
@@ -274,9 +278,8 @@ def main():
         comparator = PygameComparator(file1, file2)
     try:
         compare(file1, file2, comparator)
-    except Error, e:
-        print >> sys.stderr, e
-        sys.exit(1)
+    except Error as e:
+        sys.exit(str(e))
 
 
 if __name__ == '__main__':
