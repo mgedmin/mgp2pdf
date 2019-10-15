@@ -4,7 +4,7 @@ Changelog
 0.10.3 (unreleased)
 ~~~~~~~~~~~~~~~~~~~
 
-- Nothing changed yet.
+- Add support for Python 3.8.
 
 
 0.10.2 (2019-04-23)
