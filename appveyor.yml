@@ -1,9 +1,6 @@
 version: build-{build}-{branch}
 
 environment:
-  global:
-    # At the moment there are no ReportLab wheels for Python 3.5 on PyPI.
-    PIP_FIND_LINKS: "https://debesis.gedmin.as/wheels/"
   matrix:
     # https://www.appveyor.com/docs/installed-software#python lists available
     # versions
@@ -11,12 +8,17 @@ environment:
     - PYTHON: "C:\\Python35"
     - PYTHON: "C:\\Python36"
     - PYTHON: "C:\\Python37"
-##  - PYTHON: "C:\\Python38"
+    - PYTHON: "C:\\Python38"
 
 init:
   - "echo %PYTHON%"
 
 install:
+  - ps: |
+      if (-not (Test-Path $env:PYTHON)) {
+        curl -o install_python.ps1 https://raw.githubusercontent.com/matthew-brett/multibuild/11a389d78892cf90addac8f69433d5e22bfa422a/install_python.ps1
+        .\install_python.ps1
+      }
   - ps: if (-not (Test-Path $env:PYTHON)) { throw "No $env:PYTHON" }
   - "set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
   - python --version
