@@ -12,21 +12,18 @@ preamble = """
 pagebreak = "%page\n" + preamble
 
 
-
 def format(lines):
     iterlines = iter(lines)
-    def nextline():
-        try:
-            return iterlines.next()
-        except StopIteration:
-            return None
 
-    print preamble
+    def nextline():
+        return next(iterlines, None)
+
+    print(preamble)
     nlines = 0
     line = nextline()
     while line is not None:
         if line.startswith("#"):
-            print line.strip()
+            print(line.strip())
             line = nextline()
             continue
         output = []
@@ -41,8 +38,10 @@ def format(lines):
             else:
                 while True:
                     line = nextline()
-                    if line is None: break
-                    if not line.startswith('    '): break
+                    if line is None:
+                        break
+                    if not line.startswith('    '):
+                        break
                     line = line[4:]
                     output.append('%font "standard"\n\t' + line.rstrip())
         else:
@@ -50,8 +49,8 @@ def format(lines):
             line = nextline()
         if nlines + len(output) > pagesize:
             nlines = 0
-            print pagebreak
-        print "\n".join(output)
+            print(pagebreak)
+        print("\n".join(output))
         nlines += len(output)
 
 
