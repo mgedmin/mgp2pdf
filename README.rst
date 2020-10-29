@@ -61,8 +61,8 @@ Report bugs at https://github.com/mgedmin/mgp2pdf/issues.
 
 Licence: GPL v2 or later (https://www.gnu.org/copyleft/gpl.html)
 
-.. image:: https://travis-ci.org/mgedmin/mgp2pdf.svg?branch=master
-  :target: https://travis-ci.org/mgedmin/mgp2pdf
+.. image:: https://travis-ci.com/mgedmin/mgp2pdf.svg?branch=master
+  :target: https://travis-ci.com/mgedmin/mgp2pdf
 
 .. image:: https://ci.appveyor.com/api/projects/status/github/mgedmin/mgp2pdf?branch=master&svg=true
   :target: https://ci.appveyor.com/project/mgedmin/mgp2pdf
