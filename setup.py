@@ -36,6 +36,11 @@ setup(
     install_requires=[
         'ReportLab',
     ],
+    extras_require={
+        'test': [
+            'mock',
+        ],
+    },
     entry_points={
         'console_scripts': [
             'mgp2pdf = mgp2pdf:main',
