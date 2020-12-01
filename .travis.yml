@@ -9,7 +9,7 @@ python:
   - pypy
   - pypy3
 install:
-  - pip install coverage coveralls pytest mock -e .
+  - pip install coverage coverage-python-version coveralls pytest -e .[test]
 script:
   - coverage run -m pytest
 after_success:

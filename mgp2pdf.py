@@ -667,10 +667,10 @@ class Presentation(object):
                                              stdin=subprocess.PIPE,
                                              stdout=subprocess.PIPE)
                     stdin = ''.join(data_to_filter)
-                    if PY3:
+                    if PY3:  # pragma: PY3
                         stdin = stdin.encode('UTF-8')
                     output = child.communicate(stdin)[0]
-                    if PY3:
+                    if PY3:  # pragma: PY3
                         output = output.decode('UTF-8')
                 else:
                     log.warning("Ignoring %filter directive on line {0} in safe mode".format(filter_lineno))

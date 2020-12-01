@@ -1,5 +1,7 @@
 [run]
 source = mgp2pdf
+plugins =
+    coverage_python_version
 
 [report]
 exclude_lines =
