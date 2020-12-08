@@ -5,16 +5,16 @@ A quick-and-dirty MagicPoint to PDF converter.
 
 from __future__ import division
 
+import logging
+import optparse
 import os
 import re
-import sys
-import optparse
 import subprocess
-import logging
+import sys
 
+from reportlab.lib.colors import HexColor, black
 from reportlab.lib.pagesizes import landscape
 from reportlab.lib.units import inch
-from reportlab.lib.colors import HexColor, black
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont

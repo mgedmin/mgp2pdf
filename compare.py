@@ -34,10 +34,10 @@ caches, for faster future reconversion.  These caches may take up some amount
 of disk space.  You will find them in hidden directories named .convert-*.
 """
 
-import os
-import sys
-import subprocess
 import glob
+import os
+import subprocess
+import sys
 
 
 EXTRAPATH = "/usr/X11R6/bin"

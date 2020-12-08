@@ -1,9 +1,12 @@
-import sys
 import doctest
+import sys
 import unittest
 from contextlib import closing
+
+
 try:
-    from cStringIO import StringIO, StringIO as BytesIO
+    from cStringIO import StringIO
+    from cStringIO import StringIO as BytesIO
 except ImportError:
     from io import StringIO, BytesIO
 
