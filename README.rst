@@ -59,7 +59,7 @@ The source code can be found at https://github.com/mgedmin/mgp2pdf.
 
 Report bugs at https://github.com/mgedmin/mgp2pdf/issues.
 
-Licence: GPL v2 or later (https://www.gnu.org/copyleft/gpl.html)
+Licence: GPL v2 or v3 (https://www.gnu.org/copyleft/gpl.html)
 
 .. image:: https://github.com/mgedmin/mgp2pdf/workflows/build/badge.svg?branch=master
   :target: https://github.com/mgedmin/mgp2pdf/actions
