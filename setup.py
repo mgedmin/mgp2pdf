@@ -12,7 +12,7 @@ with open(os.path.join(here, 'CHANGES.rst')) as f:
 
 setup(
     name='mgp2pdf',
-    version='0.10.3.dev0',
+    version='0.11.0.dev0',
     author='Marius Gedminas',
     author_email='marius@gedmin.as',
     url='https://github.com/mgedmin/mgp2pdf/',
@@ -29,6 +29,7 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
     ],
