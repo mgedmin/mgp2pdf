@@ -1,9 +1,8 @@
 [run]
 source = mgp2pdf
-plugins =
-    coverage_python_version
 
 [report]
 exclude_lines =
     pragma: nocover
+    pragma: PY2
     if __name__ == '__main__':
