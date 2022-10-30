@@ -18,7 +18,7 @@ Keys:
     any other key   -- advance to next slide
 
 Dependencies:
-    python 2.4
+    python 3.something
     pygame (only for interactive mode)
     PIL (only for noninteractive mode)
     mgp

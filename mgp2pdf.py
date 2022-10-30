@@ -3,8 +3,6 @@
 A quick-and-dirty MagicPoint to PDF converter.
 """
 
-from __future__ import division
-
 import logging
 import optparse
 import os
@@ -19,9 +17,6 @@ from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
-
-
-PY3 = bytes is not str
 
 
 log = logging.getLogger('mgp2pdf')
@@ -667,11 +662,9 @@ class Presentation(object):
                                              stdin=subprocess.PIPE,
                                              stdout=subprocess.PIPE)
                     stdin = ''.join(data_to_filter)
-                    if PY3:  # pragma: PY3
-                        stdin = stdin.encode('UTF-8')
+                    stdin = stdin.encode('UTF-8')
                     output = child.communicate(stdin)[0]
-                    if PY3:  # pragma: PY3
-                        output = output.decode('UTF-8')
+                    output = output.decode('UTF-8')
                 else:
                     log.warning("Ignoring %filter directive on line {0} in safe mode".format(filter_lineno))
                     output = 'Filtering through "%s" disabled, use --unsafe to enable\n' % filter_cmd
