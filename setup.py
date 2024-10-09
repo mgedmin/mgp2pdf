@@ -31,6 +31,7 @@ setup(
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
     ],
@@ -38,6 +39,7 @@ setup(
 
     py_modules=['mgp2pdf'],
     zip_safe=False,
+    python_requires=">=3.7",
     install_requires=[
         'ReportLab',
     ],
