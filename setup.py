@@ -12,7 +12,7 @@ with open(os.path.join(here, 'CHANGES.rst')) as f:
 
 setup(
     name='mgp2pdf',
-    version='0.11.0.dev0',
+    version='0.11.0',
     author='Marius Gedminas',
     author_email='marius@gedmin.as',
     url='https://github.com/mgedmin/mgp2pdf/',
