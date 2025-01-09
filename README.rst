@@ -61,7 +61,7 @@ Report bugs at https://github.com/mgedmin/mgp2pdf/issues.
 
 Licence: GPL v2 or v3 (https://www.gnu.org/copyleft/gpl.html)
 
-.. image:: https://github.com/mgedmin/mgp2pdf/workflows/build/badge.svg?branch=master
+.. image:: https://github.com/mgedmin/mgp2pdf/actions/workflows/build.yml/badge.svg?branch=master
   :target: https://github.com/mgedmin/mgp2pdf/actions
 
 .. image:: https://ci.appveyor.com/api/projects/status/github/mgedmin/mgp2pdf?branch=master&svg=true
