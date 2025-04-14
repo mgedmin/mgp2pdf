@@ -198,7 +198,7 @@ class Slide(object):
         """
         line = self.currentOrNewLine()
         line.add(Image(filename, zoom, raised_by))
-        # XXX: self.closeCurrentLine()?
+        self.closeCurrentLine()
 
     def addMark(self):
         """Add a mark to the current line and return it.
@@ -792,6 +792,7 @@ class Presentation(object):
         self._lastlineno = 0
         self._use_defaults = True
         self._continuing = False
+        self._applying_defaults = False
         self._directives_used_in_this_line = set()
         self.mark = None
 
@@ -925,7 +926,12 @@ class Presentation(object):
             else:
                 raise MgpSyntaxError("newimage %s not handled yet" % k)
         filename = os.path.join(self.basedir, args[-1])
+        if not self._continuing and not self._applying_defaults:
+            self._lastlineno += 1
+            self._applyDefaults()
         self.slides[-1].addImage(filename, zoom, raised_by)
+        if self._applying_defaults:
+            self.slides[-1].reopenCurrentLine()
 
     def _handleDirective_mark(self, parts):
         """Handle %mark.
@@ -964,7 +970,7 @@ class Presentation(object):
         """
         if not self.mark:
             raise MgpSyntaxError("%again without %mark")
-        self._handleText('')
+        ##self._handleText('')
         self.slides[-1].addAgain(self.mark)
 
     def _handleUnknownDirective(self, parts):
@@ -1012,17 +1018,24 @@ class Presentation(object):
                 assert False, 'unknown argspec %r' % arg
         return tuple(results)
 
+    def _applyDefaults(self):
+        """Apply the default directives for this line"""
+        assert not self._applying_defaults
+        if self._use_defaults:
+            self._applying_defaults = True
+            for part in self.defaultDirectives.get(self._lastlineno, []):
+                word = self._splitArgs(part)[0]
+                if word not in self._directives_used_in_this_line:
+                    self._handleDirective(part)
+            self._applying_defaults = False
+
     def _handleText(self, line):
         """Handle a line of text that is not a comment or a directive."""
         if self.inPreamble():
             raise MgpSyntaxError('No text allowed in the preamble')
         if not self._continuing:
             self._lastlineno += 1
-            if self._use_defaults:
-                for part in self.defaultDirectives.get(self._lastlineno, []):
-                    word = self._splitArgs(part)[0]
-                    if word not in self._directives_used_in_this_line:
-                        self._handleDirective(part)
+            self._applyDefaults()
         line = line.rstrip('\n').replace(r'\#', '#').replace(r'\\', '\\')
         self.slides[-1].addText(line)
         self._continuing = False
