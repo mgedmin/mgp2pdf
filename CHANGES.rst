@@ -4,7 +4,7 @@ Changelog
 0.11.1 (unreleased)
 ~~~~~~~~~~~~~~~~~~~
 
-- Drop Python 3.7 support.
+- Drop Python 3.7 and 3.8 support.
 
 
 0.11.0 (2024-10-09)
