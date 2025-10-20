@@ -45,12 +45,17 @@ jobs:
             ${{ runner.os }}-pip-${{ matrix.python-version }}-
             ${{ runner.os }}-pip-
 
+      - name: Install OS-level dependencies (Linux)
+        if: runner.os == 'Linux' && matrix.python-version == 'pypy3.10'
+        run: |
+          sudo apt-get install -y libjpeg-dev
+
       - name: Install dependencies
         run: |
           python -m pip install -U pip
           python -m pip install -U setuptools wheel
           python -m pip install -U coverage coveralls pytest
-          python -m pip install -e .[test]
+          python -m pip install -e '.[test]'
 
       - name: Run tests
         run: coverage run -m pytest
