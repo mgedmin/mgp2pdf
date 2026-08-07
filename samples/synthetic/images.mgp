@@ -1,6 +1,16 @@
 %default 1 fore "black", back "white", center
 %page
 
+When do images cause line breaks?
+
+%newimage "povlogo.png"
+%newimage "povlogo.png"
+%newimage "povlogo.png"
+text
+
+Always
+%page
+
 So, -raise doesn't appear to do anything
 
 %newimage "povlogo.png"
