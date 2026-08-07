@@ -593,7 +593,6 @@ class Presentation(object):
         self.tabDirectives = {}
         self.fonts = Fonts()
         self.slides = []
-        self._directives_used_in_this_line = set()
         self.title = title
         self.unsafe = unsafe
         self.basedir = ''
@@ -770,7 +769,6 @@ class Presentation(object):
             log.debug("Ignoring empty directive on line {0}".format(self.lineno))
             return
         word = parts[0]
-        self._directives_used_in_this_line.add(word)
         handler = getattr(self, '_handleDirective_%s' % word,
                           self._handleUnknownDirective)
         handler(parts)
@@ -792,7 +790,7 @@ class Presentation(object):
         self._lastlineno = 0
         self._use_defaults = True
         self._continuing = False
-        self._directives_used_in_this_line = set()
+        self._alignment_overridden = False
         self.mark = None
 
     def _handleDirective_nodefault(self, parts):
@@ -822,7 +820,7 @@ class Presentation(object):
     def _handleDirective_prefix(self, parts):
         """Handle %prefix <prefix>.
 
-        Specifies left indentation (in percent of the slide area size) or a
+        Specifies indentation (in percent of the slide area size) or a
         string to be prepended to each line of text.
         """
         prefix, = self._parseArgs(parts, "S")
@@ -858,8 +856,7 @@ class Presentation(object):
         Specifies left-adjustment.
         """
         self.slides[-1].setAlignment(Left)
-        self._directives_used_in_this_line.add('right')
-        self._directives_used_in_this_line.add('center')
+        self._alignment_overridden = True
 
     def _handleDirective_right(self, parts):
         """Handle %right.
@@ -867,8 +864,7 @@ class Presentation(object):
         Specifies right-adjustment.
         """
         self.slides[-1].setAlignment(Right)
-        self._directives_used_in_this_line.add('left')
-        self._directives_used_in_this_line.add('center')
+        self._alignment_overridden = True
 
     def _handleDirective_center(self, parts):
         """Handle %center.
@@ -876,8 +872,7 @@ class Presentation(object):
         Specifies center-adjustment.
         """
         self.slides[-1].setAlignment(Center)
-        self._directives_used_in_this_line.add('left')
-        self._directives_used_in_this_line.add('right')
+        self._alignment_overridden = True
 
     def _handleDirective_cont(self, parts):
         """Handle %cont.
@@ -1021,12 +1016,13 @@ class Presentation(object):
             if self._use_defaults:
                 for part in self.defaultDirectives.get(self._lastlineno, []):
                     word = self._splitArgs(part)[0]
-                    if word not in self._directives_used_in_this_line:
-                        self._handleDirective(part)
+                    if self._alignment_overridden and word in ('left', 'center', 'right'):
+                        continue
+                    self._handleDirective(part)
         line = line.rstrip('\n').replace(r'\#', '#').replace(r'\\', '\\')
         self.slides[-1].addText(line)
         self._continuing = False
-        self._directives_used_in_this_line = set()
+        self._alignment_overridden = False
 
     def __str__(self):
         """Represent the contents of the presentation as text."""
