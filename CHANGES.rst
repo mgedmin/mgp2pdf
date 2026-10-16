@@ -4,7 +4,7 @@ Changelog
 0.11.1 (unreleased)
 ~~~~~~~~~~~~~~~~~~~
 
-- Add support Python 3.14.
+- Add support Python 3.14 and 3.15.
 
 - Drop Python 3.7, 3.8, and 3.9 support.
 
